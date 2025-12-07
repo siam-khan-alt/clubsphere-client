@@ -1,2 +1,29 @@
 @import "tailwindcss";
 @plugin "daisyui";
+
+:root {
+  --color-primary-accent: #7C3AED; 
+  --color-secondary-action: #06B6D4;
+  --color-text-body: #34495E;
+  --color-success: #00CC99;
+  --color-error: #F87171;
+  --color-bg-light: #F8F9FA;
+  --color-card-bg: #FFFFFF;
+  --color-text-light: var(--color-text-body);
+  --color-text-muted: #6B7280;
+} 
+
+[data-theme='light'], html:not([data-theme]), :root {
+    --p: var(--color-primary-accent); 
+    --s: var(--color-secondary-action); 
+    --a: var(--color-success); 
+    --n: var(--color-text-body); 
+    --b1: var(--color-bg-light); 
+    --er: var(--color-error); 
+    --bc: var(--color-text-body);
+    --pc: #FFFFFF;
+    --sc: #FFFFFF;
+    --ac: #FFFFFF;
+    --in: #22c55e;
+    --wa: #facc15;
+}

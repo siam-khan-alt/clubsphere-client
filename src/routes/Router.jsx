@@ -8,6 +8,11 @@ import Events from "../pages/Events";
 import EventDetails from "../pages/EventDetails";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
+import DashboardLayout from "../layouts/DashboardLayout";
+import AdminDashboard from "../pages/dashboard/admin/AdminDashboard";
+import ManagerDashboard from "../pages/dashboard/manager/ManagerDashboard";
+import MemberDashboard from "../pages/dashboard/member/MemberDashboard";
+import PrivateRoute from "./PrivateRoute";
 
 const router =createBrowserRouter([
     {
@@ -21,7 +26,7 @@ const router =createBrowserRouter([
       },
       {
         path: '/clubs',
-        element: <Clubs />
+        element:<PrivateRoute><Clubs /></PrivateRoute> 
       },
       {
         path: '/clubs/:id',
@@ -45,5 +50,14 @@ const router =createBrowserRouter([
       }
     ]
   },
+  {
+    path:'/dashboard',
+    element:<DashboardLayout/>,
+    children:[
+        {path:'admin', element: <AdminDashboard/>},
+        {path:'manager', element: <ManagerDashboard/>},
+        {path:'member', element: <MemberDashboard/>},
+    ]
+  }
 ])
 export default router
