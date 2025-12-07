@@ -15,7 +15,8 @@ const Navbar = () => {
   };
 
   const goDashboardRoute = () => {
-    return "/dashboard/member";
+    const role = user?.role || 'member';
+    return `/dashboard/${role}/home`;
   };
 
   const navLinks = (

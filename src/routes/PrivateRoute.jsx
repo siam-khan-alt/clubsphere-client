@@ -1,23 +1,22 @@
 import { Navigate, useLocation } from 'react-router-dom';
 import { use } from 'react';
 import { AuthContext } from '../context/AuthContext';
+import LoadingSpinner from '../components/shared/LoadingSpinner';
 
-const PrivateRoute = ({ children, }) => {
+const PrivateRoute = ({ children , requiredRole }) => {
   const { user, loading } = use(AuthContext);
   const location = useLocation();
 
   if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <span className="loading loading-spinner loading-lg"></span>
-      </div>
-    );
+    return <LoadingSpinner/>
   }
 
   if (!user) {
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
-
+  if (requiredRole && user.role !== requiredRole) {
+        return <Navigate to="/unauthorized" replace />; 
+        }
 
   return children;
 };

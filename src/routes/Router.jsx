@@ -1,4 +1,4 @@
-import { createBrowserRouter } from "react-router-dom";
+import { createBrowserRouter, Navigate } from "react-router-dom";
 import MainLayout from "../layouts/MainLayout";
 import ErrorPage from "../pages/ErrorPage";
 import Home from "../pages/Home";
@@ -13,6 +13,19 @@ import AdminDashboard from "../pages/dashboard/admin/AdminDashboard";
 import ManagerDashboard from "../pages/dashboard/manager/ManagerDashboard";
 import MemberDashboard from "../pages/dashboard/member/MemberDashboard";
 import PrivateRoute from "./PrivateRoute";
+import Unauthorized from "../pages/error/Unauthorized";
+import ManageUsers from "../pages/dashboard/admin/ManageUsers";
+import ViewPayments from "../pages/dashboard/admin/ViewPayments";
+import ManageClubs from "../pages/dashboard/admin/ManageClubs";
+import MyClubs from "../pages/dashboard/manager/MyClubs";
+import CreateClub from "../pages/dashboard/manager/CreateClub";
+import EditClub from "../pages/dashboard/manager/EditClub";
+import ClubMembers from "../pages/dashboard/manager/ClubMembers";
+import CreateEvent from "../pages/dashboard/manager/CreateEvent";
+import EventsManagement from "../pages/dashboard/manager/EventsManagement";
+import MyMemberships from "../pages/dashboard/member/MyMemberships";
+import MyEvents from "../pages/dashboard/member/MyEvents";
+import PaymentHistory from "../pages/dashboard/member/PaymentHistory";
 
 const router =createBrowserRouter([
     {
@@ -26,7 +39,7 @@ const router =createBrowserRouter([
       },
       {
         path: '/clubs',
-        element:<PrivateRoute><Clubs /></PrivateRoute> 
+        element:<Clubs />
       },
       {
         path: '/clubs/:id',
@@ -51,12 +64,65 @@ const router =createBrowserRouter([
     ]
   },
   {
+        path: '/unauthorized',
+        element: <Unauthorized />
+    },
+  {
     path:'/dashboard',
-    element:<DashboardLayout/>,
+    element:<PrivateRoute><DashboardLayout/></PrivateRoute>,
     children:[
-        {path:'admin', element: <AdminDashboard/>},
-        {path:'manager', element: <ManagerDashboard/>},
-        {path:'member', element: <MemberDashboard/>},
+         
+        {path:'admin/home',  element: <PrivateRoute requiredRole="admin"><AdminDashboard/></PrivateRoute> },
+        {
+        path: 'admin/users',
+        element: <PrivateRoute requiredRole="admin"><ManageUsers /></PrivateRoute>
+      },
+      {
+        path: 'admin/clubs',
+        element: <PrivateRoute requiredRole="admin"><ManageClubs /></PrivateRoute>
+      },
+      {
+        path: 'admin/payments',
+        element: <PrivateRoute requiredRole="admin"><ViewPayments /></PrivateRoute>
+      },
+        {path:'manager/home', element:<PrivateRoute requiredRole="clubManager"><ManagerDashboard/></PrivateRoute>},
+        {
+        path: 'manager/clubs',
+        element: <PrivateRoute requiredRole="clubManager"><MyClubs /></PrivateRoute>
+      },
+      {
+        path: 'manager/clubs/create',
+        element: <PrivateRoute requiredRole="clubManager"><CreateClub /></PrivateRoute>
+      },
+      {
+        path: 'manager/clubs/edit/:id',
+        element: <PrivateRoute requiredRole="clubManager"><EditClub /></PrivateRoute>
+      },
+      {
+        path: 'manager/members/:clubId',
+        element: <PrivateRoute requiredRole="clubManager"><ClubMembers /></PrivateRoute>
+      },
+      {
+        path: 'manager/events',
+        element: <PrivateRoute requiredRole="clubManager"><EventsManagement /></PrivateRoute>
+      },
+      {
+        path: 'manager/events/create',
+        element: <PrivateRoute requiredRole="clubManager"><CreateEvent /></PrivateRoute>
+      },
+        {path:'member/home', element:<PrivateRoute requiredRole="member"> <MemberDashboard/></PrivateRoute>},
+         {
+        path: 'member/clubs',
+        element: <PrivateRoute requiredRole="member"><MyMemberships /></PrivateRoute>
+      },
+      {
+        path: 'member/events',
+        element: <PrivateRoute requiredRole="member"><MyEvents /></PrivateRoute>
+      },
+      {
+        path: 'member/payments',
+        element: <PrivateRoute requiredRole="member"><PaymentHistory /></PrivateRoute>
+      }
     ]
   }
 ])
