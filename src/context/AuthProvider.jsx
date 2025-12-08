@@ -13,7 +13,6 @@ import { auth } from '../firebase/firebase.config';
 import axios from 'axios';
 
 const googleProvider = new GoogleAuthProvider();
-const API_BASE_URL = 'http://localhost:5000';
 
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
@@ -25,7 +24,7 @@ export const AuthProvider = ({ children }) => {
         try {
             const token = await currentUser.getIdToken(); 
             
-            const response = await axios.get(`${API_BASE_URL}/users/role`, {
+            const response = await axios.get(`${import.meta.env.VITE_API_URL}/users/role`, {
                 headers: {
                     'Authorization': `Bearer ${token}`, 
                 },
@@ -46,7 +45,13 @@ export const AuthProvider = ({ children }) => {
             setLoading(false); 
         }
     };
-
+    const getFirebaseToken = async () => {
+        const firebaseUser = auth.currentUser;
+        if (firebaseUser) {
+            return await firebaseUser.getIdToken();
+        }
+        return null;
+    }
     const register = async (email, password, name, photoURL) => {
         setLoading(true);
         try {
@@ -61,7 +66,7 @@ export const AuthProvider = ({ children }) => {
                 email: email,
                 photoURL: photoURL,
             };
-            await axios.post(`${API_BASE_URL}/users/register`, userInfo);
+            await axios.post(`${import.meta.env.VITE_API_URL}/users/register`, userInfo);
 
             return result;
         } catch (error) {
@@ -113,6 +118,7 @@ export const AuthProvider = ({ children }) => {
         googleLogin,
         logout,
         setUser,
+        getFirebaseToken
     };
 
     return (
