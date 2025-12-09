@@ -1,5 +1,6 @@
 import React from 'react';
 import { FiCheckCircle, FiXCircle, FiEye, FiUser, FiList } from 'react-icons/fi';
+import { TbFidgetSpinner } from 'react-icons/tb';
 
 const getStatusClasses = (status) => {
     switch (status) {
@@ -14,7 +15,7 @@ const getStatusClasses = (status) => {
     }
 };
 
-const ClubTableRow = ({ club, handleApprove, handleReject }) => {
+const ClubTableRow = ({ club, handleApprove, handleReject, isMutating }) => {
     
     return (
         <tr key={club._id} className="hover:bg-gray-50 transition duration-150">
@@ -22,8 +23,6 @@ const ClubTableRow = ({ club, handleApprove, handleReject }) => {
             <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                 {club.clubName}
             </td>
-            
-            {/* Hidden on screens smaller than lg */}
             <td className="hidden lg:table-cell px-6 py-4 whitespace-nowrap text-sm text-gray-600">
                 {club.managerEmail}
             </td>
@@ -38,7 +37,6 @@ const ClubTableRow = ({ club, handleApprove, handleReject }) => {
                 </span>
             </td>
             
-            {/* Hidden on screens smaller than lg */}
             <td className="hidden lg:table-cell px-6 py-4 whitespace-nowrap text-sm text-gray-600">
                 <div className="flex items-center space-x-3">
                     <div className="flex items-center">
@@ -53,21 +51,24 @@ const ClubTableRow = ({ club, handleApprove, handleReject }) => {
             </td>
             
             <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                {club.status === 'Pending' ? (
+                {club.status === 'pending' ? (
                     <div className="flex justify-end space-x-2">
                         <button 
                             onClick={() => handleApprove(club._id)} 
+                            disabled={isMutating}
                             className="text-green-600 hover:text-green-900 p-2 rounded-full hover:bg-green-50 transition"
                             title="Approve Club"
                         >
-                            <FiCheckCircle className="w-5 h-5" />
+                            {isMutating ? <TbFidgetSpinner className="w-5 h-5 animate-spin" /> : 
+                            <FiCheckCircle className="w-5 h-5" />}
                         </button>
                         <button 
                             onClick={() => handleReject(club._id)} 
+                            disabled={isMutating}
                             className="text-red-600 hover:text-red-900 p-2 rounded-full hover:bg-red-50 transition"
                             title="Reject Club"
                         >
-                            <FiXCircle className="w-5 h-5" />
+                            {isMutating?<TbFidgetSpinner className="w-5 h-5 animate-spin" /> :<FiXCircle className="w-5 h-5" />}
                         </button>
                     </div>
                 ) : (

@@ -44,17 +44,17 @@ const SideNavbar = () => {
                     
                     {isManager && (
                         <>
-                            <NavLinkItem to="/dashboard/manager/clubs" icon={FaChartLine}>
+                            <NavLinkItem to="/dashboard/clubManager/myClubs" icon={FaChartLine}>
                                 My Clubs
                             </NavLinkItem>
-                            <NavLinkItem to="/dashboard/manager/clubs/create" icon={FaPlus}>
+                            <NavLinkItem to="/dashboard/clubManager/createClub" icon={FaPlus}>
                                 Create New Club
                             </NavLinkItem>
                             
-                            <NavLinkItem to="/dashboard/manager/events" icon={FaCalendarCheck}>
+                            <NavLinkItem to="/dashboard/clubManager/events" icon={FaCalendarCheck}>
                                 Manage Events
                             </NavLinkItem>
-                            <NavLinkItem to="/dashboard/manager/events/create" icon={FaPlus}>
+                            <NavLinkItem to="/dashboard/clubManager/createEvent" icon={FaPlus}>
                                 Create New Event
                             </NavLinkItem>
                         </>

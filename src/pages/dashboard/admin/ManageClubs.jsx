@@ -1,26 +1,64 @@
 import React from 'react';
 import ClubTableRow from '../../../components/dashboard/admin/ClubTableRow'; 
-
-
-const dummyClubs = [
-    { _id: 'c1', clubName: 'Photography Enthusiasts Club', managerEmail: 'manager.photo@example.com', status: 'Approved', membershipFee: 25.00, membersCount: 85, eventsCount: 12 },
-    { _id: 'c2', clubName: 'Tech Innovators Guild', managerEmail: 'tech.boss@example.com', status: 'Pending', membershipFee: 0.00, membersCount: 0, eventsCount: 0 },
-    { _id: 'c3', clubName: 'Hiking & Adventure Seekers', managerEmail: 'hiking.pro@example.com', status: 'Rejected', membershipFee: 15.00, membersCount: 42, eventsCount: 5 },
-    { _id: 'c4', clubName: 'Book Worms Society', managerEmail: 'book.lover@example.com', status: 'Approved', membershipFee: 0.00, membersCount: 150, eventsCount: 20 },
-];
+import useAxiosSecure from '../../../hooks/useAxiosSecure';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import Swal from 'sweetalert2';
+import LoadingSpinner from '../../../components/shared/LoadingSpinner'
 
 const ManageClubs = () => {
-    
+ 
+    const axiosSecure = useAxiosSecure();
+    const queryClient = useQueryClient();
+
+    const { data: clubs = [], isLoading, isError } = useQuery({
+        queryKey: ['allClubsForAdmin'],
+        queryFn: async () => {
+            const res = await axiosSecure.get('/admin/clubs');
+            return res.data;
+        }
+    });
+
+    const updateClubStatusMutation = useMutation({
+        mutationFn: async ({ clubId, newStatus }) => {
+            const res = await axiosSecure.patch(`/admin/clubs/status/${clubId}`, { status: newStatus });
+            return res.data;
+        },
+        onSuccess: (data, variables) => {
+            queryClient.invalidateQueries(['allClubsForAdmin']);
+            Swal.fire({
+                icon: 'success',
+                title: `Club ${variables.newStatus === 'approved' ? 'Approved' : 'Rejected'}!`,
+                text: `Status updated to ${variables.newStatus.toUpperCase()}`,
+                timer: 1500,
+                showConfirmButton: false
+            });
+        },
+        onError: (error) => {
+            console.error("Status Update Error:", error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Operation Failed',
+                text: error.response?.data?.message || 'Could not update club status.',
+            });
+        }
+    });
 
     const handleApprove = (clubId) => {
-        console.log(`Approving club: ${clubId}`);
-        alert(`Approving club: ${clubId}`);
+       updateClubStatusMutation.mutate({ clubId, newStatus: 'approved' });
     };
 
-    const handleReject = (clubId) => {
-        console.log(`Rejecting club: ${clubId}`);
-        alert(`Rejecting club: ${clubId}`);
+    const handleReject = (clubId) => {updateClubStatusMutation.mutate({ clubId, newStatus: 'rejected' });
     };
+
+    if (isLoading) {
+        return <LoadingSpinner/>
+    }
+
+    if (isError) {
+        return <div className="text-center p-10 text-red-600">Failed to fetch clubs data.</div>;
+    }
+    
+    const isMutating = updateClubStatusMutation.isPending;
 
     return (
         <div className="p-4 sm:p-6 bg-gray-50 min-h-screen overflow-x-hidden"> 
@@ -52,12 +90,13 @@ const ManageClubs = () => {
                         </tr>
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200">
-                        {dummyClubs.map((club) => (
+                        {clubs.map((club) => (
                             <ClubTableRow 
                                 key={club._id}
                                 club={club}
                                 handleApprove={handleApprove}
                                 handleReject={handleReject}
+                                isMutating={isMutating}
                             />
                         ))}
                     </tbody>
@@ -65,7 +104,7 @@ const ManageClubs = () => {
             </div>
             
             <div className="mt-4 text-sm text-gray-600">
-                Total clubs shown: {dummyClubs.length}
+                Total clubs shown: {clubs.length}
             </div>
         </div>
     );

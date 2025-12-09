@@ -85,29 +85,29 @@ const router =createBrowserRouter([
         path: 'admin/payments',
         element: <PrivateRoute requiredRole="admin"><ViewPayments /></PrivateRoute>
       },
-        {path:'manager/home', element:<PrivateRoute requiredRole="clubManager"><ManagerDashboard/></PrivateRoute>},
+        {path:'clubManager/home', element:<PrivateRoute requiredRole="clubManager"><ManagerDashboard/></PrivateRoute>},
         {
-        path: 'manager/clubs',
+        path: 'clubManager/myClubs',
         element: <PrivateRoute requiredRole="clubManager"><MyClubs /></PrivateRoute>
       },
       {
-        path: 'manager/clubs/create',
+        path: 'clubManager/createClub',
         element: <PrivateRoute requiredRole="clubManager"><CreateClub /></PrivateRoute>
       },
       {
-        path: 'manager/clubs/edit/:id',
+        path: 'clubManager/editClub/:id',
         element: <PrivateRoute requiredRole="clubManager"><EditClub /></PrivateRoute>
       },
       {
-        path: 'manager/members/:clubId',
+        path: 'clubManager/members/:clubId',
         element: <PrivateRoute requiredRole="clubManager"><ClubMembers /></PrivateRoute>
       },
       {
-        path: 'manager/events',
+        path: 'clubManager/events',
         element: <PrivateRoute requiredRole="clubManager"><EventsManagement /></PrivateRoute>
       },
       {
-        path: 'manager/events/create',
+        path: 'clubManager/createEvent',
         element: <PrivateRoute requiredRole="clubManager"><CreateEvent /></PrivateRoute>
       },
         {path:'member/home', element:<PrivateRoute requiredRole="member"> <MemberDashboard/></PrivateRoute>},
