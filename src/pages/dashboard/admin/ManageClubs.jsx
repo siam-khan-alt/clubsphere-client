@@ -30,7 +30,8 @@ const ManageClubs = () => {
                 title: `Club ${variables.newStatus === 'approved' ? 'Approved' : 'Rejected'}!`,
                 text: `Status updated to ${variables.newStatus.toUpperCase()}`,
                 timer: 1500,
-                showConfirmButton: false
+
+                
             });
         },
         onError: (error) => {

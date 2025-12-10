@@ -7,7 +7,7 @@ import {
     FaPlus,
     FaCalendarCheck,
     FaHome,
-    FaSignOutAlt
+    FaSignOutAlt,
 } from 'react-icons/fa';
 import { AuthContext } from '../../context/AuthContext';
 import NavLinkItem from '../dashboard/NavLinkItem';
@@ -54,9 +54,7 @@ const SideNavbar = () => {
                             <NavLinkItem to="/dashboard/clubManager/events" icon={FaCalendarCheck}>
                                 Manage Events
                             </NavLinkItem>
-                            <NavLinkItem to="/dashboard/clubManager/createEvent" icon={FaPlus}>
-                                Create New Event
-                            </NavLinkItem>
+                            
                         </>
                     )}
                     
