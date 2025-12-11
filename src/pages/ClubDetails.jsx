@@ -1,11 +1,152 @@
-import React from 'react';
+import axios from 'axios';
+import { useParams } from 'react-router-dom';
+import LoadingSpinner from '../components/shared/LoadingSpinner';
+import { useQuery } from '@tanstack/react-query';
 
 const ClubDetails = () => {
+  const { id } = useParams(); 
+
+  const { 
+    data: club, 
+    isLoading, 
+    isError, 
+    error 
+  } = useQuery({
+    queryKey: ['club', id],
+    queryFn: async ({ queryKey }) => {
+        const [, id] = queryKey;
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/clubs/${id}`);
+        return response.data;
+    },
+    enabled: !!id,
+    retry: 1,
+  });
+
+
+  if (isLoading) {
+    return <LoadingSpinner/>
+  }
+
+  if (isError) {
+    let errorMessage = "Failed to load club details. Server error.";
+    
+    if (axios.isAxiosError(error) && error.response) {
+      if (error.response.status === 404) {
+        errorMessage = "Club not found or not yet approved.";
+      }
+    }
+
     return (
-        <div>
-            
+      <div className="flex justify-center items-center min-h-[50vh] text-red-600 text-2xl p-8">
+        🚨 {errorMessage}
+      </div>
+    );
+  }
+  
+  if (!club) {
+    return (
+      <div className="flex justify-center items-center min-h-[50vh] text-gray-500 text-xl">
+        No club data available.
+      </div>
+    );
+  }
+  console.log(club.bannerImage);
+  
+    return (
+        <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-6xl mx-auto bg-white rounded-xl shadow-2xl overflow-hidden">
+        
+        <div className="relative h-96">
+          <img
+            className="w-full h-full object-cover"
+            src={club.bannerImage}
+            alt={`${club.clubName} banner`}
+          />
+          <div className="absolute inset-0  flex items-end p-8">
+            <h1 className="text-4xl font-bold text-white drop-shadow-lg">
+              {club.clubName}
+            </h1>
+          </div>
+        </div>
+
+        <div className="p-8 lg:p-12 space-y-10">
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-center border-b pb-8">
+            <ClubInfoCard title="Category" value={club.category} icon="📚" />
+            <ClubInfoCard title="Location" value={club.location} icon="📍" />
+            <ClubInfoCard 
+              title="Membership Fee" 
+              value={club.membershipFee === 0 ? "Free" : `$${club.membershipFee.toFixed(2)}`} 
+              icon="💰" 
+            />
+          </div>
+          <section>
+            <h2 className="text-3xl font-semibold text-gray-800 mb-4 border-l-4 border-indigo-600 pl-3">
+              About Our Club
+            </h2>
+            <p className="text-gray-600 leading-relaxed whitespace-pre-line">
+              {club.description}
+            </p>
+          </section>
+          <section className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-6 border-t">
+            <div>
+              <h3 className="text-2xl font-semibold text-gray-800 mb-3">
+                Membership Snapshot
+              </h3>
+              <ul className="space-y-3 text-gray-700">
+                <ListItem 
+                  label="Total Members" 
+                  value={club.members?.length || 1} 
+                />
+                <ListItem 
+                  label="Club Manager" 
+                  value={club.managerEmail} 
+                />
+              </ul>
+            </div>
+            <div>
+              <h3 className="text-2xl font-semibold text-gray-800 mb-3">
+                Meeting Details
+              </h3>
+              <p className="text-gray-700">
+                <span className="font-medium text-indigo-600">Schedule:</span> {club.meetingSchedule || "To be announced (TBA)"}
+              </p>
+              <p className="mt-2 text-sm text-gray-500">
+                (This schedule is subject to change. Contact the manager for current updates.)
+              </p>
+            </div>
+          </section>
+
+          <div className="pt-8 text-center">
+            <button className="px-8 py-3 bg-indigo-600 text-white font-bold text-lg rounded-full shadow-lg hover:bg-indigo-700 transition duration-300">
+              Join This Club Now
+            </button>
+            <p className="mt-3 text-sm text-gray-500">
+              *You must be logged in to join a club.
+            </p>
+          </div>
+        </div>
+      </div>
         </div>
     );
 };
 
+
+const ClubInfoCard = ({ title, value, icon }) => (
+  <div className="p-4 bg-indigo-50 rounded-lg shadow-md">
+    <p className="text-3xl mb-1">{icon}</p>
+    <p className="text-sm font-medium text-gray-500 uppercase">{title}</p>
+    <p className="text-xl font-bold text-indigo-700 mt-1">{value}</p>
+  </div>
+);
+
+const ListItem = ({ label, value }) => (
+  <li className="flex justify-between py-2 border-b border-gray-100">
+    <span className="font-medium text-gray-600">{label}:</span>
+    <span className="font-semibold text-gray-800 truncate">{value}</span>
+  </li>
+);
+
 export default ClubDetails;
+
+
