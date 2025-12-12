@@ -4,8 +4,9 @@ import { format } from 'date-fns';
 
 const EventListTable = ({ events, onViewRegistrations, onEditEvent, onDeleteEvent }) => { 
     return (
-        <div className="overflow-x-auto bg-white shadow-lg rounded-xl mt-6">
-            <table className="min-w-full divide-y divide-gray-200">
+        <div className=" bg-white shadow-lg rounded-xl mt-6">
+            <table
+             className="min-w-full divide-y divide-gray-200">
                 <thead className="bg-blue-50">
                     <tr>
                         <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Title</th>

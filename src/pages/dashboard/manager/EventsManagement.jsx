@@ -88,14 +88,16 @@ const EventsManagement = () => {
                     Create New Event
                 </button>
             </div>
-            
-            <EventListTable 
+            <div className='overflow-x-auto'>
+ <EventListTable 
                 events={events}
                 onViewRegistrations={handleViewRegistrations}
                 onEditEvent={handleEditEvent} 
                 onDeleteEvent={handleDeleteEvent} 
             />
 
+            </div>
+           
             <CreateEventModal isOpen={isCreateModalOpen} onClose={() => setIsCreateModalOpen(false)} />
             <ViewRegistrationModal 
                 isOpen={isViewRegModalOpen} 

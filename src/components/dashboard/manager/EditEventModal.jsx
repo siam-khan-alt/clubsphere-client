@@ -5,6 +5,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import useAxiosSecure from '../../../hooks/useAxiosSecure'; 
 import Swal from 'sweetalert2';
 import { format } from 'date-fns';
+import ReactModal from 'react-modal';
 
 const EditEventModal = ({ isOpen, onClose, eventToEdit }) => {
     const axiosSecure = useAxiosSecure();
@@ -20,6 +21,7 @@ const EditEventModal = ({ isOpen, onClose, eventToEdit }) => {
                 eventDate: format(new Date(eventToEdit.eventDate), 'yyyy-MM-dd'),
                 eventTime: eventToEdit.eventTime,
                 location: eventToEdit.location,
+                bannerImage: eventToEdit.bannerImage || '',
                 isPaid: eventToEdit.isPaid ? 'true' : 'false',
                 eventFee: eventToEdit.eventFee,
                 maxAttendees: eventToEdit.maxAttendees || '',
@@ -43,8 +45,10 @@ const EditEventModal = ({ isOpen, onClose, eventToEdit }) => {
     });
 
     const onSubmit = (data) => {
+        const dateTimeString = `${data.eventDate}T${data.eventTime}:00`;
         const payload = {
             ...data,
+            eventDate: dateTimeString,
             eventFee: data.isPaid === 'true' ? parseFloat(data.eventFee) : 0,
             isPaid: data.isPaid === 'true',
         };
@@ -54,8 +58,13 @@ const EditEventModal = ({ isOpen, onClose, eventToEdit }) => {
     if (!isOpen || !eventToEdit) return null;
 
     return (
-        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-start pt-10 sm:pt-4 p-4">
-            <div className="bg-white rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto transform transition-all duration-300">
+        <ReactModal
+            isOpen={isOpen}
+            onRequestClose={onClose}
+            className="bg-white rounded-xl shadow-2xl w-[350px] md:w-full max-h-[90vh] overflow-y-auto transform transition-all duration-300 sm:max-w-2xl"
+            overlayClassName="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-center p-4">
+        
+            <div >
                 <div className="p-6 border-b flex justify-between items-center sticky top-0 bg-white z-10">
                     <h2 className="text-xl sm:text-2xl font-bold text-blue-700 flex items-center">
                         <FiEdit className="mr-2" /> Edit Event: {eventToEdit.title}
@@ -120,6 +129,16 @@ const EditEventModal = ({ isOpen, onClose, eventToEdit }) => {
                         />
                         {errors.location && <p className="text-red-500 text-xs mt-1">{errors.location.message}</p>}
                     </div>
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Banner Image URL *</label>
+                        <input
+                            type="text"
+                            {...register('bannerImage', { required: 'Banner image URL is required' })}
+                            className="w-full p-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+                            placeholder="Paste image URL here"
+                        />
+                        {errors.bannerImage && <p className="text-red-500 text-xs mt-1">{errors.bannerImage.message}</p>}
+                    </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
@@ -172,7 +191,8 @@ const EditEventModal = ({ isOpen, onClose, eventToEdit }) => {
                     </button>
                 </form>
             </div>
-        </div>
+        
+        </ReactModal>
     );
 };
 
