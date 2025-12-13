@@ -14,13 +14,12 @@ const EventsManagement = () => {
     const queryClient = useQueryClient(); 
 
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
-    const [isViewRegModalOpen, setIsViewRegModalOpen] = useState(false);
-    const [registrations, setRegistrations] = useState([]);
-    const [eventTitle, setEventTitle] = useState('');
     
     const [isEditModalOpen, setIsEditModalOpen] = useState(false); 
     const [eventToEdit, setEventToEdit] = useState(null); 
-
+    const [isViewRegModalOpen, setIsViewRegModalOpen] = useState(false);
+    const [viewingEventId, setViewingEventId] = useState(null);
+    const [viewingEventTitle, setViewingEventTitle] = useState('');
     const { data: events = [], isLoading } = useQuery({
         queryKey: ['managerEvents'],
         queryFn: async () => {
@@ -28,16 +27,27 @@ const EventsManagement = () => {
             return res.data;
         }
     });
-
-    const handleViewRegistrations = async (eventId) => {
-        try {
-            const res = await axiosSecure.get(`/manager/events/${eventId}/registrations`);
-            setRegistrations(res.data.registrations);
-            setEventTitle(res.data.eventTitle);
-            setIsViewRegModalOpen(true);
-        } catch (error) {
-            Swal.fire('Error', 'Failed to fetch registrations.', error);
-        }
+const { 
+        data: registrationData, 
+        isLoading: isRegLoading,
+        isFetching: isRegFetching
+    } = useQuery({
+        queryKey: ['eventRegistrations', viewingEventId],
+        queryFn: async () => {
+            const res = await axiosSecure.get(`/manager/events/${viewingEventId}/registrations`);
+            return res.data; 
+        },
+        enabled: !!viewingEventId && isViewRegModalOpen,
+    });
+    const handleViewRegistrations = async (eventId, eventTitle) => {
+        setViewingEventId(eventId);
+        setViewingEventTitle(eventTitle);
+        setIsViewRegModalOpen(true);
+    };
+    const handleCloseViewRegModal = () => {
+        setIsViewRegModalOpen(false);
+        setViewingEventId(null); 
+        setViewingEventTitle('');
     };
     
     const handleEditEvent = (event) => {
@@ -88,7 +98,7 @@ const EventsManagement = () => {
                     Create New Event
                 </button>
             </div>
-            <div className='overflow-x-auto'>
+            <div className='overflow-x-auto container lg: mx-auto'>
  <EventListTable 
                 events={events}
                 onViewRegistrations={handleViewRegistrations}
@@ -101,9 +111,10 @@ const EventsManagement = () => {
             <CreateEventModal isOpen={isCreateModalOpen} onClose={() => setIsCreateModalOpen(false)} />
             <ViewRegistrationModal 
                 isOpen={isViewRegModalOpen} 
-                onClose={() => setIsViewRegModalOpen(false)} 
-                registrations={registrations}
-                eventTitle={eventTitle}
+                onClose={handleCloseViewRegModal} 
+                registrations={registrationData?.registrations || []}
+                eventTitle={viewingEventTitle}
+                isLoading={isRegLoading || isRegFetching}
             />
 
             <EditEventModal 
