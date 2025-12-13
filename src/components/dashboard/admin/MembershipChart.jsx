@@ -1,21 +1,25 @@
 import React from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
-const chartData = [
-    { name: 'Photography', members: 350 },
-    { name: 'Tech', members: 420 },
-    { name: 'Hiking', members: 210 },
-    { name: 'Book', members: 180 },
-    { name: 'Sports', members: 600 },
-];
 
-const MembershipChart = () => {
+const MembershipChart = ({ chartData=[]}) => {
+    if (chartData.length === 0) {
+        return (
+            <div className="bg-white p-6 rounded-lg shadow-md h-[400px] flex items-center justify-center">
+                <h2 className="text-xl font-semibold text-gray-500">No membership data available for charting.</h2>
+            </div>
+        );
+    }
+    const formattedData = chartData.map(item => ({
+        name: item.clubName,
+        members: item.memberCount || 0, 
+    }));
     return (
         <div className="bg-white p-6 rounded-lg shadow-md h-[400px]">
             <h2 className="text-xl font-semibold text-gray-800 mb-4">Memberships by Club Category</h2>
             <ResponsiveContainer width="100%" height="85%">
                 <BarChart
-                    data={chartData}
+                    data={formattedData}
                     margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
                 >
                     <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />

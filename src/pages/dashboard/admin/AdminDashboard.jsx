@@ -1,18 +1,35 @@
 import React from 'react';
-import { FiUsers, FiGlobe, FiDollarSign, FiClock, FiXCircle, FiCheckCircle, FiList } from 'react-icons/fi';
+import { FiUsers, FiGlobe, FiDollarSign, FiClock, FiXCircle, FiCheckCircle, FiList, FiActivity } from 'react-icons/fi';
 import StatCard from '../../../components/dashboard/admin/StatCard'
 import MembershipChart from '../../../components/dashboard/admin/MembershipChart';
+import useAxiosSecure from '../../../hooks/useAxiosSecure';
+import { useQuery } from '@tanstack/react-query';
+import LoadingSpinner from '../../../components/shared/LoadingSpinner';
 
 const AdminDashboard = () => {
-    const dummyStats = {
-        totalUsers: 1200,
-        totalClubs: 45,
-        totalRevenue: 52000,
-        approvedClubs: 38, 
-        pendingClubs: 5, 
-        rejectedClubs: 2,  
-        totalMemberships: 850,
-    };
+    const axiosSecure=useAxiosSecure()
+    const { data: adminStats = {}, isLoading, error } = useQuery({
+        queryKey: ['adminDashboardStats'],
+        queryFn: async () => {
+            const res = await axiosSecure.get('/admin/stats'); 
+            return res.data;
+        }
+    });
+    if (isLoading) return <LoadingSpinner />;
+    if (error) return <div className="text-red-500 p-4">Error loading stats: {error.message}</div>;
+    const {
+        totalUsers = 0,
+        totalClubs = 0,
+        totalRevenue = 0,
+        totalMemberships = 0,
+        totalEvents = 0,
+        approvedClubs = 0,
+        pendingClubs = 0,
+        rejectedClubs = 0,
+        membershipsByClub = []
+    } = adminStats;
+    console.log(membershipsByClub);
+    
     return (
         <div className="p-4 sm:p-6 bg-gray-50 min-h-screen">
             <h1 className="text-3xl font-bold text-gray-800 mb-6">Admin Dashboard Overview 📊</h1>
@@ -21,7 +38,7 @@ const AdminDashboard = () => {
                 
                 <StatCard 
                     title="Total Users" 
-                    value={dummyStats.totalUsers.toLocaleString()} 
+                    value={totalUsers.toLocaleString()} 
                     icon={FiUsers} 
                     colorClass="border-l-4 border-blue-600"
                     bgColorClass="bg-white"
@@ -30,7 +47,7 @@ const AdminDashboard = () => {
 
                 <StatCard 
                     title="Total Memberships" 
-                    value={dummyStats.totalMemberships} 
+                    value={totalMemberships.toLocaleString()} 
                     icon={FiList} 
                     colorClass="border-l-4 border-purple-600"
                     bgColorClass="bg-white"
@@ -39,7 +56,7 @@ const AdminDashboard = () => {
                 
                 <StatCard 
                     title="Total Revenue" 
-                    value={`$${dummyStats.totalRevenue.toLocaleString()}`} 
+                    value={totalRevenue.toLocaleString()} 
                     icon={FiDollarSign} 
                     colorClass="border-l-4 border-yellow-600"
                     bgColorClass="bg-white"
@@ -48,7 +65,7 @@ const AdminDashboard = () => {
 
                 <StatCard 
                     title="Total Clubs" 
-                    value={dummyStats.totalClubs} 
+                    value={totalClubs.toLocaleString()} 
                     icon={FiGlobe} 
                     colorClass="border-l-4 border-green-600"
                     bgColorClass="bg-white"
@@ -58,7 +75,7 @@ const AdminDashboard = () => {
                 
                 <StatCard 
                     title="Approved Clubs" 
-                    value={dummyStats.approvedClubs} 
+                    value={approvedClubs.toLocaleString()} 
                     icon={FiCheckCircle} 
                     colorClass="border-l-4 border-emerald-600"
                     bgColorClass="bg-white"
@@ -67,7 +84,7 @@ const AdminDashboard = () => {
 
                  <StatCard 
                     title="Pending Clubs" 
-                    value={dummyStats.pendingClubs} 
+                    value={pendingClubs.toLocaleString()} 
                     icon={FiClock} 
                     colorClass="border-l-4 border-orange-600"
                     bgColorClass="bg-white"
@@ -76,18 +93,26 @@ const AdminDashboard = () => {
                 
                  <StatCard 
                     title="Rejected Clubs" 
-                    value={dummyStats.rejectedClubs} 
+                    value={rejectedClubs.toLocaleString()} 
                     icon={FiXCircle} 
                     colorClass="border-l-4 border-red-600"
                     bgColorClass="bg-white"
                     iconColorClass="bg-red-500"
+                />
+                <StatCard 
+                    title="Total Events" 
+                    value={totalEvents.toLocaleString()} 
+                    icon={FiActivity} 
+                    colorClass="border-l-4 border-sky-600"
+                    bgColorClass="bg-white"
+                    iconColorClass="bg-sky-500"
                 />
                 
             </div>
 
             <div className="mt-8 grid grid-cols-1 lg:grid-cols-2 gap-6">
                 
-                <MembershipChart />
+                <MembershipChart chartData={membershipsByClub}/>
                 <div className="bg-white p-6 rounded-lg shadow-md">
                     <h2 className="text-xl font-semibold text-gray-800 mb-4">Recent Platform Activity</h2>
                     <ul className="space-y-3 text-gray-600">
