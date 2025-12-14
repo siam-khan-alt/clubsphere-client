@@ -18,7 +18,7 @@ const DashboardLayout = () => {
     };
 
     return (
-        <div className="flex min-h-screen relative">
+        <div className="flex min-h-screen container bg-[var(--color-bg-light)] mx-auto relative">
             
             <button 
                 className="lg:hidden fixed top-4 left-4 z-50 p-2 rounded-md bg-[var(--color-primary-accent)] text-white"
@@ -32,7 +32,7 @@ const DashboardLayout = () => {
                     w-64 bg-[var(--color-card-bg)] text-[var(--color-text-body)] shadow-lg p-4 
                     fixed lg:static top-0 min-h-screen z-40 
                     transition-transform duration-300 transform 
-                    ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} 
+                    ${isSidebarOpen ? 'translate-x-0' : '-translate-x-80'} 
                     lg:translate-x-0 lg:block lg:border-r border-gray-200
                 `}
             >
@@ -45,7 +45,6 @@ const DashboardLayout = () => {
                     <Outlet />
                 </div>
             </div>
-        
         </div>
     );
 };

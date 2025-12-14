@@ -33,7 +33,8 @@ const ViewPayments = () => {
                 </p>
                 <p className="text-sm text-gray-500 mt-2">{payments.length} total transactions recorded.</p>
             </div>
-            <AdminPaymentHistoryTable payments={payments} />
+            <div className='overflow-x-auto max-w-64 md:max-w-2xl lg:max-w-3xl'>
+            <AdminPaymentHistoryTable payments={payments} /></div>
         </div>
     );
 };

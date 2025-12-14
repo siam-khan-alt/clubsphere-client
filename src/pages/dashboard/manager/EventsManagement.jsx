@@ -90,15 +90,9 @@ const {
         <div className="p-4 sm:p-6 bg-gray-50 min-h-screen">
             <div className="flex justify-between items-center mb-6">
                 <h1 className="text-3xl font-bold text-gray-800">🗓️ Event Management</h1>
-                <button
-                    onClick={() => setIsCreateModalOpen(true)}
-                    className="flex items-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-150"
-                >
-                    <FiPlusCircle className="mr-2" />
-                    Create New Event
-                </button>
+                
             </div>
-            <div className='overflow-x-auto container lg: mx-auto'>
+            <div className='overflow-x-auto max-w-64 md:max-w-2xl lg:max-w-3xl  '>
  <EventListTable 
                 events={events}
                 onViewRegistrations={handleViewRegistrations}
@@ -122,6 +116,13 @@ const {
                 onClose={() => setIsEditModalOpen(false)}
                 eventToEdit={eventToEdit}
             />
+            <button
+                    onClick={() => setIsCreateModalOpen(true)}
+                    className="flex items-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-150"
+                >
+                    <FiPlusCircle className="mr-2" />
+                    Create New Event
+                </button>
         </div>
     );
 };

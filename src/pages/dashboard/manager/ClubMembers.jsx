@@ -70,11 +70,11 @@ const ClubMembers = () => {
                     <FiUsers className="w-12 h-12 mx-auto text-blue-500 mb-4" />
                     <p className="text-xl font-semibold text-gray-700">No members have joined this club yet.</p>
                 </div>
-            ) : (
+            ) : (<div className='overflow-x-auto max-w-64 md:max-w-2xl lg:max-w-3xl'>
                 <MemberTable 
                     members={members} 
                     onExpireMember={handleExpireMember} 
-                />
+                /></div>
             )}
         </div>
     );

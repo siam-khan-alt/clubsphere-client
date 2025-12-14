@@ -10,6 +10,7 @@ const AdminPaymentHistoryTable = ({ payments }) => {
             </div>
         );
     }
+console.log(payments);
 
     return (
         <div className="overflow-x-auto bg-white rounded-xl shadow-lg">

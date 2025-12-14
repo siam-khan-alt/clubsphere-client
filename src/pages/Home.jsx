@@ -1,9 +1,10 @@
 import React from 'react';
+import HeroSection from '../components/Home/HeroSection';
 
 const Home = () => {
     return (
         <div>
-            <p className='text-pink-400'>clubsphere home</p>
+            <HeroSection/>
         </div>
     );
 };

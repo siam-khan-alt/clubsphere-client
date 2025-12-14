@@ -1,5 +1,5 @@
 import React from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import useAxiosSecure from '../../../hooks/useAxiosSecure';
 import LoadingSpinner from '../../../components/shared/LoadingSpinner';
 import { FiCreditCard } from 'react-icons/fi';
@@ -8,7 +8,11 @@ import PaymentHistoryTable from '../../../components/member/PaymentHistoryTable'
 
 const PaymentHistory = () => {
      const axiosSecure = useAxiosSecure();
-    
+     const queryClient = useQueryClient(); 
+
+    React.useEffect(() => {
+        queryClient.invalidateQueries({ queryKey: ['memberPaymentHistory'] });
+    }, [queryClient]); 
     const { data: payments = [], isLoading, error } = useQuery({
         queryKey: ['memberPaymentHistory'],
         queryFn: async () => {
@@ -19,14 +23,17 @@ const PaymentHistory = () => {
 
     if (isLoading) return <LoadingSpinner />;
     if (error) return <div className="text-red-500 p-4">Error loading payment history: {error.message}</div>;
+console.log(payments);
 
     return (
         <div className="p-4">
             <h1 className="text-3xl font-bold text-gray-800 mb-6 flex items-center">
                 <FiCreditCard className="w-6 h-6 mr-2 text-blue-600" /> Payment History
             </h1>
+            <div className='overflow-x-auto max-w-64 md:max-w-2xl lg:max-w-3xl'>
+                  <PaymentHistoryTable payments={payments} />
+            </div>
             
-            <PaymentHistoryTable payments={payments} />
         </div>
     );
 };
