@@ -115,7 +115,7 @@ const EventDetails = () => {
                 />
 
                 <div className="p-8">
-                    <h1 className="text-4xl font-extrabold text-primary mb-2">{event.title}</h1>
+                    <h2 className=" mb-2">{event.title}</h2>
                     <p className="text-lg text-gray-600 mb-6">Hosted by: <span className="font-semibold">{event.clubDetails.clubName}</span></p>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8 border-t pt-4">
@@ -154,7 +154,7 @@ const EventDetails = () => {
                         </div>
                     </div>
                     
-                    <h2 className="text-2xl font-bold mb-3 mt-4 border-b pb-2">Event Details</h2>
+                    <h4 className="text-2xl font-bold mb-3 mt-4 border-b pb-2">Event Details</h4>
                     <p className="text-gray-700 whitespace-pre-line mb-8">{event.description}</p>
                     
                     <div className="mt-8">

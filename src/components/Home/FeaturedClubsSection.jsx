@@ -39,7 +39,7 @@ const FeaturedClubsSection = () => {
     if (isError) {
         return (
             <div className="container mx-auto px-4 text-center">
-                 <h2 className="text-4xl font-bold text-gray-800 mb-12">⭐ Featured Clubs</h2>
+                 <h2 className=" mb-12">Featured Clubs</h2>
                 <p className="text-red-500 text-lg">Error loading clubs. Please check the network and backend connection.</p>
             </div>
         );
@@ -47,7 +47,7 @@ const FeaturedClubsSection = () => {
 
     return (
         <div className="container mx-auto pt-10 px-4">
-            <h2 className="text-4xl font-bold text-gray-800 text-center mb-8">Featured Clubs</h2>
+            <h2 className="text-center mb-8">Featured Clubs</h2>
             
             <motion.div
                 variants={containerVariants}

@@ -2,7 +2,7 @@
 import React from 'react';
 
 const StatCard = ({ title, value, icon: Icon, colorClass, bgColorClass, iconColorClass }) => (
-    <div className={`p-5 rounded-lg shadow-md ${bgColorClass} ${colorClass} transition duration-300 hover:shadow-xl`}>
+    <div className={`p-5 rounded-lg border-t-4 border-indigo-500 shadow-md ${bgColorClass} ${colorClass} transition duration-300 hover:shadow-xl`}>
         <div className="flex items-center justify-between">
             <div>
                 <p className="text-sm font-medium text-gray-600">{title}</p>

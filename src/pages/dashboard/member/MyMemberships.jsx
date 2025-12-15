@@ -22,9 +22,9 @@ const MyClubs = () => {
 
     return (
         <div className="p-4">
-            <h1 className="text-3xl font-bold text-gray-800 mb-6 flex items-center">
+            <h2 className=" mb-6 flex items-center">
                 <FiUsers className="w-6 h-6 mr-2 text-indigo-600" /> My Clubs & Memberships
-            </h1>
+            </h2>
             
             {clubs.length === 0 ? (
                 <div className="text-center py-10 bg-white rounded-lg shadow-md">

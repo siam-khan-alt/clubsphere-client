@@ -78,8 +78,8 @@ const MyClubs = () => {
 
     return (
         <div className="p-4 sm:p-6 bg-gray-50 min-h-screen">
-            <h1 className="text-3xl font-bold text-gray-800 mb-8">My Managed Clubs</h1>
-            <h2 className="text-2xl font-bold text-gray-800 mb-6 border-b pb-2">Clubs List ({myClubs.length})</h2>
+            <h2 className=" mb-8">My Managed Clubs</h2>
+            <h4 className="text-2xl font-bold text-gray-800 mb-6 border-b pb-2">Clubs List ({myClubs.length})</h4>
             
             {myClubs.length === 0 ? (
                 <div className="text-center p-16 border-2 border-dashed border-gray-300 rounded-lg bg-white shadow-sm">

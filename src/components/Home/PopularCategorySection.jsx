@@ -27,7 +27,7 @@ const containerVariants = {
 const PopularCategorySection = () => {
     return (
         <div className="container mx-auto px-4 py-10">
-            <h2 className="text-4xl font-bold text-gray-800 text-center mb-8">
+            <h2 className=" text-center mb-8">
                 Popular Categories
             </h2>
             

@@ -38,14 +38,14 @@ const Events = () => {
 
     return (
         <div className="container mx-auto px-4 py-10">
-            <motion.h1 
+            <motion.h2 
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5 }}
-                className="text-4xl font-extrabold text-center mb-12 text-gray-800 border-b-4 border-indigo-500 pb-2"
+                className=" text-center mb-12  border-b-4 border-indigo-500 pb-2"
             >
                 Upcoming Events
-            </motion.h1>
+            </motion.h2>
 
             <motion.div 
                 initial={{ opacity: 0 }}
@@ -90,7 +90,7 @@ const Events = () => {
                             className="bg-white rounded-xl shadow-lg hover:shadow-xl transition duration-300 overflow-hidden border-t-4 border-indigo-500 flex flex-col justify-between"
                         >
                             <div className="p-6">
-                                <h3 className="text-2xl font-bold text-gray-900 mb-2">{event.title}</h3>
+                                <h4 className="text-2xl font-bold text-gray-900 mb-2">{event.title}</h4>
                                 
                                 <p className="text-sm text-gray-500 mb-3 flex items-center gap-2">
                                     <FaCalendarAlt /> 

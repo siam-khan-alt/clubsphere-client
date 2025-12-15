@@ -6,7 +6,7 @@ const MembershipChart = ({ chartData=[]}) => {
     if (chartData.length === 0) {
         return (
             <div className="bg-white p-6 rounded-lg shadow-md h-[400px] flex items-center justify-center">
-                <h2 className="text-xl font-semibold text-gray-500">No membership data available for charting.</h2>
+                <h4 className="text-xl font-semibold text-gray-500">No membership data available for charting.</h4>
             </div>
         );
     }
@@ -16,7 +16,7 @@ const MembershipChart = ({ chartData=[]}) => {
     }));
     return (
         <div className="bg-white p-6 rounded-lg shadow-md h-[400px]">
-            <h2 className="text-xl font-semibold text-gray-800 mb-4">Memberships by Club Category</h2>
+            <h4 className="text-xl font-semibold text-gray-800 mb-4">Memberships by Club Category</h4>
             <ResponsiveContainer width="100%" height="85%">
                 <BarChart
                     data={formattedData}

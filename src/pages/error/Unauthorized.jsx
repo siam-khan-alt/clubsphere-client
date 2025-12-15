@@ -8,8 +8,8 @@ const {user}=use(AuthContext)
 const userRole = user?.role || 'Guest';
     return (
         <div className="flex flex-col items-center justify-center min-h-screen bg-[var(--color-bg-light)] text-[var(--color-text-body)] p-6">
-            <h1 className="text-6xl font-extrabold text-[var(--color-error)]">403</h1>
-            <h2 className="text-3xl font-semibold mt-4">Access Denied</h2>
+            <h2 >403</h2>
+            <h4 className="text-3xl font-semibold mt-4">Access Denied</h4>
             <p className="mt-2 text-xl text-[var(--color-text-muted)] text-center">
                 Sorry, you do not have the required permissions to view this page ({userRole}).
             </p>

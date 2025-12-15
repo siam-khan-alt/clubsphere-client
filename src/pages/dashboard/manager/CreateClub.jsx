@@ -100,9 +100,9 @@ const CreateClub = () => {
       <div className="card w-full max-w-2xl shadow-2xl bg-[var(--color-card-bg)]">
         <div className="card-body">
           <div className="mb-8 text-center">
-            <h1 className="my-3 text-4xl font-bold text-[var(--color-primary-accent)]">
+            <h2 className="my-3 ">
               Create a New Club
-            </h1>
+            </h2>
             <p className="text-sm text-[var(--color-text-muted)]">
               Submit the details for your local club
             </p>

@@ -32,7 +32,7 @@ const AdminDashboard = () => {
     
     return (
         <div className="p-4 sm:p-6 bg-gray-50 min-h-screen">
-            <h1 className="text-3xl font-bold text-gray-800 mb-6">Admin Dashboard Overview 📊</h1>
+            <h2 className=" mb-6">Admin Dashboard Overview 📊</h2>
 
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4">
                 
@@ -114,7 +114,7 @@ const AdminDashboard = () => {
                 
                 <MembershipChart chartData={membershipsByClub}/>
                 <div className="bg-white p-6 rounded-lg shadow-md">
-                    <h2 className="text-xl font-semibold text-gray-800 mb-4">Recent Platform Activity</h2>
+                    <h4 className="text-xl font-semibold text-gray-800 mb-4">Recent Platform Activity</h4>
                     <ul className="space-y-3 text-gray-600">
                         <li className="p-3 bg-gray-50 rounded-md border-l-2 border-green-400">✅ New Club 'Photography Pro' Approved.</li>
                         <li className="p-3 bg-gray-50 rounded-md border-l-2 border-blue-400">👤 New User registered: user@example.com</li>

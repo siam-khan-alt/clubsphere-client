@@ -15,7 +15,7 @@ const CategoryCard = ({ category }) => {
         <motion.div variants={itemVariants}>
             <div 
                 
-                className="block p-6 rounded-xl bg-white shadow-md hover:shadow-lg transition duration-300 transform hover:-translate-y-1 hover:border-indigo-400 border border-gray-100"
+                className="block p-6 rounded-xl bg-white shadow-md hover:shadow-lg transition duration-300 transform hover:-translate-y-1 hover:border-indigo-400   border-t-4 border-indigo-500"
             >
                 <div className="flex flex-col items-center text-center">
                     
@@ -23,9 +23,9 @@ const CategoryCard = ({ category }) => {
                         <Icon className={`w-8 h-8 `} />
                     </div>
                     
-                    <h3 className="text-lg font-semibold text-gray-800 min-h-16">
+                    <h5 className="text-lg font-semibold text-gray-800 min-h-16">
                         {category.name}
-                    </h3>
+                    </h5>
                     
                 </div>
             </div>

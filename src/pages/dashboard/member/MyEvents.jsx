@@ -22,9 +22,9 @@ const MyEvents = () => {
 
     return (
         <div className="p-4">
-            <h1 className="text-3xl font-bold text-gray-800 mb-6 flex items-center">
+            <h2 className=" mb-6 flex items-center">
                 <FiCalendar className="w-6 h-6 mr-2 text-amber-600" /> My Event Registrations
-            </h1>
+            </h2>
             <div className='overflow-x-auto max-w-64 md:max-w-2xl lg:max-w-3xl'>
              <RegisteredEventsTable registrations={registrations} />
             </div>

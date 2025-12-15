@@ -23,9 +23,9 @@ const ViewPayments = () => {
 
     return (
         <div className="p-4">
-            <h1 className="text-3xl font-bold text-gray-800 mb-6 flex items-center">
+            <h2 className=" mb-6 flex items-center">
                 <FiCreditCard className="w-6 h-6 mr-2 text-[#7C3AED]" /> Platform Payment Overview
-            </h1>
+            </h2>
             <div className="bg-white p-6 rounded-xl shadow-lg mb-6 border-l-4 border-[#7C3AED]">
                 <p className="text-lg font-medium text-gray-600">Total Revenue Generated</p>
                 <p className="text-4xl font-extrabold text-[#7C3AED] mt-1 flex items-center">

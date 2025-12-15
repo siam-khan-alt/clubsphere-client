@@ -89,9 +89,9 @@ const UpdateClubModal = ({ club, onClose }) => {
     <div className="fixed inset-0 bg-gray-600 bg-opacity-75 flex items-center justify-center z-50 p-4">
       <div className="bg-white rounded-lg shadow-2xl w-full max-w-lg overflow-y-auto max-h-[90vh]">
         <div className="p-6 border-b flex justify-between items-center">
-          <h2 className="text-2xl font-bold text-gray-800">
+          <h4 className="text-2xl font-bold text-gray-800">
             Edit Club: {club.clubName}
-          </h2>
+          </h4>
           <button
             onClick={onClose}
             className="text-gray-400 hover:text-gray-600 text-3xl leading-none"

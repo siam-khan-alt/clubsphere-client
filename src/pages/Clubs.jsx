@@ -37,7 +37,7 @@ const Clubs = () => {
   if (isError) {
     return (
       <div className="min-h-screen container mx-auto p-8 text-center">
-        <h2 className="text-3xl font-bold text-red-600 mb-4">Error Loading Clubs</h2>
+        <h5 className="text-3xl font-bold text-red-600 mb-4">Error Loading Clubs</h5>
         <p className="text-lg">Could not fetch data from the server. Please try again later.</p>
         <p className="text-sm text-gray-500 mt-2">Error: {error.message}</p>
       </div>
@@ -45,7 +45,7 @@ const Clubs = () => {
   }
     return (
         <div className="container mx-auto px-4 py-12">
-      <h1 className="text-5xl font-extrabold text-center mb-10 text-primary">Explore Local Clubs</h1>
+      <h2 className="text-center mb-10 ">Explore Local Clubs</h2>
       
       <div className="flex flex-col md:flex-row gap-4 mb-8 p-4 bg-base-200 rounded-lg shadow-md">
         

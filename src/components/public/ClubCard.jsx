@@ -8,7 +8,7 @@ const formatFee = (fee) => {
 const ClubCard = ({ club }) => {
 
   return (
-    <div className="bg-white shadow-lg rounded-xl overflow-hidden border border-gray-100 transition-transform hover:shadow-2xl duration-300 group">
+    <div className="bg-white shadow-lg rounded-xl overflow-hidden  transition-transform hover:shadow-2xl duration-300 group border-t-4 border-indigo-500">
       <div className="h-40 overflow-hidden">
         {club.bannerImage ? (
             <img 
@@ -24,9 +24,9 @@ const ClubCard = ({ club }) => {
       </div>
       <div className="p-5">
         
-        <h2 className="text-2xl font-bold text-gray-900 mt-1 mb-3 truncate hover:text-primary transition duration-200">
+        <h4 className="text-2xl font-bold text-gray-900 mt-1 mb-3 truncate hover:text-primary transition duration-200">
             {club.clubName}
-        </h2>
+        </h4>
         <div className="space-y-2 text-gray-600">
             <div className="flex items-center text-sm">
                 <FiTag className="w-4 h-4 mr-2 text-primary" />

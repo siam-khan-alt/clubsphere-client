@@ -37,7 +37,7 @@ const ClubCard = ({ club, onDelete, onEdit, isDeleting ,onViewMembers}) => {
                     {club.status}
                 </span>
                 
-                <h2 className="text-xl font-bold text-gray-900 mt-3 mb-2 truncate">{club.clubName}</h2>
+                <h4 className="text-xl font-bold text-gray-900 mt-3 mb-2 truncate">{club.clubName}</h4>
                 
                 <div className="mt-4 space-y-2 text-gray-600">
                     <div className="flex items-center text-sm">

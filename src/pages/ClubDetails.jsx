@@ -124,9 +124,9 @@ const ClubDetails = () => {
             alt={`${club.clubName} banner`}
           />
           <div className="absolute inset-0  flex items-end p-8">
-            <h1 className="text-4xl font-bold text-white drop-shadow-lg">
+            <h2 className=" drop-shadow-lg">
               {club.clubName}
-            </h1>
+            </h2>
           </div>
         </div>
 
@@ -145,7 +145,7 @@ const ClubDetails = () => {
             />
           </div>
           <section>
-            <h2 className="text-3xl font-semibold text-gray-800 mb-4 border-l-4 border-indigo-600 pl-3">
+            <h2 className=" mb-4 border-l-4 border-indigo-600 pl-3">
               About Our Club
             </h2>
             <p className="text-gray-600 leading-relaxed whitespace-pre-line">
@@ -154,9 +154,9 @@ const ClubDetails = () => {
           </section>
           <section className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-6 border-t">
             <div>
-              <h3 className="text-2xl font-semibold text-gray-800 mb-3">
+              <h4 className="text-2xl font-semibold text-gray-800 mb-3">
                 Membership Snapshot
-              </h3>
+              </h4>
               <ul className="space-y-3 text-gray-700">
                 <ListItem
                   label="Total Members"
@@ -166,9 +166,9 @@ const ClubDetails = () => {
               </ul>
             </div>
             <div>
-              <h3 className="text-2xl font-semibold text-gray-800 mb-3">
+              <h4 className="text-2xl font-semibold text-gray-800 mb-3">
                 Meeting Details
-              </h3>
+              </h4>
               <p className="text-gray-700">
                 <span className="font-medium text-indigo-600">Schedule:</span>{" "}
                 {club.meetingSchedule || "To be announced (TBA)"}
@@ -203,7 +203,7 @@ const ClubDetails = () => {
 };
 
 const ClubInfoCard = ({ title, value, icon }) => (
-  <div className="p-4 bg-indigo-50 rounded-lg shadow-md">
+  <div className="p-4 bg-white rounded-lg shadow-md border-t-4 border-indigo-500 transition duration-300 hover:shadow-xl">
     <p className="text-3xl mb-1">{icon}</p>
     <p className="text-sm font-medium text-gray-500 uppercase">{title}</p>
     <p className="text-xl font-bold text-indigo-700 mt-1">{value}</p>

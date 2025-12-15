@@ -103,9 +103,9 @@ const queryClient = useQueryClient();
 
   return (
     <div className="container mx-auto p-4">
-      <h2 className="text-3xl font-bold mb-6">
+      <h4 className="text-3xl font-bold mb-6">
         Manage All Users: {users.length}
-      </h2>
+      </h4>
 
       <div className="overflow-x-auto bg-white shadow-md rounded-lg">
         <table className="table w-full">

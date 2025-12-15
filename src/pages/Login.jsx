@@ -63,7 +63,7 @@ const Login = () => {
             <div className="card w-full max-w-md shadow-2xl bg-[var(--color-card-bg)] text-[var(--color-text-light)]">
                 <div className="card-body">
                     <div className="text-center mb-6">
-                        <h2 className="text-3xl font-bold text-[var(--color-primary-accent)]">Welcome Back!</h2>
+                        <h2 >Welcome Back!</h2>
                         <p className="text-[var(--color-text-muted)] mt-2">Login to continue to ClubSphere</p>
                     </div>
                     {error && (

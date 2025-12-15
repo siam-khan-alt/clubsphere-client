@@ -62,13 +62,13 @@ const EditEventModal = ({ isOpen, onClose, eventToEdit }) => {
             isOpen={isOpen}
             onRequestClose={onClose}
             className="bg-white rounded-xl shadow-2xl w-[350px] md:w-full max-h-[90vh] overflow-y-auto transform transition-all duration-300 sm:max-w-2xl"
-            overlayClassName="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-center p-4">
+            overlayClassName="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-center p-4">
         
             <div >
                 <div className="p-6 border-b flex justify-between items-center sticky top-0 bg-white z-10">
-                    <h2 className="text-xl sm:text-2xl font-bold text-blue-700 flex items-center">
+                    <h4 className="text-xl sm:text-2xl font-bold text-blue-700 flex items-center">
                         <FiEdit className="mr-2" /> Edit Event: {eventToEdit.title}
-                    </h2>
+                    </h4>
                     <button onClick={onClose} className="text-gray-500 hover:text-gray-800">
                         <FiX className="w-6 h-6" />
                     </button>

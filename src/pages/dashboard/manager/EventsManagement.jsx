@@ -89,7 +89,7 @@ const {
     return (
         <div className="p-4 sm:p-6 bg-gray-50 min-h-screen">
             <div className="flex justify-between items-center mb-6">
-                <h1 className="text-3xl font-bold text-gray-800">🗓️ Event Management</h1>
+                <h2 >Event Management</h2>
                 
             </div>
             <div className='overflow-x-auto max-w-64 md:max-w-2xl lg:max-w-3xl  '>

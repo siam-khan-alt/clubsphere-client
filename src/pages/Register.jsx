@@ -71,9 +71,9 @@ const Register = () => {
             <div className="card w-full max-w-md shadow-2xl bg-[var(--color-card-bg)]">
                 <div className="card-body">
                     <div className="mb-8 text-center">
-                        <h1 className="my-3 text-4xl font-bold text-[var(--color-primary-accent)]">
+                        <h2 >
                             Join ClubSphere
-                        </h1>
+                        </h2>
                         <p className="text-sm text-[var(--color-text-muted)]">
                             Create your account to get started
                         </p>
