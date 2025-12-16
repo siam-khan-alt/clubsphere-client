@@ -114,7 +114,7 @@ const AdminDashboard = () => {
                 
                 <MembershipChart chartData={membershipsByClub}/>
                 <div className="bg-white p-6 rounded-lg shadow-md">
-                    <h4 className="text-xl font-semibold text-gray-800 mb-4">Recent Platform Activity</h4>
+                    <h4 className=" mb-4">Recent Platform Activity</h4>
                     <ul className="space-y-3 text-gray-600">
                         <li className="p-3 bg-gray-50 rounded-md border-l-2 border-green-400">✅ New Club 'Photography Pro' Approved.</li>
                         <li className="p-3 bg-gray-50 rounded-md border-l-2 border-blue-400">👤 New User registered: user@example.com</li>

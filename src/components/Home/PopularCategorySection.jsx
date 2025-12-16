@@ -27,9 +27,13 @@ const containerVariants = {
 const PopularCategorySection = () => {
     return (
         <div className="container mx-auto px-4 py-10">
-            <h2 className=" text-center mb-8">
+            <motion.h2 
+            initial={{ opacity: 0, y: -20 }}
+             animate={{ opacity: 1, y: 0 }}
+             transition={{ duration: 0.5 }}
+              className=" text-center mb-8">
                 Popular Categories
-            </h2>
+            </motion.h2>
             
             <motion.div
                 variants={containerVariants}

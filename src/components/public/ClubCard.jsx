@@ -24,9 +24,9 @@ const ClubCard = ({ club }) => {
       </div>
       <div className="p-5">
         
-        <h4 className="text-2xl font-bold text-gray-900 mt-1 mb-3 truncate hover:text-primary transition duration-200">
+        <h3 className=" mt-1 mb-3 truncate ">
             {club.clubName}
-        </h4>
+        </h3>
         <div className="space-y-2 text-gray-600">
             <div className="flex items-center text-sm">
                 <FiTag className="w-4 h-4 mr-2 text-primary" />

@@ -61,8 +61,8 @@ const Navbar = () => {
   );
 
   return (
-    <nav className="shadow-md sticky top-0 z-50 bg-[var(--color-card-bg)]">
-      <div className=" px-4 sm:px-6 lg:px-8">
+    <nav className="shadow-md sticky top-0 z-50 bg-[var(--color-bg-light)]">
+      <div className=" px-4 ">
         <div className="flex justify-between items-center h-16">
           <div className="flex-shrink-0">
             <Link

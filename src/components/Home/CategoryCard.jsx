@@ -23,9 +23,9 @@ const CategoryCard = ({ category }) => {
                         <Icon className={`w-8 h-8 `} />
                     </div>
                     
-                    <h5 className="text-lg font-semibold text-gray-800 min-h-16">
+                    <h6 className="text-lg font-semibold text-[#34495E] min-h-16">
                         {category.name}
-                    </h5>
+                    </h6>
                     
                 </div>
             </div>

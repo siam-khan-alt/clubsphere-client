@@ -5,6 +5,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import useAxiosSecure from "../hooks/useAxiosSecure";
 import { use, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
+import toast from "react-hot-toast";
 
 const ClubDetails = () => {
   const { id } = useParams();
@@ -34,7 +35,7 @@ const ClubDetails = () => {
     if (loading || isJoining) return;
 
     if (!user) {
-      alert("You must be logged in to join a club.");
+      toast("You must be logged in to join a club.");
       navigate("/login");
       return;
     }
@@ -52,14 +53,14 @@ const ClubDetails = () => {
         if (response.data.url) {
           window.location.replace(response.data.url);
         } else {
-          alert("Could not get payment URL. Please try again.");
+          toast("Could not get payment URL. Please try again.");
         }
       } catch (error) {
         console.error("Checkout Session creation failed:", error);
         const errorMessage =
           error.response?.data?.message ||
           "Failed to initiate payment. Server error.";
-        alert(errorMessage);
+        toast.error(errorMessage);
       } finally {
         setIsJoining(false);
       }
@@ -72,7 +73,7 @@ const ClubDetails = () => {
         paymentStatus: "free",
       });
 
-      alert(`Successfully joined ${club.clubName}!`);
+      toast.success(`Successfully joined ${club.clubName}!`);
 
       queryClient.invalidateQueries(["club", id]);
 
@@ -82,7 +83,7 @@ const ClubDetails = () => {
       const errorMessage =
         error.response?.data?.message ||
         "An error occurred while trying to join the club.";
-      alert(errorMessage);
+      toast.error(errorMessage);
     }
   };
 
@@ -154,7 +155,7 @@ const ClubDetails = () => {
           </section>
           <section className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-6 border-t">
             <div>
-              <h4 className="text-2xl font-semibold text-gray-800 mb-3">
+              <h4 className=" mb-3">
                 Membership Snapshot
               </h4>
               <ul className="space-y-3 text-gray-700">
@@ -166,7 +167,7 @@ const ClubDetails = () => {
               </ul>
             </div>
             <div>
-              <h4 className="text-2xl font-semibold text-gray-800 mb-3">
+              <h4 className=" mb-3">
                 Meeting Details
               </h4>
               <p className="text-gray-700">

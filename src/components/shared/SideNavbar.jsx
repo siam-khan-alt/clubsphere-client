@@ -27,7 +27,7 @@ const SideNavbar = () => {
                 {role ? `${role.toUpperCase()} DASHBOARD` : 'DASHBOARD'}
             </div>
 
-            <h4 className="text-xs font-semibold uppercase text-[var(--color-text-muted)] mt-4 pt-4 border-t border-gray-200">General</h4>
+            <h4 className=" uppercase  mt-4 pt-4 border-t border-gray-200">General</h4>
             <NavLinkItem to={`/dashboard/${role}/home`} icon={FaUser}>
                 My Profile
             </NavLinkItem>
@@ -40,7 +40,7 @@ const SideNavbar = () => {
 
             {(isAdminOrOrganizer) && (
                 <>
-                    <h4 className="text-xs font-semibold uppercase text-[var(--color-text-muted)] mt-4 pt-4 border-t border-gray-200">Management</h4>
+                    <h4 className="uppercase  mt-4 pt-4 border-t border-gray-200">Management</h4>
                     
                     {isManager && (
                         <>
@@ -89,7 +89,7 @@ const SideNavbar = () => {
             )}
             
             <div className="pt-4 border-t border-gray-200 mt-4 space-y-2">
-                <h4 className="text-xs font-semibold uppercase text-[var(--color-text-muted)]">Quick Actions</h4>
+                <h4 className=" uppercase ">Quick Actions</h4>
                 <NavLinkItem to="/" icon={FaHome}>
                     Back to Home
                 </NavLinkItem>

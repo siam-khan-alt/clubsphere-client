@@ -34,9 +34,12 @@ const stepVariants = {
 const HowItWorksSection = () => {
     return (
         <div className="container mx-auto px-4 pb-10">
-            <h2 className="text-center mb-8">
+            <motion.h2
+            initial={{ opacity: 0, y: -20 }}
+             animate={{ opacity: 1, y: 0 }}
+             transition={{ duration: 0.5 }} className="text-center mb-8">
                 How ClubSphere Works
-            </h2>
+            </motion.h2>
             
             <div className="flex justify-center">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-12 max-w-6xl">
@@ -62,9 +65,9 @@ const HowItWorksSection = () => {
                                     STEP {step.id}
                                 </div>
                                 
-                                <h5 className="text-xl font-bold text-gray-800 mb-3">
+                                <h6 className="text-xl font-bold text-[#34495E] mb-3">
                                     {step.title}
-                                </h5>
+                                </h6>
                                 
                                 <p className="text-gray-600">
                                     {step.description}

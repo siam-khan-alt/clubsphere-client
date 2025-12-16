@@ -47,7 +47,11 @@ const FeaturedClubsSection = () => {
 
     return (
         <div className="container mx-auto pt-10 px-4">
-            <h2 className="text-center mb-8">Featured Clubs</h2>
+            <motion.h2 
+             initial={{ opacity: 0, y: -20 }}
+             animate={{ opacity: 1, y: 0 }}
+             transition={{ duration: 0.5 }}
+             className="text-center mb-8">Featured Clubs</motion.h2>
             
             <motion.div
                 variants={containerVariants}

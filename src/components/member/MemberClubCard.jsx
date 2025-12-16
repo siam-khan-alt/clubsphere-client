@@ -12,7 +12,7 @@ const MemberClubCard = ({ club }) => {
     return (
         <div className="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition duration-300 border-t-4 border-indigo-600">
             <div className="flex justify-between items-start mb-3">
-                <h5 className="text-xl font-bold text-gray-900">{club.clubName}</h5>
+                <h3 >{club.clubName}</h3>
                 <span className={`px-3 py-1 text-xs font-semibold rounded-full ${statusColor}`}>
                     {statusText}
                 </span>

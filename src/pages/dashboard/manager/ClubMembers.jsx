@@ -63,7 +63,7 @@ const ClubMembers = () => {
     return (
         <div className="p-4 sm:p-6 bg-gray-50 min-h-screen">
             <h2 className=" mb-2">Club Members Management</h2>
-            <h4 className="text-xl text-indigo-600 mb-6 border-b pb-2">Club: {clubName || 'N/A'} ({members.length} Members)</h4>
+            <h3 className=" mb-6 border-b pb-2">Club: {clubName || 'N/A'} ({members.length} Members)</h3>
             
             {members.length === 0 ? (
                 <div className="text-center p-16 border-2 border-dashed border-gray-300 rounded-lg bg-white shadow-sm">

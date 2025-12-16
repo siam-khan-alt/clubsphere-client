@@ -14,9 +14,9 @@ const ViewRegistrationModal = ({
     <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-center p-4">
       <div className="bg-white rounded-xl shadow-2xl w-full max-w-3xl max-h-[90vh] overflow-y-auto">
         <div className="p-6 border-b flex justify-between items-center sticky top-0 bg-white z-10">
-          <h4 className="text-2xl font-bold text-teal-700 flex items-center">
+          <h3 className=" flex items-center">
             <FiUsers className="mr-2" /> Registrations for: {eventTitle}
-          </h4>
+          </h3>
           <button
             onClick={onClose}
             className="text-gray-500 hover:text-gray-800"

@@ -154,7 +154,7 @@ const EventDetails = () => {
                         </div>
                     </div>
                     
-                    <h4 className="text-2xl font-bold mb-3 mt-4 border-b pb-2">Event Details</h4>
+                    <h4 className=" mb-3 mt-4 border-b pb-2">Event Details</h4>
                     <p className="text-gray-700 whitespace-pre-line mb-8">{event.description}</p>
                     
                     <div className="mt-8">

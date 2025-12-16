@@ -66,9 +66,9 @@ const EditEventModal = ({ isOpen, onClose, eventToEdit }) => {
         
             <div >
                 <div className="p-6 border-b flex justify-between items-center sticky top-0 bg-white z-10">
-                    <h4 className="text-xl sm:text-2xl font-bold text-blue-700 flex items-center">
+                    <h3 className=" flex items-center">
                         <FiEdit className="mr-2" /> Edit Event: {eventToEdit.title}
-                    </h4>
+                    </h3>
                     <button onClick={onClose} className="text-gray-500 hover:text-gray-800">
                         <FiX className="w-6 h-6" />
                     </button>

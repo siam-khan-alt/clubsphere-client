@@ -41,7 +41,7 @@ const DashboardLayout = () => {
             </div>
             
             <div className={`flex-1 p-4 lg:p-8 bg-[var(--color-bg-light)] ${isSidebarOpen ? 'lg:ml-0' : 'ml-0'}`}>
-                <div className="pt-16 lg:pt-0">
+                <div className="pt-10 className='bg-[#FFFFFF] lg:pt-0">
                     <Outlet />
                 </div>
             </div>

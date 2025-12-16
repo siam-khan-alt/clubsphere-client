@@ -2,7 +2,8 @@ import { useQuery } from '@tanstack/react-query';
 import React, { useMemo, useState } from 'react';
 import ClubCard from '../components/public/ClubCard';
 import axios from 'axios';
-import { BounceLoader } from 'react-spinners'; 
+import { BounceLoader } from 'react-spinners';
+import { motion } from 'framer-motion'; 
 
 const categories = [
   "All", "Technology","Photography","Sports", "Book Club","Art & Design", "Hiking & Travel", "Music & Film", "Food & Cooking"
@@ -45,9 +46,26 @@ const Clubs = () => {
   }
     return (
         <div className="container mx-auto px-4 py-12">
-      <h2 className="text-center mb-10 ">Explore Local Clubs</h2>
-      
-      <div className="flex flex-col md:flex-row gap-4 mb-8 p-4 bg-base-200 rounded-lg shadow-md">
+       <div className="text-center mb-10">
+                <motion.h2
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }} 
+                className=" inline-block">
+                    Explore Local Clubs
+                </motion.h2>
+                <div 
+                    className="h-1  mx-auto 
+                                bg-gradient-to-r 
+                                from-[#7C3AED] to-[#4F46E5] 
+                                rounded-full mt-2" 
+                ></div>
+            </div>
+      <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ delay: 0.3, duration: 0.5 }} 
+      className="flex flex-col md:flex-row gap-4 mb-8 p-4 bg-base-200 rounded-lg shadow-md">
         
         <input
           type="text"
@@ -77,7 +95,7 @@ const Clubs = () => {
           <option value="fee_desc">Fee: High to Low</option>
           <option value="fee_asc">Fee: Low to High</option>
         </select>
-      </div>
+      </motion.div>
       {isLoading?  <div className="flex items-center justify-center mt-20 w-full bg-[var(--color-bg-light)]/80 backdrop-blur-sm  inset-0 z-50">
             <div className="flex flex-col items-center">
                 
@@ -92,8 +110,13 @@ const Clubs = () => {
             </div>
         </div> :clubs?.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {clubs.map(club => (
-            <ClubCard key={club._id} club={club} />
+          {clubs.map((club, index) => (<motion.div 
+                            key={club._id} 
+                            initial={{ opacity: 0, y: 50 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.5, delay: index * 0.1 }}
+                        >
+            <ClubCard club={club} /></motion.div>
           ))}
         </div>
       ) : (

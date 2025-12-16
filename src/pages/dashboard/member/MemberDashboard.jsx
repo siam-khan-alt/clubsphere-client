@@ -34,7 +34,7 @@ const MemberDashboard = () => {
             <h2 >👋 Welcome back, {user?.displayName || 'Member'}!</h2>
             <p className="text-gray-600">Here's a quick look at your ClubSphere activities.</p>
 
-            <h4 className="text-2xl font-bold text-gray-800 border-b pb-2">📊 My Snapshot</h4>
+            <h4 className=" border-b pb-2">📊 My Snapshot</h4>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <StatCard
                   title="Total Clubs Joined" 
@@ -55,7 +55,7 @@ const MemberDashboard = () => {
             </div>
 
             <div className="bg-white p-6 rounded-xl shadow-xl">
-                <h4 className="text-2xl font-bold text-gray-800 mb-4 flex items-center">
+                <h4 className=" mb-4 flex items-center">
                     <FiActivity className="w-6 h-6 mr-2 text-red-500" /> Upcoming Events from My Clubs
                 </h4>
                 <hr className="mb-4" />

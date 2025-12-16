@@ -2,10 +2,10 @@ import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import LoadingSpinner from '../components/shared/LoadingSpinner';
 import { motion } from 'framer-motion'; 
 import { FaSearch, FaSortAmountDown, FaCalendarAlt, FaMapMarkerAlt, FaTag } from 'react-icons/fa';
 import { format } from 'date-fns';
+import { BounceLoader } from 'react-spinners';
 const Events = () => {
     const navigate = useNavigate();
 
@@ -33,20 +33,26 @@ const Events = () => {
         setParams(prev => ({ ...prev, sort, order }));
     };
 
-    if (isLoading) return <LoadingSpinner/>
     if (error) return <div className="text-center py-20 text-red-600">Error loading events: {error.message}</div>;
 
     return (
         <div className="container mx-auto px-4 py-10">
+            <div className="text-center mb-12">
             <motion.h2 
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5 }}
-                className=" text-center mb-12  border-b-4 border-indigo-500 pb-2"
+                className=" inline-block"
             >
                 Upcoming Events
             </motion.h2>
-
+            <div 
+                    className="h-1  mx-auto 
+                                bg-gradient-to-r 
+                                from-[#7C3AED] to-[#4F46E5] 
+                                rounded-full mt-2" 
+                ></div>
+            </div>
             <motion.div 
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -78,7 +84,18 @@ const Events = () => {
                     <FaSortAmountDown className="absolute left-3 top-3 text-gray-400 pointer-events-none" />
                 </div>
             </motion.div>
-
+        {isLoading ? (
+                <div className="flex items-center justify-center mt-20 w-full bg-[var(--color-bg-light)]/80 backdrop-blur-sm  inset-0 z-50 mx-auto">
+                    <div className="flex flex-col items-center">
+                        <BounceLoader 
+                            color='#7C3AED' loading={true}
+                        />
+                        <p className="mt-6 text-xl font-semibold text-[#34495E] tracking-wider">
+                            ClubSphere is Loading Events...
+                        </p>
+                    </div>
+                </div>
+            ) :
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {events.length > 0 ? (
                     events.map((event, index) => (
@@ -90,7 +107,7 @@ const Events = () => {
                             className="bg-white rounded-xl shadow-lg hover:shadow-xl transition duration-300 overflow-hidden border-t-4 border-indigo-500 flex flex-col justify-between"
                         >
                             <div className="p-6">
-                                <h4 className="text-2xl font-bold text-gray-900 mb-2">{event.title}</h4>
+                                <h3 className="mb-2">{event.title}</h3>
                                 
                                 <p className="text-sm text-gray-500 mb-3 flex items-center gap-2">
                                     <FaCalendarAlt /> 
@@ -125,7 +142,7 @@ const Events = () => {
                         <p className="text-xl text-gray-500">No events found matching your criteria.</p>
                     </div>
                 )}
-            </div>
+            </div>}
         </div>
     );
 };

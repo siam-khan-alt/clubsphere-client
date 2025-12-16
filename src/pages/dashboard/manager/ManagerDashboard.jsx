@@ -69,7 +69,7 @@ const ManagerDashboard = () => {
                 />
             </div>
 
-            <h4 className="text-2xl font-bold text-gray-800 mb-4 border-b pb-2">Quick Actions</h4>
+            <h4 className=" mb-4 border-b pb-2">Quick Actions</h4>
             
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <a 
