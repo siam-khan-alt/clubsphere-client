@@ -13,7 +13,7 @@ const AdminPaymentHistoryTable = ({ payments }) => {
 console.log(payments);
 
     return (
-        <div className="overflow-x-auto bg-white rounded-xl shadow-lg">
+        <div className=" bg-white rounded-xl shadow-lg">
             <table className="min-w-full divide-y divide-gray-200">
                 <thead className="bg-red-50">
                     <tr>

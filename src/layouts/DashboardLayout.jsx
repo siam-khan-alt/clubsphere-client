@@ -29,7 +29,7 @@ const DashboardLayout = () => {
             
             <div 
                 className={`
-                    w-64 bg-[var(--color-card-bg)] text-[var(--color-text-body)] shadow-lg p-4 
+                    max-w-64 bg-[var(--color-card-bg)] text-[var(--color-text-body)] shadow-lg p-4 
                     fixed lg:static top-0 min-h-screen z-40 
                     transition-transform duration-300 transform 
                     ${isSidebarOpen ? 'translate-x-0' : '-translate-x-80'} 

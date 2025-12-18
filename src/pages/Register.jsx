@@ -67,7 +67,7 @@ const Register = () => {
     };
 
     return (
-        <div className="flex justify-center items-center min-h-screen py-12 px-4 bg-[var(--color-bg-light)] text-[var(--color-text-light)]">
+        <div className="flex justify-center items-center min-h-screen py-12 px-4 bg-[var(--color-card-bg)] text-[var(--color-text-light)]">
             <div className="card w-full max-w-md shadow-2xl bg-[var(--color-card-bg)]">
                 <div className="card-body">
                     <div className="mb-8 text-center">

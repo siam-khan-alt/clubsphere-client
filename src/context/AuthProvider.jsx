@@ -92,7 +92,34 @@ export const AuthProvider = ({ children }) => {
     const googleLogin = () => {
         return signInWithPopup(auth, googleProvider);
     };
+        
+    const updateUser = async (name, photoURL) => {
+    setLoading(true);
+    try {
+        await updateProfile(auth.currentUser, {
+            displayName: name,
+            photoURL: photoURL
+        });
 
+        await axios.patch(`${import.meta.env.VITE_API_URL}/users/update`, {
+            email: user?.email, 
+            name: name,
+            photoURL: photoURL
+        });
+
+        setUser(prev => ({
+            ...prev,
+            displayName: name,
+            photoURL: photoURL
+        }));
+
+    } catch (error) {
+        console.error("Update error:", error);
+        throw error;
+    } finally {
+        setLoading(false);
+    }
+};
     const logout = () => {
         setLoading(true);
         return signOut(auth);
@@ -118,7 +145,8 @@ export const AuthProvider = ({ children }) => {
         googleLogin,
         logout,
         setUser,
-        getFirebaseToken
+        getFirebaseToken,
+        updateUser
     };
 
     return (

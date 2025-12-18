@@ -62,7 +62,7 @@ const ManageClubs = () => {
     const isMutating = updateClubStatusMutation.isPending;
 
     return (
-        <div className="p-4 sm:p-6 bg-gray-50 min-h-screen overflow-x-hidden"> 
+        <div className="p-4 sm:p-6 bg-gray-50 min-h-screen "> 
             
             <h2 className=" mb-6">Manage All Clubs 🏢</h2>
             

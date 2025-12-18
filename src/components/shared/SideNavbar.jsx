@@ -11,6 +11,7 @@ import {
 } from 'react-icons/fa';
 import { AuthContext } from '../../context/AuthContext';
 import NavLinkItem from '../dashboard/NavLinkItem';
+import Swal from 'sweetalert2';
 
 const SideNavbar = () => {
     const { user, logout } = use(AuthContext); 
@@ -20,7 +21,29 @@ const SideNavbar = () => {
     const isAdmin = role === 'admin';
     const isManager = role === 'clubManager'; 
     const isMember = role === 'member';
-
+    const handleLogout = () => {
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You will be logged out from the dashboard.",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, log me out!"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                logout();
+                
+                Swal.fire({
+                    title: "Logged Out!",
+                    text: "You have been successfully logged out.",
+                    icon: "success",
+                    timer: 1500,
+                    showConfirmButton: false
+                });
+            }
+        });
+    };
     return (
         <nav className="space-y-2">
             <div className="text-sm font-bold uppercase text-[var(--color-primary-accent)] mb-4">
@@ -95,7 +118,7 @@ const SideNavbar = () => {
                 </NavLinkItem>
                 
                 <button 
-                    onClick={logout}
+                    onClick={handleLogout}
                     className="flex items-center w-full p-3 rounded-lg transition duration-200 text-[var(--color-error)] hover:bg-[var(--color-error)] hover:text-white"
                 >
                     <FaSignOutAlt className="w-5 h-5 mr-3" />

@@ -11,7 +11,7 @@ const ViewRegistrationModal = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-center p-4">
+    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-1000 flex justify-center items-center p-4">
       <div className="bg-white rounded-xl shadow-2xl w-full max-w-3xl max-h-[90vh] overflow-y-auto">
         <div className="p-6 border-b flex justify-between items-center sticky top-0 bg-white z-10">
           <h3 className=" flex items-center">
@@ -31,7 +31,7 @@ const ViewRegistrationModal = ({
               No members have registered for this event yet.
             </div>
           ) : (
-            <div className="overflow-x-auto">
+            <div >
               <table className="min-w-full divide-y divide-gray-200">
                 <thead className="bg-teal-50">
                   <tr>
@@ -42,7 +42,7 @@ const ViewRegistrationModal = ({
                       Registration Date
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
-                      Payment Status
+                      Status
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
                       Amount Paid
@@ -53,13 +53,13 @@ const ViewRegistrationModal = ({
                   {registrations.map((reg, index) => (
                     <tr key={index}>
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                        {reg.memberEmail}
+                        {reg.userEmail}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {reg.registrationDate &&
-                        !isNaN(new Date(reg.registrationDate))
+                        {reg.registeredAt &&
+                        !isNaN(new Date(reg.registeredAt))
                           ? format(
-                              new Date(reg.registrationDate),
+                              new Date(reg.registeredAt),
                               "MMM d, yyyy, h:mm a"
                             )
                           : "N/A"}{" "}
@@ -67,17 +67,17 @@ const ViewRegistrationModal = ({
                       <td className="px-6 py-4 whitespace-nowrap text-sm">
                         <span
                           className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                            reg.paymentStatus === "paid"
+                            reg.status === "registered"
                               ? "bg-green-100 text-green-800"
                               : "bg-red-100 text-red-800"
                           }`}
                         >
-                          {reg.paymentStatus.charAt(0).toUpperCase() +
-                            reg.paymentStatus.slice(1)}
+                          {reg.status?.charAt(0).toUpperCase() +
+                            reg.status?.slice(1)}
                         </span>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        ${reg.amount.toFixed(2)}
+                        {reg.amount ? reg.amount.toFixed(2) : "0.00"}
                       </td>
                     </tr>
                   ))}

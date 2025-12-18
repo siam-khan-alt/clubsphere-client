@@ -59,7 +59,7 @@ const Login = () => {
     const isDisabled = loading || authLoading;
 
     return (
-        <div className="min-h-screen flex items-center justify-center py-12 px-4 bg-[var(--color-bg-light)]">
+        <div className="min-h-screen flex items-center justify-center py-12 px-4 bg-[var(--color-card-bg)]">
             <div className="card w-full max-w-md shadow-2xl bg-[var(--color-card-bg)] text-[var(--color-text-light)]">
                 <div className="card-body">
                     <div className="text-center mb-6">

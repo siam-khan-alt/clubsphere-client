@@ -1,8 +1,8 @@
 import React, { use, useState } from "react";
-import { FiGrid, FiLogOut, FiMenu, FiX } from "react-icons/fi";
+import { FiGrid, FiLogOut, FiMenu, FiUser, FiX } from "react-icons/fi";
 import { Link, NavLink } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
-
+import Swal from "sweetalert2";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -10,12 +10,32 @@ const Navbar = () => {
   const { user, logout } = use(AuthContext);
 
   const handleLogout = () => {
-    logout();
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You will be logged out from the dashboard.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, log me out!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        logout();
+
+        Swal.fire({
+          title: "Logged Out!",
+          text: "You have been successfully logged out.",
+          icon: "success",
+          timer: 1500,
+          showConfirmButton: false,
+        });
+      }
+    });
     setIsOpen(false);
   };
 
   const goDashboardRoute = () => {
-    const role = user?.role || 'member';
+    const role = user?.role || "member";
     return `/dashboard/${role}/home`;
   };
 
@@ -97,8 +117,16 @@ const Navbar = () => {
                   >
                     <li className="menu-title">
                       <span className="font-semibold">{user?.displayName}</span>
-                      </li>
+                    </li>
                     <div className="divider my-0"></div>
+                    <li>
+                      <Link
+                        to="/dashboard/profile"
+                        className="flex items-center gap-2 hover:text-[var(--color-primary-accent)] py-2"
+                      >
+                        <FiUser className="text-lg" /> Profile
+                      </Link>
+                    </li>
                     <li>
                       <Link
                         to={goDashboardRoute()}
@@ -156,6 +184,14 @@ const Navbar = () => {
                   </li>
                   <li>
                     <Link
+                      to="/dashboard/profile"
+                      onClick={() => setIsOpen(false)}
+                    >
+                      <FiUser /> Profile
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
                       to={goDashboardRoute()}
                       className="hover:text-[var(--color-primary-accent)]"
                     >
@@ -163,7 +199,10 @@ const Navbar = () => {
                     </Link>
                   </li>
                   <li>
-                    <button onClick={handleLogout} className="text-[var(--color-error)]">
+                    <button
+                      onClick={handleLogout}
+                      className="text-[var(--color-error)]"
+                    >
                       <FiLogOut /> Logout
                     </button>
                   </li>

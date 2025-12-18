@@ -93,7 +93,7 @@ const {
                 
             </div>
             <div className='overflow-x-auto max-w-64 md:max-w-2xl lg:max-w-3xl  '>
- <EventListTable 
+              <EventListTable 
                 events={events}
                 onViewRegistrations={handleViewRegistrations}
                 onEditEvent={handleEditEvent} 

@@ -33,7 +33,7 @@ const getStatusBadge = (status) => {
 
 const MemberTable = ({ members, onExpireMember }) => {
   return (
-    <div className="overflow-x-auto bg-white shadow-lg rounded-xl">
+    <div className=" bg-white shadow-lg rounded-xl">
       <table className="min-w-full divide-y divide-gray-200">
         <thead className="bg-gray-100">
           <tr>
