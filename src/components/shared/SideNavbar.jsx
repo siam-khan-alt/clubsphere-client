@@ -1,6 +1,5 @@
 import { use } from 'react';
 import {
-    FaUser,
     FaHistory,
     FaChartLine,
     FaUsers,
@@ -12,6 +11,7 @@ import {
 import { AuthContext } from '../../context/AuthContext';
 import NavLinkItem from '../dashboard/NavLinkItem';
 import Swal from 'sweetalert2';
+import { FiGrid } from 'react-icons/fi';
 
 const SideNavbar = () => {
     const { user, logout } = use(AuthContext); 
@@ -51,8 +51,8 @@ const SideNavbar = () => {
             </div>
 
             <h4 className=" uppercase  mt-4 pt-4 border-t border-gray-200">General</h4>
-            <NavLinkItem to={`/dashboard/${role}/home`} icon={FaUser}>
-                My Profile
+            <NavLinkItem to={`/dashboard/${role}/home`} icon={FiGrid}>
+                 {role ? `${role.toUpperCase()} OVERVIEW` : 'OVERVIEW'}
             </NavLinkItem>
             
             {isMember && (
