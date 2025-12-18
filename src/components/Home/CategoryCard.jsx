@@ -8,8 +8,6 @@ const itemVariants = {
 
 const CategoryCard = ({ category }) => {
     const Icon = category.icon;
-    console.log(Icon);
-    
     
     return (
         <motion.div variants={itemVariants}>

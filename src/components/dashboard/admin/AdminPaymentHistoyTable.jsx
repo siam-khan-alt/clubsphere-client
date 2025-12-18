@@ -10,7 +10,6 @@ const AdminPaymentHistoryTable = ({ payments }) => {
             </div>
         );
     }
-console.log(payments);
 
     return (
         <div className=" bg-white rounded-xl shadow-lg">

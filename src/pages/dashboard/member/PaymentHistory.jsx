@@ -23,7 +23,7 @@ const PaymentHistory = () => {
 
     if (isLoading) return <LoadingSpinner />;
     if (error) return <div className="text-red-500 p-4">Error loading payment history: {error.message}</div>;
-console.log(payments);
+
 
     return (
         <div className="p-4">

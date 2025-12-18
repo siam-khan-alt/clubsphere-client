@@ -28,7 +28,6 @@ const AdminDashboard = () => {
         rejectedClubs = 0,
         membershipsByClub = []
     } = adminStats;
-    console.log(membershipsByClub);
     
     return (
         <div className="p-4 sm:p-6 bg-gray-50 min-h-screen">
