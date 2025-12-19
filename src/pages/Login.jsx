@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form';
 import { FcGoogle } from 'react-icons/fc';
 import { AuthContext } from '../context/AuthContext';
 import { toast } from 'react-hot-toast'; 
+import { TbFidgetSpinner } from 'react-icons/tb';
 
 const Login = () => {
     const { login, googleLogin, loading: authLoading } = use(AuthContext);
@@ -131,10 +132,10 @@ const Login = () => {
 
                         <button 
                             type="submit" 
-                            className={`btn w-full text-white bg-[var(--color-primary-accent)] hover:bg-[#1E40AF] border-0 ${isDisabled ? 'loading' : ''}`}
+                            className="w-full rounded-md py-3 text-white bg-[var(--color-primary-accent)] hover:bg-[#1E40AF] disabled:opacity-50 flex items-center justify-center transition"
                             disabled={isDisabled}
                         >
-                            {isDisabled ? 'Logging in...' : 'Login'}
+                            {isDisabled ? <TbFidgetSpinner className="animate-spin text-xl" /> : 'Login'}
                         </button>
                     </form>
 

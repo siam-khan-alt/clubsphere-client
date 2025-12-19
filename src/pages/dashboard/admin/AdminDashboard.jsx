@@ -26,7 +26,8 @@ const AdminDashboard = () => {
         approvedClubs = 0,
         pendingClubs = 0,
         rejectedClubs = 0,
-        membershipsByClub = []
+        membershipsByClub = [],
+        recentActivities = []
     } = adminStats;
     
     return (
@@ -114,12 +115,30 @@ const AdminDashboard = () => {
                 <MembershipChart chartData={membershipsByClub}/>
                 <div className="bg-white p-6 rounded-lg shadow-md">
                     <h4 className=" mb-4">Recent Platform Activity</h4>
-                    <ul className="space-y-3 text-gray-600">
-                        <li className="p-3 bg-gray-50 rounded-md border-l-2 border-green-400">✅ New Club 'Photography Pro' Approved.</li>
-                        <li className="p-3 bg-gray-50 rounded-md border-l-2 border-blue-400">👤 New User registered: user@example.com</li>
-                        <li className="p-3 bg-gray-50 rounded-md border-l-2 border-yellow-400">💳 Membership Payment of $25 received.</li>
-                        <li className="p-3 bg-gray-50 rounded-md border-l-2 border-red-400">🛑 Club 'Gaming Guild' registration rejected.</li>
-                    </ul>
+                    <ul className="space-y-3">{recentActivities.length > 0 ? (
+            recentActivities.map((activity, index) => (
+                <li 
+                    key={index} 
+                    className={`p-3 bg-gray-50 rounded-md border-l-4 text-sm transition-all hover:bg-gray-100 ${
+                        activity.color === 'green' ? 'border-green-400' :
+                        activity.color === 'blue' ? 'border-blue-400' :
+                        activity.color === 'yellow' ? 'border-yellow-400' : 'border-red-400'
+                    }`}
+                >
+                    <span className="mr-2">
+                        {activity.color === 'green' && '✅'}
+                        {activity.color === 'blue' && '👤'}
+                        {activity.color === 'yellow' && '💳'}
+                        {activity.color === 'red' && '🛑'}
+                    </span>
+                    <span className="text-gray-700 font-medium">{activity.text}</span>
+                </li>
+            ))
+        ) : (
+            <div className="text-center py-6 text-gray-400 text-sm">
+                No recent activities found.
+            </div>
+        )}</ul>
                 </div>
             </div>
         </div>

@@ -4,6 +4,7 @@ import useAxiosSecure from '../../../hooks/useAxiosSecure';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import Swal from 'sweetalert2';
 import LoadingSpinner from '../../../components/shared/LoadingSpinner'
+import { FiLayout } from 'react-icons/fi';
 
 const ManageClubs = () => {
  
@@ -64,7 +65,7 @@ const ManageClubs = () => {
     return (
         <div className="p-4 sm:p-6 bg-gray-50 min-h-screen "> 
             
-            <h2 className=" mb-6">Manage All Clubs 🏢</h2>
+            <h2 className="flex items-center mb-6"><FiLayout className="w-6 h-6 mr-2 text-[#7C3AED]" />Manage All Clubs</h2>
             
             <div className="bg-white shadow-md rounded-lg overflow-x-auto max-w-64 md:max-w-2xl lg:max-w-3xl">
                 <table className="min-w-full divide-y divide-gray-200">

@@ -1,6 +1,7 @@
 import React from 'react';
 import { FiCheckCircle, FiXCircle, FiEye, FiUser, FiList } from 'react-icons/fi';
 import { TbFidgetSpinner } from 'react-icons/tb';
+import { Link } from 'react-router-dom';
 
 const getStatusClasses = (status) => {
     switch (status) {
@@ -72,12 +73,12 @@ const ClubTableRow = ({ club, handleApprove, handleReject, isMutating }) => {
                         </button>
                     </div>
                 ) : (
-                    <button 
+                    <Link to={`/clubs/${club._id}`}><button 
                         className="text-indigo-600 hover:text-indigo-900 p-2 rounded-full hover:bg-indigo-50 transition"
                         title="View Details"
                     >
                         <FiEye className="w-5 h-5" />
-                    </button>
+                    </button></Link>
                 )}
             </td>
         </tr>

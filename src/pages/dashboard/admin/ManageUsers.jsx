@@ -107,7 +107,7 @@ const queryClient = useQueryClient();
         Manage All Users: {users.length}
       </h3>
 
-      <div className="overflow-x-auto bg-white shadow-md rounded-lg">
+      <div className="overflow-x-auto  max-w-64 md:max-w-2xl lg:max-w-3xl bg-white shadow-md rounded-lg">
         <table className="table w-full">
           <thead>
             <tr>
