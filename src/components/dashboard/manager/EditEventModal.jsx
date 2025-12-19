@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import Swal from "sweetalert2";
-import { format } from "date-fns";
+import { format, isValid, parse } from "date-fns";
 import ReactModal from "react-modal";
 import uploadImageToImgBB from "../../../utils/imgbb";
 import { TbFidgetSpinner } from "react-icons/tb";
@@ -64,7 +64,7 @@ const EditEventModal = ({ isOpen, onClose, eventToEdit }) => {
     const { bannerImage, ...restData } = data;
     const imageFile = bannerImage?.length > 0 ? bannerImage[0] : null;
     let imageUrl = eventToEdit.bannerImage;
-    if (imageFile) {
+    if (imageFile instanceof File) {
       setIsImageUploading(true);
       try {
         imageUrl = await uploadImageToImgBB(imageFile);
@@ -79,10 +79,21 @@ const EditEventModal = ({ isOpen, onClose, eventToEdit }) => {
       }
       setIsImageUploading(false);
     }
-    const dateTimeString = `${data.eventDate}T${data.eventTime}:00`;
+    const dateTimeString = `${data.eventDate} ${data.eventTime}`;
+    let parsedDate = parse(dateTimeString, "yyyy-MM-dd HH:mm", new Date());
+
+    if (!isValid(parsedDate)) {
+      parsedDate = parse(dateTimeString, "yyyy-MM-dd hh:mm a", new Date());
+    }
+
+    if (!isValid(parsedDate)) {
+      Swal.fire("Error!", "Invalid Date or Time format.", "error");
+      return;
+    }
     const payload = {
-      ...data,
-      eventDate: dateTimeString,
+      ...restData,
+      bannerImage: imageUrl,
+      eventDate: parsedDate.toISOString(),
       eventFee: data.isPaid === "true" ? parseFloat(data.eventFee) : 0,
       isPaid: data.isPaid === "true",
     };
@@ -117,7 +128,7 @@ const EditEventModal = ({ isOpen, onClose, eventToEdit }) => {
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Event Title *
+              Event Title :
             </label>
             <input
               type="text"
@@ -133,7 +144,7 @@ const EditEventModal = ({ isOpen, onClose, eventToEdit }) => {
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Description *
+              Description :
             </label>
             <textarea
               {...register("description", {
@@ -168,10 +179,10 @@ const EditEventModal = ({ isOpen, onClose, eventToEdit }) => {
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Time (e.g., 7:00 PM) *
+                Time :
               </label>
               <input
-                type="text"
+                type="time"
                 {...register("eventTime", { required: "Time is required" })}
                 className="w-full p-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
                 placeholder="HH:MM AM/PM"
