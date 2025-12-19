@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import useAxiosSecure from '../../../hooks/useAxiosSecure';
 
@@ -11,12 +11,14 @@ const PaymentSuccess = () => {
     const [eventId, setEventId] = useState(null);
     const [paymentType, setPaymentType] = useState(null);
     const sessionId = new URLSearchParams(location.search).get('session_id');
-
+    const hasCalledVerify = useRef(false);
     useEffect(() => {
         if (!sessionId) {
             setStatus('Error: No payment session found.');
             return;
         }
+        if (hasCalledVerify.current) return;
+        hasCalledVerify.current = true;
         const verifyPayment = async () => {
             try {
                 const response = await axiosSecure.get(`/payment/success?session_id=${sessionId}`);
@@ -76,7 +78,7 @@ const PaymentSuccess = () => {
                 
                 {status.includes('Successful') && (
                     <button 
-                        onClick={() => navigate(getButtonPath)}
+                        onClick={() => navigate(getButtonPath())}
                         className="bg-indigo-600 text-white px-6 py-2 rounded-lg hover:bg-indigo-700 transition"
                     >
                       {paymentType === 'event' ? 'Go to Event' : 'Go to Club / Dashboard'}
