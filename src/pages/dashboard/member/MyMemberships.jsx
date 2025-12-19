@@ -5,9 +5,6 @@ import LoadingSpinner from '../../../components/shared/LoadingSpinner';
 import { FiUsers } from 'react-icons/fi';
 import MemberClubCard from '../../../components/member/MemberClubCard';
 import { Link } from 'react-router-dom';
-
-
-
 const MyClubs = () => {
     const axiosSecure = useAxiosSecure();
     const { data: clubs = [], isLoading, error } = useQuery({
