@@ -1,5 +1,5 @@
-import React, { use, useState } from "react";
-import { FiGrid, FiLogOut, FiMenu, FiUser, FiX } from "react-icons/fi";
+import React, { use, useEffect, useState } from "react";
+import { FiGrid, FiLogOut, FiMenu, FiMoon, FiSun, FiUser, FiX } from "react-icons/fi";
 import { Link, NavLink } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 import Swal from "sweetalert2";
@@ -8,6 +8,15 @@ const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   const { user, logout } = use(AuthContext);
+  const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
+  useEffect(() => {
+    document.documentElement.setAttribute("data-theme", theme);
+    localStorage.setItem("theme", theme);
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme(theme === "light" ? "dark" : "light");
+  };
 
   const handleLogout = () => {
     Swal.fire({
@@ -46,8 +55,8 @@ const Navbar = () => {
           to="/"
           className={({ isActive }) =>
             isActive
-              ? "text-[var(--color-primary-accent)] font-semibold"
-              : "text-[var(--color-text-light)] hover:text-[var(--color-primary-accent)]"
+              ? "text-primary font-bold underline underline-offset-8 transition-all"
+              : "hover:text-primary transition-all"
           }
         >
           Home
@@ -58,8 +67,8 @@ const Navbar = () => {
           to="/clubs"
           className={({ isActive }) =>
             isActive
-              ? "text-[var(--color-primary-accent)] font-semibold"
-              : "text-[var(--color-text-light)] hover:text-[var(--color-primary-accent)]"
+              ? "text-primary font-bold underline underline-offset-8 transition-all"
+              : "hover:text-primary transition-all"
           }
         >
           Clubs
@@ -70,39 +79,48 @@ const Navbar = () => {
           to="/events"
           className={({ isActive }) =>
             isActive
-              ? "text-[var(--color-primary-accent)] font-semibold"
-              : "text-[var(--color-text-light)] hover:text-[var(--color-primary-accent)]"
+              ? "text-primary font-bold underline underline-offset-8 transition-all"
+              : "hover:text-primary transition-all"
           }
         >
           Events
         </NavLink>
       </li>
+      {user && (
+        <>
+          <li><NavLink to="/about" className="hover:text-primary transition-all">About</NavLink></li>
+          <li><NavLink to="/contact" className="hover:text-primary transition-all">Contact</NavLink></li>
+        </>
+      )}
     </>
   );
 
   return (
-    <nav className="shadow-md sticky top-0 z-50 bg-[var(--color-bg-light)]">
-      <div className=" px-4 ">
-        <div className="flex justify-between items-center h-16">
+    <nav className="navbar-glass sticky top-0 z-50  transition-all duration-300 shadow-[0_4px_6px_-1px_rgba(0,0,0,0.1)]">
+      <div className="container mx-auto px-4 overflow-x-hidden">
+        <div className="flex justify-between items-center h-20">
           <div className="flex-shrink-0">
             <Link
               to="/"
-              className="text-2xl font-bold text-[var(--color-primary-accent)] hover:text-[var(--color-primary-accent)] transition"
+              className="text-2xl font-black tracking-tighter text-primary"
             >
-              ClubSphere
+              Club<span className="text-secondary">Sphere</span>
             </Link>
           </div>
 
           <div className="hidden md:flex items-center space-x-8">
-            <ul className="flex space-x-6 items-center">{navLinks}</ul>
-            <div className="flex items-center gap-3">
+            <ul className="flex space-x-8 items-center font-medium">{navLinks}</ul>
+            <div className="flex items-center gap-4">
+              <button onClick={toggleTheme} className="p-2 rounded-full bg-base-200 dark:bg-slate-800 text-xl transition-all active:scale-90">
+                {theme === "light" ? <FiMoon className="text-slate-700" /> : <FiSun className="text-yellow-400" />}
+              </button>
               {user ? (
                 <div className="dropdown dropdown-end">
                   <label
                     tabIndex={0}
-                    className="btn btn-ghost btn-circle avatar"
+                    className="btn btn-ghost btn-circle avatar ring-2 ring-primary ring-offset-2 ring-offset-base-100"
                   >
-                    <div className="w-10 rounded-full ring ring-[var(--color-primary-accent)] ring-offset-[var(--color-bg-light)] ring-offset-2">
+                    <div className="w-10 rounded-full ">
                       <img
                         src={
                           user?.photoURL || "https://via.placeholder.com/150"
@@ -113,16 +131,16 @@ const Navbar = () => {
                   </label>
                   <ul
                     tabIndex={0}
-                    className="mt-3 z-[1] p-2 shadow-lg menu menu-sm dropdown-content rounded-box w-52 bg-[var(--color-card-bg)] text-[var(--color-text-light)] border border-gray-100"
+                    className="mt-4 z-[1] p-2 shadow-2xl menu menu-sm dropdown-content rounded- w-60 border border-base-content/10"
                   >
-                    <li className="menu-title">
-                      <span className="font-semibold">{user?.displayName}</span>
+                    <li className="px-4 py-3 border-b border-base-content/10 mb-2">
+                      <p className="font-bold text-primary truncate">{user?.displayName}</p>
+                      <p className="text-xs opacity-60 truncate">{user?.email}</p>
                     </li>
-                    <div className="divider my-0"></div>
                     <li>
                       <Link
                         to="/dashboard/profile"
-                        className="flex items-center gap-2 hover:text-[var(--color-primary-accent)] py-2"
+                        className="py-3 flex gap-3"
                       >
                         <FiUser className="text-lg" /> Profile
                       </Link>
@@ -130,7 +148,7 @@ const Navbar = () => {
                     <li>
                       <Link
                         to={goDashboardRoute()}
-                        className="flex items-center gap-2 hover:text-[var(--color-primary-accent)]"
+                        className="flex py-3 gap-3 "
                       >
                         <FiGrid /> Dashboard
                       </Link>
@@ -138,7 +156,7 @@ const Navbar = () => {
                     <li>
                       <button
                         onClick={handleLogout}
-                        className="flex items-center gap-2 text-[var(--color-error)]"
+                        className="flex py-3 gap-3"
                       >
                         <FiLogOut /> Logout
                       </button>
@@ -149,13 +167,13 @@ const Navbar = () => {
                 <>
                   <Link
                     to="/login"
-                    className="btn btn-ghost btn-sm text-[var(--color-text-light)] hover:bg-[var(--color-primary-accent)]/10"
+                    className="btn btn-ghost btn-sm text-primary"
                   >
                     Login
                   </Link>
                   <Link
                     to="/register"
-                    className="btn btn-sm text-white bg-[var(--color-primary-accent)] hover:bg-[#1E40AF]"
+                    className="btn btn-primary-gradient btn-sm border-none shadow-lg"
                   >
                     Register
                   </Link>
@@ -163,84 +181,34 @@ const Navbar = () => {
               )}
             </div>
           </div>
+          
 
-          <div className="md:hidden flex items-center gap-2">
-            {user && (
-              <div className="dropdown dropdown-end">
-                <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
-                  <div className="w-8 rounded-full">
-                    <img
-                      src={user?.photoURL || "https://via.placeholder.com/150"}
-                      alt={user?.displayName || "User"}
-                    />
-                  </div>
-                </label>
-                <ul
-                  tabIndex={0}
-                  className="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content rounded-box w-52 bg-[var(--color-card-bg)] text-[var(--color-text-light)] border border-gray-100"
-                >
-                  <li className="menu-title">
-                    <span>{user?.displayName}</span>
-                  </li>
-                  <li>
-                    <Link
-                      to="/dashboard/profile"
-                      onClick={() => setIsOpen(false)}
-                    >
-                      <FiUser /> Profile
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      to={goDashboardRoute()}
-                      className="hover:text-[var(--color-primary-accent)]"
-                    >
-                      <FiGrid /> Dashboard
-                    </Link>
-                  </li>
-                  <li>
-                    <button
-                      onClick={handleLogout}
-                      className="text-[var(--color-error)]"
-                    >
-                      <FiLogOut /> Logout
-                    </button>
-                  </li>
-                </ul>
-              </div>
-            )}
-
-            <button
-              onClick={() => setIsOpen(!isOpen)}
-              className="btn btn-ghost btn-circle text-[var(--color-text-light)]"
-            >
-              {isOpen ? <FiX size={24} /> : <FiMenu size={24} />}
+        <div className="md:hidden flex items-center gap-3">
+            <button onClick={toggleTheme} className="p-2 text-xl">
+              {theme === "light" ? <FiMoon /> : <FiSun className="text-yellow-400" />}
+            </button>
+            <button onClick={() => setIsOpen(!isOpen)} className="btn btn-ghost btn-circle">
+              {isOpen ? <FiX size={26} /> : <FiMenu size={26} />}
             </button>
           </div>
         </div>
 
         {isOpen && (
-          <div className="md:hidden pb-4">
-            <ul className="space-y-2">{navLinks}</ul>
-
-            {!user && (
-              <div className="flex flex-col gap-2 mt-4">
-                <Link
-                  to="/login"
-                  className="btn btn-ghost btn-sm w-full text-[var(--color-text-light)] hover:bg-[var(--color-primary-accent)]/10"
-                  onClick={() => setIsOpen(false)}
-                >
-                  Login
-                </Link>
-                <Link
-                  to="/register"
-                  className="btn btn-sm w-full text-white bg-[var(--color-primary-accent)] hover:bg-[#1E40AF]"
-                  onClick={() => setIsOpen(false)}
-                >
-                  Register
-                </Link>
-              </div>
-            )}
+          <div className="md:hidden pb-6 animate-in slide-in-from-top duration-300">
+            <ul className="menu bg-base-200 rounded-2xl p-4 gap-2 font-semibold">
+              {navLinks}
+              {!user ? (
+                <div className="grid grid-cols-2 gap-2 mt-4">
+                  <Link to="/login" className="btn btn-outline btn-primary btn-sm" onClick={() => setIsOpen(false)}>Login</Link>
+                  <Link to="/register" className="btn btn-primary btn-sm" onClick={() => setIsOpen(false)}>Register</Link>
+                </div>
+              ) : (
+                <div className="mt-4 border-t border-base-content/10 pt-4">
+                  <li><Link to={goDashboardRoute()} onClick={() => setIsOpen(false)}>Go to Dashboard</Link></li>
+                  <li><button onClick={handleLogout} className="text-error">Logout</button></li>
+                </div>
+              )}
+            </ul>
           </div>
         )}
       </div>

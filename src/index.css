@@ -2,38 +2,69 @@
 @plugin "daisyui";
 
 :root {
-  --color-primary-accent: #7C3AED; 
-  --color-secondary-action: #06B6D4;
-  --color-text-body: #34495E;
-  --color-success: #00CC99;
-  --color-error: #F87171;
-  --color-bg-light: #F8F9FA;
-  --color-card-bg: #FFFFFF;
-  --color-text-light: var(--color-text-body);
-  --color-text-muted: #6B7280;
-} 
-
-[data-theme='light'], html:not([data-theme]), :root {
-    --p: var(--color-primary-accent); 
-    --s: var(--color-secondary-action); 
-    --a: var(--color-success); 
-    --n: var(--color-text-body); 
-    --b1: var(--color-bg-light); 
-    --er: var(--color-error); 
-    --bc: var(--color-text-body);
-    --pc: #FFFFFF;
-    --sc: #FFFFFF;
-    --ac: #FFFFFF;
-    --in: #22c55e;
-    --wa: #facc15;
+  --p: 124 58 237;          
+  --s: 6 182 212;           
+  --a: 0 204 153;           
+  --b1: 248 249 250;        
+  --bc: 52 73 94;           
+  --er: 248 113 113;        
+  --color-card: #FFFFFF;
 }
 
-h2{
-  @apply text-3xl md:text-4xl lg:text-[40px] font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#7C3AED] to-[#4F46E5] 
+[data-theme='dark'] {
+  --p: 167 139 250;         
+  --s: 34 211 238;          
+  --b1: 15 23 42;           
+  --bc: 226 232 240;        
+  --color-card: #1E293B;    
 }
-h3 {
-  @apply text-xl md:text-2xl font-semibold md:font-bold text-[#7C3AED];
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  body {
+    background-color: rgb(var(--b1));
+    color: rgb(var(--bc));
+    font-family: "Poppins", sans-serif;
+    @apply transition-colors duration-300;
+  }
+
+  h2 {
+    font-family: "Outfit", sans-serif;
+    @apply text-3xl md:text-4xl lg:text-[40px] font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#7C3AED] to-[#4F46E5] text-center mb-6;
+  }
+
+  h3 {
+    @apply text-xl md:text-2xl font-semibold md:font-bold text-primary mb-4 transition-colors;
+  }
+
+  h4 {
+    @apply text-lg md:text-2xl font-medium text-slate-700 dark:text-slate-200 mb-2 transition-colors;
+  }
+
+  input, textarea, select {
+    @apply bg-white dark:bg-slate-800 border border-gray-300 dark:border-gray-700 text-slate-900 dark:text-white rounded-lg px-4 py-2 focus:ring-2 focus:ring-primary outline-none transition-all;
+  }
+
+  label {
+    @apply text-sm font-medium text-slate-600 dark:text-slate-400 mb-1 block;
+  }
 }
-h4 {
-  @apply text-lg md:text-2xl font-medium text-[#34495E]; 
+
+@layer components {
+  .btn-primary-gradient {
+    @apply px-6 py-2 rounded-full text-white font-semibold bg-gradient-to-r from-[#7C3AED] to-[#4F46E5] hover:opacity-90 transition duration-300 shadow-md active:scale-95;
+  }
+
+  .card-style {
+    background-color: var(--color-card);
+    @apply rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 p-5 transition-all hover:shadow-xl;
+  }
+
+  .navbar-glass {
+    @apply sticky top-0 z-50 backdrop-blur-md border-b border-gray-200 dark:border-gray-800;
+    background-color: rgba(var(--b1), 0.8);
+  }
 }
