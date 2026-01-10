@@ -41,7 +41,7 @@
   }
 
   h4 {
-    @apply text-lg md:text-2xl font-medium text-slate-700 dark:text-slate-200 mb-2 transition-colors;
+    @apply text-lg md:text-2xl font-bold text-slate-500 dark:text-slate-200 mb-2 transition-colors md:group-hover:text-primary ;
   }
 
   input, textarea, select {

@@ -31,45 +31,52 @@ const FeaturedClubsSection = () => {
         },
         staleTime: 1000 * 60 * 5,
     });
-
-    if (isLoading) {
-        return <LoadingSpinner/>
-    }
-    
+ if (isLoading) return <LoadingSpinner />;
     if (isError) {
         return (
-            <div className="container mx-auto px-4 text-center">
-                 <h2 className=" mb-12">Featured Clubs</h2>
-                <p className="text-red-500 text-lg">Error loading clubs. Please check the network and backend connection.</p>
+            <div className="container mx-auto px-4 py-5 text-center">
+                <h2>Featured Clubs</h2>
+                <p className="text-red-400 font-medium bg-red-100/10 p-4 rounded-lg inline-block">
+                    Error loading clubs. Please check the network connection.
+                </p>
             </div>
         );
     }
 
     return (
-        <div className="container mx-auto pt-10 px-4">
-            <motion.h2 
-             initial={{ opacity: 0, y: -20 }}
-             animate={{ opacity: 1, y: 0 }}
-             transition={{ duration: 0.5 }}
-             className="text-center mb-8">Featured Clubs</motion.h2>
-            
-            <motion.div
-                variants={containerVariants}
-                initial="hidden" 
-                animate="visible" 
-                className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"
-            >
-                {clubs.length > 0 ? (
-                    clubs.map((club) => (
-                        <motion.div key={club._id} variants={itemVariants}>
-                            <ClubCard club={club} />
-                        </motion.div>
-                    ))
-                ) : (
-                    <p className="col-span-full text-center text-gray-500">No featured clubs found at the moment.</p>
-                )}
-            </motion.div>
-        </div>
+        <section className="py-8 bg-base-100 transition-colors duration-300">
+            <div className="container mx-auto px-4">
+                <motion.h2 
+                    initial={{ opacity: 0, y: -20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.6 }}
+                    className='mb-8'
+                >
+                    Featured Clubs
+                </motion.h2>
+                
+                <motion.div
+                    variants={containerVariants}
+                    initial="hidden" 
+                    whileInView="visible" 
+                    viewport={{ once: true }}
+                    className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8"
+                >
+                    {clubs.length > 0 ? (
+                        clubs.map((club) => (
+                            <motion.div key={club._id} variants={itemVariants}>
+                                <ClubCard club={club} />
+                            </motion.div>
+                        ))
+                    ) : (
+                        <p className="col-span-full text-center opacity-60 text-lg">
+                            No featured clubs found at the moment.
+                        </p>
+                    )}
+                </motion.div>
+            </div>
+        </section>
     );
 };
 

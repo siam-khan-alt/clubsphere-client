@@ -10,21 +10,20 @@ const CategoryCard = ({ category }) => {
     const Icon = category.icon;
     
     return (
-        <motion.div variants={itemVariants}>
-            <div 
-                
-                className="block p-6 rounded-xl bg-white shadow-md hover:shadow-lg transition duration-300 transform hover:-translate-y-1 hover:border-indigo-400   border-t-4 border-indigo-500"
-            >
-                <div className="flex flex-col items-center text-center">
-                    
-                    <div className={`p-4 rounded-full ${category.color} bg-opacity-10 mb-4`}>
-                        <Icon className={`w-8 h-8 `} />
+        <motion.div variants={itemVariants} whileHover={{ y: -5 }}>
+           <div className="card-style h-full cursor-pointer group border-t-4 border-primary transition-all duration-300">
+                <div className="flex flex-col items-center text-center p-4">
+                    <div className={`p-5 rounded-2xl ${category.color} bg-opacity-10 dark:bg-opacity-20 mb-4 transition-all duration-300 group-hover:bg-opacity-100`}>
+                        <Icon className={`w-8 h-8 ${category.iconTextColor} transition-all duration-300 group-hover:text-white`} />
                     </div>
                     
-                    <h6 className="text-lg font-semibold text-[#34495E] min-h-16">
+                    <h4 className="text-lg mb-0  ">
                         {category.name}
-                    </h6>
+                    </h4>
                     
+                    <p className="text-xs opacity-50 mt-2 group-hover:opacity-100 transition-opacity">
+                        Browse Clubs
+                    </p>
                 </div>
             </div>
         </motion.div>

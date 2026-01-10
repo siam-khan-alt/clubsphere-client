@@ -8,53 +8,53 @@ const formatFee = (fee) => {
 const ClubCard = ({ club }) => {
 
   return (
-    <div className="bg-white shadow-lg rounded-xl overflow-hidden  transition-transform hover:shadow-2xl duration-300 group border-t-4 border-indigo-500">
-      <div className="h-40 overflow-hidden">
+    <div className="card-style flex flex-col h-full border-t-4 border-primary group p-0 overflow-hidden">
+     <div className="h-44 overflow-hidden relative">
         {club.bannerImage ? (
             <img 
               src={club.bannerImage} 
               alt={`${club.clubName} Banner`} 
-              className="w-full h-full object-cover transition duration-300 group-hover:scale-105"
+              className="w-full h-full object-cover transition duration-500 group-hover:scale-110"
             />
         ) : (
-            <div className="w-full h-full flex items-center justify-center bg-gray-200 text-gray-500 font-semibold">
+            <div className="w-full h-full flex items-center justify-center bg-base-200 text-slate-400 font-semibold">
                 No Image Available
             </div>
         )}
+        <div className="absolute top-3 right-3">
+            <span className={`px-3 py-1 rounded-full text-xs font-bold shadow-sm ${
+                club.membershipFee > 0 ? 'bg-red-100 text-red-600' : 'bg-green-100 text-green-600'
+            }`}>
+                {formatFee(club.membershipFee)}
+            </span>
+        </div>
       </div>
-      <div className="p-5">
-        
-        <h3 className=" mt-1 mb-3 truncate ">
+
+      <div className="p-5 flex-grow">
+        <h3 className="mt-1 mb-3 truncate leading-tight">
             {club.clubName}
         </h3>
-        <div className="space-y-2 text-gray-600">
+        
+        <div className="space-y-3 opacity-80">
             <div className="flex items-center text-sm">
                 <FiTag className="w-4 h-4 mr-2 text-primary" />
-                <span className="font-semibold">{club.category}</span>
+                <span className="font-medium">{club.category}</span>
             </div>
             <div className="flex items-center text-sm truncate">
                 <FiMapPin className="w-4 h-4 mr-2 text-secondary" />
                 <span>{club.location}</span>
             </div>
         </div>
-        <div className="mt-3 pt-3 border-t border-gray-100">
-            <div className="text-md font-bold text-gray-800 flex justify-between items-center">
-                <span>Membership Fee:</span> 
-                <span className={club.membershipFee > 0 ? 'text-red-600' : 'text-green-600'}>
-                    {formatFee(club.membershipFee)}
-                </span>
-            </div>
-        </div>
       </div>
-      <button className="w-full justify-center 
-                         flex items-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-150 disabled:bg-gray-400">
-          <Link 
+
+      <div className="p-4 pt-0">
+        <Link 
             to={`/clubs/${club._id}`} 
-            
-          >
+            className="btn-primary-gradient w-full py-3 flex items-center justify-center gap-2 text-sm no-underline"
+        >
             View Details 
-          </Link>
-      </button>
+        </Link>
+      </div>
     </div>
   );
 };

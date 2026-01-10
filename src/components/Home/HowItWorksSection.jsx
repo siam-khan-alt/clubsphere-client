@@ -1,28 +1,35 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { FiSearch, FiUsers, FiCalendar } from 'react-icons/fi';
+import { FiSearch, FiUsers, FiCalendar, FiShare2 } from 'react-icons/fi';
 
 const WORK_STEPS = [
     {
-        id: 1,
+       id: 1,
         title: "Explore & Discover",
-        description: "Browse hundreds of approved clubs by category, location, or membership fee. Find the perfect fit for your passion.",
+        description: "Find your perfect club by category or location easily.",
         icon: FiSearch,
-        color: "text-indigo-600",
+        color: "text-primary",
     },
     {
         id: 2,
         title: "Join & Connect",
-        description: "Submit a quick membership request or join instantly. Start communicating with fellow members right away.",
+        description: "Join communities and start engaging with fellow members.",
         icon: FiUsers,
-        color: "text-green-600",
+        color: "text-secondary",
     },
     {
         id: 3,
         title: "Participate & Grow",
-        description: "Access event calendars, manage your membership, and engage in club discussions to maximize your experience.",
+        description: "Attend exciting events and manage your club activities.",
         icon: FiCalendar,
-        color: "text-red-600",
+        color: "text-accent"
+    },
+    {
+        id: 4,
+        title: "Share & Invite",
+        description: "Invite friends and build a stronger campus community.",
+        icon: FiShare2,
+        color: "text-primary",
     },
 ];
 
@@ -33,60 +40,63 @@ const stepVariants = {
 
 const HowItWorksSection = () => {
     return (
-        <div className="container mx-auto px-4 pb-10">
-            <motion.h2
-            initial={{ opacity: 0, y: -20 }}
-             animate={{ opacity: 1, y: 0 }}
-             transition={{ duration: 0.5 }} className="text-center mb-8">
-                How ClubSphere Works
-            </motion.h2>
-            
-            <div className="flex justify-center">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-12 max-w-6xl">
-                    
-                    {WORK_STEPS.map((step, index) => {
-                        const Icon = step.icon;
-                        return (
-                            <motion.div
-                                key={step.id}
-                                variants={stepVariants}
-                                initial="hidden"
-                                whileInView="visible"
-                                viewport={{ once: true, amount: 0.5 }}
-                                transition={{ delay: index * 0.2 }}
-                                
-                                className="bg-white p-8 rounded-xl shadow-xl text-center border-t-4 border-indigo-500 hover:shadow-2xl transition duration-300"
-                            >
-                                <div className={`mx-auto w-16 h-16 flex items-center justify-center rounded-full bg-opacity-10 mb-6   ${step.color.replace('text', 'bg')}`}>
-                                    <Icon className={`w-8 h-8 `} />
-                                </div>
-                                
-                                <div className={`text-sm font-semibold mb-2 ${step.color}`}>
-                                    STEP {step.id}
-                                </div>
-                                
-                                <h6 className="text-xl font-bold text-[#34495E] mb-3">
-                                    {step.title}
-                                </h6>
-                                
-                                <p className="text-gray-600">
-                                    {step.description}
-                                </p>
-                            </motion.div>
-                        );
-                    })}
-                </div>
-            </div>
-            
-            <div className="text-center mt-16">
-                <a 
-                    href="/clubs"
-                    className="inline-flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-full text-white bg-indigo-600 hover:bg-indigo-700 shadow-lg transition duration-200"
+        <section className="py-5 bg-base-100 transition-colors duration-300">
+      <div className="container mx-auto px-4">
+        <motion.h2
+          initial={{ opacity: 0, y: -20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+          className="text-center mb-8"
+        >
+          How ClubSphere Works
+        </motion.h2>
+
+        <div className="flex justify-center">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl w-full">
+            {WORK_STEPS.map((step, index) => {
+              const Icon = step.icon;
+              return (
+                <motion.div
+                  key={step.id}
+                  variants={stepVariants}
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true }}
+                  transition={{ delay: index * 0.2 }}
+                  className="card-style flex flex-col items-center text-center group border-t-4 border-primary"
                 >
-                    Start Exploring Clubs
-                </a>
-            </div>
+                  <div className="w-20 h-20 flex items-center justify-center rounded-2xl bg-opacity-10 dark:bg-opacity-20  transition-all duration-300 group-hover:scale-110 ">
+                    <Icon className={`w-10 h-10 ${step.color}`} />
+                  </div>
+
+                  <span className={`text-xs font-black tracking-widest uppercase mb-2 ${step.color}`}>
+                    STEP {step.id}
+                  </span>
+
+                  <h4 className="mb-4">
+                    {step.title}
+                  </h4>
+
+                  <p className="opacity-70 dark:text-slate-300 leading-relaxed">
+                    {step.description}
+                  </p>
+                </motion.div>
+              );
+            })}
+          </div>
         </div>
+
+        <div className="text-center mt-6">
+          <a
+            href="/clubs"
+            className="btn-primary-gradient px-10 py-4 inline-block shadow-xl"
+          >
+            Start Exploring Clubs
+          </a>
+        </div>
+      </div>
+    </section>
     );
 };
 
