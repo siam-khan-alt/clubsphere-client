@@ -28,12 +28,12 @@ const ViewPayments = () => {
 
             <div className="bg-base-100 p-8 rounded-2xl border border-base-content/5 shadow-sm relative overflow-hidden group">
                 <div className="absolute right-0 top-0 p-8 opacity-5 group-hover:scale-110 transition-transform">
-                    <FiTrendingUp size={120} />
+                    <FiTrendingUp size={100} />
                 </div>
                 <div className="relative z-10">
                     <p className="text-xs font-black uppercase tracking-[0.2em] text-base-content/50">Total Revenue Generated</p>
                     <div className="flex items-center gap-1 mt-2">
-                        <span className="text-4xl font-black text-primary">$</span>
+                        <span className="text-xl sm:text-2xl md:text-3xl font-black text-primary">$</span>
                         <span className="text-5xl font-black text-base-content tracking-tighter">
                             {totalRevenue.toLocaleString(undefined, { minimumFractionDigits: 2 })}
                         </span>

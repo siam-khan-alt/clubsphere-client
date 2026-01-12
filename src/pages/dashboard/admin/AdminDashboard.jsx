@@ -33,8 +33,8 @@ const AdminDashboard = () => {
     } = adminStats;
     
     return (
-        <div className="p-4 space-y-8">
-            <h2 className="text-2xl font-black flex items-center gap-3 text-base-content">
+        <div className="p-4 container mx-auto space-y-8">
+            <h2 className="text-xl sm:text-2xl font-black flex items-center gap-3 text-base-content">
                 <FiActivity className="text-primary" /> Admin Dashboard Overview
             </h2>
 

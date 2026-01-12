@@ -92,8 +92,8 @@ const ManageUsers = () => {
   };
 
   return (
-    <div className="p-4 space-y-6">
-      <h2 className="text-2xl font-black flex items-center gap-3 text-base-content">
+    <div className=" container mx-auto p-4 space-y-6">
+      <h2 className="sm:text-2xl text-xl font-black flex items-center gap-3 text-base-content">
         <FiUsers className="text-primary" /> Manage All Users
       </h2>
 
