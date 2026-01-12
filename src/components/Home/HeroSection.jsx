@@ -14,7 +14,7 @@ const sliderData = [
     id: 1,
     title: "Discover Your <span class='text-primary italic'>Perfect Club</span>",
     description: "Connect with communities that share your passion. From coding to photography, find your tribe today.",
-    image: "https://images.unsplash.com/photo-1523580494863-6f3031224c94?q=80&w=1470&auto=format&fit=crop",
+    image: "https://i.ibb.co.com/fYfS6kYd/mens-talk-working-hard-new-project-54111652.jpg",
     cta: "Explore Clubs",
     link: "/clubs"
   },
@@ -22,9 +22,17 @@ const sliderData = [
     id: 2,
     title: "Lead & <span class='text-secondary italic'>Manage Events</span>",
     description: "Organize campus events seamlessly. Empower your club members and track growth with our dashboard.",
-    image: "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?q=80&w=1470&auto=format&fit=crop",
+    image: "https://i.ibb.co.com/hFnjh404/tech-conference-speech-stockcake.jpg",
     cta: "Start Hosting",
     link: "/dashboard/manager/my-clubs"
+  },
+  {
+    id: 3,
+    title: "Shape Your <span class='text-accent italic'>Future Skills</span>",
+    description: "Participate in workshops, competitions, and collaborative projects. Turn your academic knowledge into real-world impact.",
+    image: "https://i.ibb.co.com/FS7Ff7p/pngtree-collaborative-team-concept-image-15740876.png",
+    cta: "View All Events",
+    link: "/events"
   }
 ];
 

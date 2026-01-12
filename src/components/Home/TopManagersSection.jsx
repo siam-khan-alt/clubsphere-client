@@ -3,10 +3,10 @@ import { motion } from 'framer-motion';
 import { FaTrophy } from 'react-icons/fa';
 
 const managers = [
-    { id: 1, name: "Tanvir Rahman", clubs: 5, members: "1.2K", img: "https://i.pravatar.cc/150?u=2" },
-    { id: 2, name: "Mehedi Hasan", clubs: 3, members: "850", img: "https://i.pravatar.cc/150?u=2" },
-    { id: 3, name: "Anika Tabassum", clubs: 4, members: "920", img: "https://i.pravatar.cc/150?u=2" },
-    { id: 4, name: "Sabbir Ahmed", clubs: 2, members: "640", img: "https://i.pravatar.cc/150?u=2" },
+    { id: 1, name: "Sifat Khan", clubs: 5, members: "1.2K", img: "https://i.ibb.co.com/fYSwztV9/image.png" },
+    { id: 2, name: "Mehedi Hasan", clubs: 3, members: "850", img: "https://i.ibb.co.com/MD80DRn6/image.png" },
+    { id: 3, name: "Emran Mahmod", clubs: 4, members: "920", img: "https://i.ibb.co.com/k2LQ7mZT/image.png" },
+    { id: 4, name: "Sabbir Ahmed", clubs: 2, members: "640", img: "https://i.ibb.co.com/qYmxcz6t/image.png" },
 ];
 
 const TopManagersSection = () => {

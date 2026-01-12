@@ -2,10 +2,10 @@ import React from 'react';
 import { motion } from 'framer-motion';
 
 const testimonials = [
-    { id: 1, name: "Jishan Ahmed", role: "Coding Club Lead", text: "ClubSphere makes event management incredibly intuitive and fast.", img: "https://i.pravatar.cc/150?u=2" },
-    { id: 2, name: "Sarah Miller", role: "Photography Enthusiast", text: "Finding communities for my passion was never this easy!", img: "https://i.pravatar.cc/150?u=2" },
-    { id: 3, name: "David Chen", role: "Sports Manager", text: "Membership automation saves us hours of manual work weekly.", img: "https://i.pravatar.cc/150?u=2" },
-    { id: 4, name: "Raisa Islam", role: "Art Director", text: "The clean UI and dark mode provide a premium experience.", img: "https://i.pravatar.cc/150?u=2" },
+    { id: 1, name: "Jishan Ahmed", role: "Coding Club Lead", text: "ClubSphere makes event management incredibly intuitive and fast.", img: "https://i.ibb.co.com/mCLsJp11/young-man-sad-expression-1194-2829.jpg" },
+    { id: 2, name: "Sarah Miller", role: "Photography Enthusiast", text: "Finding communities for my passion was never this easy!", img: "https://i.ibb.co.com/35Y4JKwp/image.png" },
+    { id: 3, name: "David Chen", role: "Sports Manager", text: "Membership automation saves us hours of manual work weekly.", img: "https://i.ibb.co.com/yFT5QVFc/image.png" },
+    { id: 4, name: "Raisa Islam", role: "Art Director", text: "The clean UI and dark mode provide a premium experience.", img: "https://i.ibb.co.com/p6ZTwPDS/image.png" },
 ];
 const TestimonialSection = () => {
     return (
