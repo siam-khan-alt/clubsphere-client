@@ -1,36 +1,56 @@
 import React from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { FiActivity } from 'react-icons/fi';
 
-
-const MembershipChart = ({ chartData=[]}) => {
+const MembershipChart = ({ chartData = [] }) => {
     if (chartData.length === 0) {
         return (
-            <div className="bg-white p-6 rounded-lg shadow-md h-[400px] flex items-center justify-center">
-                <h4>No membership data available for charting.</h4>
+            <div className="bg-base-100 p-6 rounded-2xl border border-base-content/5 shadow-sm h-[450px] flex items-center justify-center">
+                <p className="text-base-content/30 font-bold">No membership data available for charting.</p>
             </div>
         );
     }
+
     const formattedData = chartData.map(item => ({
         name: item.clubName,
         members: item.memberCount || 0, 
     }));
+
     return (
-        <div className="bg-white p-6 rounded-lg shadow-md h-[400px]">
-            <h3 className=" mb-4">Memberships by Club Category</h3>
+        <div className="bg-base-100 p-6 rounded-2xl border border-base-content/5 shadow-sm h-[450px]">
+            <h3 className="text-lg font-black mb-6 flex items-center gap-2">
+                <FiActivity className="text-primary" /> Memberships by Club Category
+            </h3>
             <ResponsiveContainer width="100%" height="85%">
-                <BarChart
-                    data={formattedData}
-                    margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
-                >
-                    <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-                    <XAxis dataKey="name" stroke="#333" />
-                    <YAxis stroke="#333" />
-                    <Tooltip 
-                        contentStyle={{ backgroundColor: '#fff', border: '1px solid #ccc' }}
-                        formatter={(value) => [`${value} Members`, 'Members']}
+                <BarChart data={formattedData} margin={{ top: 5, right: 20, left: 0, bottom: 5 }}>
+                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="oklch(var(--bc)/0.1)" />
+                    <XAxis 
+                        dataKey="name" 
+                        axisLine={false} 
+                        tickLine={false} 
+                        tick={{ fill: 'oklch(var(--bc)/0.5)', fontSize: 12, fontWeight: 700 }} 
                     />
-                    <Legend />
-                    <Bar dataKey="members" fill="#3B82F6" name="Total Members" />
+                    <YAxis 
+                        axisLine={false} 
+                        tickLine={false} 
+                        tick={{ fill: 'oklch(var(--bc)/0.5)', fontSize: 12, fontWeight: 700 }} 
+                    />
+                    <Tooltip 
+                        cursor={{ fill: 'oklch(var(--bc)/0.05)' }}
+                        contentStyle={{ 
+                            borderRadius: '16px', 
+                            border: 'none', 
+                            boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)',
+                            backgroundColor: 'oklch(var(--b1))',
+                            color: 'oklch(var(--bc))'
+                        }}
+                    />
+                    <Bar 
+                        dataKey="members" 
+                        fill="oklch(var(--p))" 
+                        radius={[6, 6, 0, 0]} 
+                        barSize={40}
+                    />
                 </BarChart>
             </ResponsiveContainer>
         </div>

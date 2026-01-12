@@ -2,9 +2,8 @@ import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 import useAxiosSecure from '../../../hooks/useAxiosSecure';
 import LoadingSpinner from '../../../components/shared/LoadingSpinner';
-import { FiDollarSign, FiCreditCard } from 'react-icons/fi';
+import { FiDollarSign, FiCreditCard, FiTrendingUp } from 'react-icons/fi';
 import AdminPaymentHistoryTable from '../../../components/dashboard/admin/AdminPaymentHistoyTable';
-
 
 const ViewPayments = () => {
     const axiosSecure = useAxiosSecure();
@@ -17,24 +16,41 @@ const ViewPayments = () => {
     });
 
     if (isLoading) return <LoadingSpinner />;
-    if (error) return <div className="text-red-500 p-4">Error loading payments: {error.message}</div>;
+    if (error) return <div className="text-error p-4 bg-error/10 rounded-2xl font-bold">Error loading payments: {error.message}</div>;
 
     const totalRevenue = payments.reduce((sum, payment) => sum + payment.amount, 0);
 
     return (
-        <div className="p-4">
-            <h2 className=" mb-6 flex items-center">
-                <FiCreditCard className="w-6 h-6 mr-2 text-[#7C3AED]" /> Platform Payment Overview
+        <div className="p-4 space-y-8">
+            <h2 className="text-2xl font-black flex items-center gap-3 text-base-content">
+                <FiCreditCard className="text-primary" /> Platform Payment Overview
             </h2>
-            <div className="bg-white p-6 rounded-xl shadow-lg mb-6 border-l-4 border-[#7C3AED]">
-                <p className="text-lg font-medium text-gray-600">Total Revenue Generated</p>
-                <p className="text-4xl font-extrabold text-[#7C3AED] mt-1 flex items-center">
-                    <FiDollarSign className="w-6 h-6" /> {totalRevenue.toFixed(2)} USD
-                </p>
-                <p className="text-sm text-gray-500 mt-2">{payments.length} total transactions recorded.</p>
+
+            <div className="bg-base-100 p-8 rounded-2xl border border-base-content/5 shadow-sm relative overflow-hidden group">
+                <div className="absolute right-0 top-0 p-8 opacity-5 group-hover:scale-110 transition-transform">
+                    <FiTrendingUp size={120} />
+                </div>
+                <div className="relative z-10">
+                    <p className="text-xs font-black uppercase tracking-[0.2em] text-base-content/50">Total Revenue Generated</p>
+                    <div className="flex items-center gap-1 mt-2">
+                        <span className="text-4xl font-black text-primary">$</span>
+                        <span className="text-5xl font-black text-base-content tracking-tighter">
+                            {totalRevenue.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                        </span>
+                        <span className="text-sm font-black text-base-content/30 ml-2 uppercase">USD</span>
+                    </div>
+                    <div className="mt-6 flex items-center gap-2">
+                        <div className="px-3 py-1 bg-success/10 text-success rounded-lg text-xs font-black uppercase">
+                            {payments.length} Transactions
+                        </div>
+                        <p className="text-xs font-bold text-base-content/40 italic">Live platform data</p>
+                    </div>
+                </div>
             </div>
-            <div className='overflow-x-auto max-w-64 md:max-w-2xl lg:max-w-3xl'>
-            <AdminPaymentHistoryTable payments={payments} /></div>
+
+            <div className="w-full max-w-[80vw] md:max-w-full overflow-hidden bg-base-100 rounded-2xl border border-base-content/5 shadow-sm">
+                <AdminPaymentHistoryTable payments={payments} />
+            </div>
         </div>
     );
 };

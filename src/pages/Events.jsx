@@ -1,154 +1,116 @@
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion'; 
-import { FaSearch, FaSortAmountDown, FaCalendarAlt, FaMapMarkerAlt, FaTag } from 'react-icons/fa';
-import { format } from 'date-fns';
-import { BounceLoader } from 'react-spinners';
-const Events = () => {
-    const navigate = useNavigate();
+import { FiSearch, FiInbox, FiAlertCircle, FiFilter } from 'react-icons/fi';
+import EventCard from '../components/public/EventCard';
+import LoadingSpinner from '../components/shared/LoadingSpinner';
 
-    const [params, setParams] = useState({
-        search: '',
-        sort: 'eventDate',
-        order: 'asc' 
-    });
-    
-    const { data: events = [], isLoading, error } = useQuery({
-        queryKey: ['allEvents', params], 
+const Events = () => {
+    const [search, setSearch] = useState('');
+    const [debouncedSearch, setDebouncedSearch] = useState('');
+    const [sortConfig, setSortConfig] = useState({ sort: 'eventDate', order: 'asc' });
+
+    useEffect(() => {
+        const handler = setTimeout(() => setDebouncedSearch(search), 500);
+        return () => clearTimeout(handler);
+    }, [search]);
+
+    const { data: events = [], isLoading, isFetching, isError, error } = useQuery({
+        queryKey: ['allEvents', debouncedSearch, sortConfig], 
         queryFn: async () => {
+            const params = {
+                search: debouncedSearch,
+                sort: sortConfig.sort,
+                order: sortConfig.order
+            };
             const res = await axios.get(`${import.meta.env.VITE_API_URL}/events`, { params }); 
             return res.data;
         },
-        staleTime: 1000 * 60 * 5, 
     });
-
-    const handleSearchChange = (e) => {
-        setParams(prev => ({ ...prev, search: e.target.value }));
-    };
 
     const handleSortChange = (e) => {
         const [sort, order] = e.target.value.split('-');
-        setParams(prev => ({ ...prev, sort, order }));
+        setSortConfig({ sort, order });
     };
 
-    if (error) return <div className="text-center py-20 text-red-600">Error loading events: {error.message}</div>;
+    if (isError) return (
+        <div className="min-h-screen flex flex-col items-center justify-center p-8 text-center bg-base-100">
+            <FiAlertCircle size={50} className="text-error mb-4" />
+            <h5 className="text-3xl font-bold text-error mb-2">Error Loading Events</h5>
+            <p className="text-xs opacity-40">{error.message}</p>
+        </div>
+    );
 
     return (
-        <div className="container mx-auto px-4 py-10">
-            <div className="text-center mb-12">
-            <motion.h2 
-                initial={{ opacity: 0, y: -20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }}
-                className=" inline-block"
-            >
-                Upcoming Events
-            </motion.h2>
-            <div 
-                    className="h-1  mx-auto 
-                                bg-gradient-to-r 
-                                from-[#7C3AED] to-[#4F46E5] 
-                                rounded-full mt-2" 
-                ></div>
-            </div>
-            <motion.div 
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.3, duration: 0.5 }}
-                className="flex flex-col md:flex-row gap-4 mb-8 bg-white p-4 rounded-lg shadow-md"
-            >
-                <div className="flex-1 relative">
-                    <input
-                        type="text"
-                        placeholder="Search by event title..."
-                        value={params.search}
-                        onChange={handleSearchChange}
-                        className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500"
-                    />
-                    <FaSearch className="absolute left-3 top-3 text-gray-400" />
+        <div className="min-h-screen bg-base-100 transition-colors duration-300">
+            <div className="container mx-auto px-4 py-12">
+                <div className="text-center mb-6">
+                    <motion.h2 initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="text-4xl font-black italic uppercase tracking-tighter">
+                        Upcoming <span className="text-primary not-italic">Events</span>
+                    </motion.h2>
                 </div>
-                
-                <div className="relative">
-                    <select
-                        value={`${params.sort}-${params.order}`}
-                        onChange={handleSortChange}
-                        className="appearance-none w-full md:w-auto pl-10 pr-4 py-2 border border-gray-300 rounded-lg bg-white focus:ring-indigo-500 focus:border-indigo-500 cursor-pointer"
-                    >
-                        <option value="eventDate-asc">Sort by Date: Oldest First</option>
-                        <option value="eventDate-desc">Sort by Date: Newest First</option>
-                        <option value="createdAt-desc">Sort by Created: Newest First</option>
-                        <option value="createdAt-asc">Sort by Created: Oldest First</option>
-                    </select>
-                    <FaSortAmountDown className="absolute left-3 top-3 text-gray-400 pointer-events-none" />
-                </div>
-            </motion.div>
-        {isLoading ? (
-                <div className="flex items-center justify-center mt-20 w-full bg-[var(--color-bg-light)]/80 backdrop-blur-sm  inset-0 z-50 mx-auto">
-                    <div className="flex flex-col items-center">
-                        <BounceLoader 
-                            color='#7C3AED' loading={true}
-                        />
-                        <p className="mt-6 text-xl font-semibold text-[#34495E] tracking-wider">
-                            ClubSphere is Loading Events...
-                        </p>
-                    </div>
-                </div>
-            ) :
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {events.length > 0 ? (
-                    events.map((event, index) => (
-                        <motion.div
-                            key={event._id}
-                            initial={{ opacity: 0, y: 50 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.5, delay: index * 0.1 }}
-                            className="bg-white rounded-xl shadow-lg hover:shadow-xl transition duration-300 overflow-hidden border-t-4 border-indigo-500 flex flex-col justify-between"
-                        >
-                            <div className="p-6">
-                                <h3 className="mb-2">{event.title}</h3>
-                                
-                                <p className="text-sm text-gray-500 mb-3 flex items-center gap-2">
-                                    <FaCalendarAlt /> 
-                                    {format(new Date(event.eventDate), 'dd MMMM yyyy')}
-                                </p>
-                                
-                                <p className="text-sm text-gray-500 mb-4 flex items-center gap-2">
-                                    <FaMapMarkerAlt /> {event.location}
-                                </p>
 
-                                <div className="flex justify-between items-center mt-4">
-                                    <span className="text-lg font-semibold text-green-600 flex items-center gap-2">
-                                        <FaTag /> {event.isPaid ? `$${event.eventFee}` : 'FREE'}
-                                    </span>
-                                    <span className="text-sm font-medium text-indigo-600 hover:text-indigo-800 transition">
-                                        Club: {event.clubDetails.clubName}
-                                    </span>
-                                </div>
-                            </div>
-                            <div className="p-6 pt-0">
-                                <button 
-                                    onClick={() => navigate(`/events/${event._id}`)}
-                                    className="w-full bg-indigo-500 text-white py-2 rounded-lg hover:bg-indigo-600 transition duration-300 font-semibold"
-                                >
-                                    View Details
-                                </button>
-                            </div>
-                        </motion.div>
-                    ))
-                ) : (
-                    <div className="col-span-full text-center py-10">
-                        <p className="text-xl text-gray-500">No events found matching your criteria.</p>
+                <motion.div 
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="flex flex-col lg:flex-row gap-4 mb-12 p-6 bg-base-200/50 backdrop-blur-md rounded-2xl border border-base-content/5 shadow-sm"
+                >
+                    <div className="relative flex-1">
+                        <FiSearch className="absolute left-4 top-1/2 -translate-y-1/2 opacity-40" />
+                        <input
+                            type="text"
+                            placeholder="Search by event title..."
+                            value={search}
+                            onChange={(e) => setSearch(e.target.value)}
+                            className="w-full pl-11 focus:ring-2 focus:ring-primary h-12 rounded-xl bg-base-100 border-base-content/10"
+                        />
                     </div>
-                )}
-            </div>}
+                    
+                    <div className="relative w-full lg:w-72">
+                        <FiFilter className="absolute left-4 top-1/2 -translate-y-1/2 opacity-40 z-10" />
+                        <select
+                            value={`${sortConfig.sort}-${sortConfig.order}`}
+                            onChange={handleSortChange}
+                            className="w-full h-12 pl-11 cursor-pointer appearance-none rounded-xl bg-base-100 border-base-content/10"
+                        >
+                            <option value="eventDate-asc">Date: Soonest First</option>
+                            <option value="eventDate-desc">Date: Latest First</option>
+                            <option value="createdAt-desc">Recently Added</option>
+                        </select>
+                    </div>
+                </motion.div>
+
+                <div className="relative min-h-[400px]">
+                    {(isLoading || isFetching) && (
+                        <div className="absolute inset-0 z-10 flex items-center justify-center bg-base-100/10 backdrop-blur-[2px]">
+                            <LoadingSpinner />
+                        </div>
+                    )}
+
+                    {!isLoading && events.length > 0 ? (
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                            {events.map((event, index) => (
+                                <motion.div
+                                    key={event._id}
+                                    initial={{ opacity: 0, y: 30 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ duration: 0.4, delay: index * 0.05 }}
+                                >
+                                    <EventCard event={event} />
+                                </motion.div>
+                            ))}
+                        </div>
+                    ) : !isLoading && (
+                        <div className="text-center py-24 border-2 border-dashed border-base-content/10 rounded-3xl flex flex-col items-center">
+                            <FiInbox size={48} className="text-primary mb-4 opacity-50" />
+                            <h3 className="text-2xl font-bold opacity-80 uppercase tracking-widest">No Events Found</h3>
+                        </div>
+                    )}
+                </div>
+            </div>
         </div>
     );
 };
 
 export default Events;
-
-
-
-

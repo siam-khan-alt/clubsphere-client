@@ -1,36 +1,58 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { FiHome, FiAlertTriangle } from 'react-icons/fi';
+import { FiHome, FiAlertCircle } from 'react-icons/fi';
+import { motion } from 'framer-motion';
 
-const ErrorPage = ({ status = '404', title = 'Page Not Found', message = 'Sorry, we couldn’t find the page you’re looking for. It might have been moved or deleted.' }) => {
-        const statusColor = (status === '404' || status === '403') ? 'text-indigo-600' : 'text-red-600';
-
+const ErrorPage = ({ status = '404', title = 'Page Not Found', message = 'The page you are looking for might have been moved, deleted, or never existed.' }) => {
     return (
-        <div className="flex items-center justify-center min-h-screen bg-gray-50 dark:bg-gray-900 px-4">
-            <div className="text-center p-6 sm:p-10 bg-white dark:bg-gray-800 rounded-2xl shadow-xl max-w-lg w-full transform transition-all duration-300 hover:shadow-2xl">
-                
-                <p className={`font-extrabold text-7xl sm:text-9xl mb-4 ${statusColor} dark:${statusColor.replace('600', '400')} transition duration-500`}>
-                    {status}
-                </p>
-                
-                <div className="flex items-center justify-center space-x-2 mb-4">
-                    <FiAlertTriangle className={`w-6 h-6 ${statusColor}`} />
-                    <h1 className="text-2xl sm:text-3xl font-bold text-gray-800 dark:text-white">
-                        {title}
-                    </h1>
-                </div>
+        <div className="min-h-screen bg-base-100 flex items-center justify-center p-6 relative overflow-hidden">
+            <div className="absolute inset-0 opacity-5 pointer-events-none">
+                <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-primary rounded-full blur-[120px]"></div>
+                <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-secondary rounded-full blur-[120px]"></div>
+            </div>
 
-                <p className="text-gray-600 dark:text-gray-400 mb-8 leading-relaxed">
-                    {message}
-                </p>
-
-                <Link
-                    to="/"
-                    className={`inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-full shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-150 transform hover:scale-[1.02]`}
+            <div className="max-w-2xl w-full text-center relative z-10">
+                <motion.div
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.5 }}
                 >
-                    <FiHome className="w-5 h-5 mr-2" />
-                    Go back to Homepage
-                </Link>
+                    <h1 className="text-[12rem] sm:text-[16rem] font-black italic leading-none tracking-tighter opacity-10 select-none">
+                        {status}
+                    </h1>
+                    
+                    <div className="mt-[-8rem] sm:mt-[-10rem]">
+                        <motion.div 
+                            initial={{ y: 20, opacity: 0 }}
+                            animate={{ y: 0, opacity: 1 }}
+                            transition={{ delay: 0.2 }}
+                            className="inline-flex items-center gap-2 px-4 py-1 rounded-full bg-error/10 border border-error/20 text-error mb-6"
+                        >
+                            <FiAlertCircle className="animate-pulse" />
+                            <span className="text-[10px] font-black uppercase tracking-[0.2em]">System Alert</span>
+                        </motion.div>
+                        
+                        <h2 className="text-4xl sm:text-6xl font-black uppercase italic tracking-tighter mb-4 text-base-content">
+                            {title}
+                        </h2>
+                        
+                        <p className="text-base-content/60 max-w-md mx-auto mb-10 font-medium leading-relaxed">
+                            {message}
+                        </p>
+
+                        <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+                            <Link
+                                to="/"
+                                className="group relative px-8 py-4 bg-primary text-primary-content font-black uppercase tracking-widest text-xs rounded-2xl overflow-hidden transition-all hover:pr-12"
+                            >
+                                <span className="relative z-10 flex items-center gap-2">
+                                    <FiHome size={18} /> Back to Hub
+                                </span>
+                                <span className="absolute right-4 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-all">→</span>
+                            </Link>
+                        </div>
+                    </div>
+                </motion.div>
             </div>
         </div>
     );

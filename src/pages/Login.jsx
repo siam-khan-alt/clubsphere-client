@@ -1,6 +1,6 @@
 import React, { use, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { FiEye, FiEyeOff } from 'react-icons/fi';
+import { FiEye, FiEyeOff, FiUser, FiShield } from 'react-icons/fi';
 import { useForm } from 'react-hook-form';
 import { FcGoogle } from 'react-icons/fc';
 import { AuthContext } from '../context/AuthContext';
@@ -15,28 +15,30 @@ const Login = () => {
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
     
-    const { register, handleSubmit, formState: { errors } } = useForm();
+    const { register, handleSubmit, setValue, formState: { errors } } = useForm();
 
     const from = location.state?.from?.pathname || '/';
+
+    const handleDemoLogin = (role) => {
+        if (role === 'user') {
+            setValue('email', 'adnan@gmail.com');
+            setValue('password', 'Siam12');
+        } else if (role === 'manager') {
+            setValue('email', 'sifatkhan@gmail.com');
+            setValue('password', 'Siam12');
+        }
+        toast.success(`${role.charAt(0).toUpperCase() + role.slice(1)} credentials applied!`);
+    };
 
     const onSubmit = async (data) => {
         setError('');
         setLoading(true);
-        
         try {
             await login(data.email, data.password);
             toast.success("Login Successful!");
             navigate(from, { replace: true });
         } catch (error) {
-            if (error.code === 'auth/user-not-found') {
-                setError('No user found with this email');
-            } else if (error.code === 'auth/wrong-password') {
-                setError('Incorrect password');
-            } else if (error.code === 'auth/invalid-email') {
-                setError('Invalid email address');
-            } else {
-                setError('Login failed. Please try again.');
-            }
+            setError(error.message || 'Login failed. Please try again.');
         } finally {
             setLoading(false);
         }
@@ -45,7 +47,6 @@ const Login = () => {
     const handleGoogleLogin = async () => {
         setError('');
         setLoading(true);
-        
         try {
             await googleLogin();
             toast.success("Login Successful!");
@@ -60,100 +61,95 @@ const Login = () => {
     const isDisabled = loading || authLoading;
 
     return (
-        <div className="min-h-screen flex items-center justify-center py-12 px-4 bg-[var(--color-card-bg)]">
-            <div className="card w-full max-w-md shadow-2xl bg-[var(--color-card-bg)] text-[var(--color-text-light)]">
-                <div className="card-body">
+        <div className="min-h-screen flex items-center justify-center py-12 px-4 bg-base-200 dark:bg-base-300 transition-colors duration-300">
+            <div className="card w-full max-w-md shadow-2xl bg-base-100 dark:bg-slate-900 border border-base-content/5">
+                <div className="card-body p-8">
                     <div className="text-center mb-6">
-                        <h2 >Welcome Back!</h2>
-                        <p className="text-[var(--color-text-muted)] mt-2">Login to continue to ClubSphere</p>
+                        <h2 className="text-3xl font-black text-base-content tracking-tight">Welcome Back!</h2>
+                        <p className="text-base-content/60 text-sm mt-2 font-medium">Login to continue to ClubSphere</p>
                     </div>
+
+                    <div className="grid grid-cols-2 gap-3 mb-6">
+                        <button 
+                            onClick={() => handleDemoLogin('user')}
+                            className="flex flex-col items-center gap-1 py-3 px-2 rounded-2xl border-2 border-dashed border-primary/30 hover:border-primary hover:bg-primary/5 transition-all group"
+                        >
+                            <FiUser className="text-primary group-hover:scale-110 transition-transform" size={20} />
+                            <span className="text-[10px] font-black uppercase tracking-widest text-base-content/70">User Demo</span>
+                        </button>
+                        <button 
+                            onClick={() => handleDemoLogin('manager')}
+                            className="flex flex-col items-center gap-1 py-3 px-2 rounded-2xl border-2 border-dashed border-secondary/30 hover:border-secondary hover:bg-secondary/5 transition-all group"
+                        >
+                            <FiShield className="text-secondary group-hover:scale-110 transition-transform" size={20} />
+                            <span className="text-[10px] font-black uppercase tracking-widest text-base-content/70">Manager Demo</span>
+                        </button>
+                    </div>
+
                     {error && (
-                        <div className="alert bg-[var(--color-error)] border-0 text-white mb-4">
-                            <span>{error}</span>
+                        <div className="p-3 rounded-xl bg-error/10 border border-error/20 text-error text-xs font-bold mb-4 text-center">
+                            {error}
                         </div>
                     )}
+
                     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
                         <div className="form-control">
-                            <label className="label">
-                                <span className="label-text font-semibold text-[var(--color-text-light)]">Email</span>
+                            <label className="label py-1">
+                                <span className="text-xs font-black uppercase tracking-widest text-base-content/50">Email Address</span>
                             </label>
                             <input
                                 type="email"
-                                placeholder="your@email.com"
-                                className={`input input-bordered w-full bg-[var(--color-card-bg)] border border-gray-300 text-[var(--color-text-light)] ${errors.email ? 'input-error' : ''}`}
-                                {...register('email', { 
-                                    required: 'Email is required',
-                                    pattern: {
-                                        value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                                        message: 'Invalid email address'
-                                    }
-                                })}
+                                placeholder="demo@example.com"
+                                className={`input input-bordered w-full rounded-xl bg-base-200/50 dark:bg-slate-800 font-bold focus:ring-2 focus:ring-primary/20 ${errors.email ? 'border-error' : 'border-base-content/10'}`}
+                                {...register('email', { required: 'Email is required' })}
                             />
-                            {errors.email && (
-                                <label className="label">
-                                    <span className="label-text-alt text-[var(--color-error)]">{errors.email.message}</span>
-                                </label>
-                            )}
                         </div>
 
                         <div className="form-control">
-                            <label className="label">
-                                <span className="label-text font-semibold text-[var(--color-text-light)]">Password</span>
+                            <label className="label py-1">
+                                <span className="text-xs font-black uppercase tracking-widest text-base-content/50">Password</span>
                             </label>
                             <div className="relative">
                                 <input
                                     type={showPassword ? 'text' : 'password'}
-                                    placeholder="Enter your password"
-                                    className={`input input-bordered w-full pr-10 bg-[var(--color-card-bg)] border border-gray-300 text-[var(--color-text-light)] ${errors.password ? 'input-error' : ''}`}
-                                    {...register('password', { 
-                                        required: 'Password is required'
-                                    })}
+                                    placeholder="••••••••"
+                                    className={`input input-bordered w-full rounded-xl bg-base-200/50 dark:bg-slate-800 font-bold pr-12 focus:ring-2 focus:ring-primary/20 ${errors.password ? 'border-error' : 'border-base-content/10'}`}
+                                    {...register('password', { required: 'Password is required' })}
                                 />
                                 <button
                                     type="button"
                                     onClick={() => setShowPassword(!showPassword)}
-                                    className="absolute right-3 top-1/2 -translate-y-1/2 btn btn-ghost btn-sm btn-circle text-[var(--color-text-muted)]"
+                                    className="absolute right-3 top-1/2 -translate-y-1/2 p-2 text-base-content/40 hover:text-primary transition-colors"
                                 >
                                     {showPassword ? <FiEyeOff size={18} /> : <FiEye size={18} />}
                                 </button>
                             </div>
-                            {errors.password && (
-                                <label className="label">
-                                    <span className="label-text-alt text-[var(--color-error)]">{errors.password.message}</span>
-                                </label>
-                            )}
-                        </div>
-
-                        <div className="text-right">
-                            <a href="#" className="text-sm link text-[var(--color-primary-accent)]">
-                                Forgot Password?
-                            </a>
                         </div>
 
                         <button 
                             type="submit" 
-                            className="w-full rounded-md py-3 text-white bg-[var(--color-primary-accent)] hover:bg-[#1E40AF] disabled:opacity-50 flex items-center justify-center transition"
+                            className="btn btn-primary w-full rounded-xl font-black uppercase tracking-widest shadow-lg shadow-primary/20 mt-2"
                             disabled={isDisabled}
                         >
-                            {isDisabled ? <TbFidgetSpinner className="animate-spin text-xl" /> : 'Login'}
+                            {isDisabled ? <TbFidgetSpinner className="animate-spin text-xl" /> : 'Sign In'}
                         </button>
                     </form>
 
-                    <div className="divider text-[var(--color-text-muted)]">OR</div>
+                    <div className="divider text-[10px] font-black uppercase tracking-[0.3em] text-base-content/30 my-6">OR</div>
 
                     <button 
                         onClick={handleGoogleLogin} 
-                        className="btn btn-outline w-full border-gray-300 text-[var(--color-text-light)] hover:bg-[var(--color-secondary-action)]/10 hover:border-[var(--color-secondary-action)]"
+                        className="btn btn-outline w-full rounded-xl border-base-content/10 font-bold hover:bg-base-content/5 text-base-content shadow-sm"
                         disabled={isDisabled}
                     >
-                        <FcGoogle className="text-2xl" />
+                        <FcGoogle size={22} />
                         Continue with Google
                     </button>
 
-                    <p className="text-center mt-6">
-                        Don't have an account?{' '}
-                        <Link to="/register" className="link text-[var(--color-primary-accent)] font-semibold">
-                            Register here
+                    <p className="text-center mt-8 text-sm font-bold text-base-content/60">
+                        New to ClubSphere?{' '}
+                        <Link to="/register" className="text-primary hover:underline underline-offset-4 decoration-2">
+                            Create Account
                         </Link>
                     </p>
                 </div>

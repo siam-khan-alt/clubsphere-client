@@ -1,52 +1,49 @@
 import React from 'react';
 import { format } from 'date-fns';
 import { Link } from 'react-router-dom';
-import { FiCalendar, FiMapPin, FiCheckCircle } from 'react-icons/fi';
+import { FiCalendar, FiMapPin, FiCheckCircle, FiArrowRight } from 'react-icons/fi';
 
 const RegisteredEventsTable = ({ registrations }) => {
     if (registrations.length === 0) {
         return (
-            <div className="text-center py-10 bg-white rounded-lg shadow-md">
-                <p className="text-gray-500 text-lg">You have not registered for any events yet.</p>
-                <Link to="/events" className="mt-4 inline-block text-amber-600 hover:text-amber-800 font-medium">
-                    Explore Events &rarr;
+            <div className="text-center py-16 bg-base-100 rounded-2xl border border-dashed border-base-content/20 shadow-sm">
+                <FiCalendar className="mx-auto text-5xl text-base-content/20 mb-4" />
+                <p className="text-base-content/50 text-lg font-bold">You have not registered for any events yet.</p>
+                <Link to="/events" className="btn btn-primary btn-sm mt-6 rounded-2xl px-8">
+                    Explore Events
                 </Link>
             </div>
         );
     }
 
     return (
-        <div className=" bg-white rounded-xl shadow-lg">
-            <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-amber-50">
-                    <tr>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Event Title</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Club</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Date</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Registration Status</th>
-                        <th className="px-6 py-3"></th>
+        <div className="bg-base-100 rounded-2xl border border-base-content/5 shadow-sm overflow-hidden">
+            <table className="table w-full">
+                <thead className="bg-base-200/50">
+                    <tr className="border-b border-base-content/5">
+                        <th className="bg-transparent text-base-content/70 font-bold uppercase text-[10px] tracking-widest">Event Title</th>
+                        <th className="bg-transparent text-base-content/70 font-bold uppercase text-[10px] tracking-widest">Club</th>
+                        <th className="bg-transparent text-base-content/70 font-bold uppercase text-[10px] tracking-widest">Date</th>
+                        <th className="bg-transparent text-base-content/70 font-bold uppercase text-[10px] tracking-widest">Status</th>
+                        <th className="bg-transparent"></th>
                     </tr>
                 </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
+                <tbody className="divide-y divide-base-content/5">
                     {registrations.map((reg) => (
-                        <tr key={reg._id}>
-                            <td className="px-6 py-4 whitespace-nowrap">
-                                <p className="text-sm font-medium text-gray-900">{reg.eventTitle}</p>
+                        <tr key={reg._id} className="hover:bg-base-200/30 transition-colors">
+                            <td className="font-bold text-base-content">{reg.eventTitle}</td>
+                            <td className="text-base-content/70 font-medium">{reg.clubName}</td>
+                            <td className="text-sm text-base-content/60">
+                                {reg.eventDate ? format(new Date(reg.eventDate), 'MMM d, yyyy') : 'N/A'}
                             </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                {reg.clubName}
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                {reg.eventDate ? format(new Date(reg.eventDate), 'MMM d, yyyy h:mm a') : 'N/A'}
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap">
-                                <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                            <td>
+                                <span className="badge badge-success badge-soft rounded-2xl font-bold text-[10px] px-3 border-none bg-success/10 text-success">
                                     {reg.status.toUpperCase()}
                                 </span>
                             </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                <Link to={`/events/${reg.eventId}`} className="text-indigo-600 hover:text-indigo-900">
-                                    View Details
+                            <td className="text-right">
+                                <Link to={`/events/${reg.eventId}`} className="btn btn-ghost btn-xs text-primary rounded-2xl hover:bg-primary/10">
+                                    Details <FiArrowRight />
                                 </Link>
                             </td>
                         </tr>

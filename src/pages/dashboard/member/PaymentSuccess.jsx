@@ -1,5 +1,6 @@
-import { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { FiCheckCircle, FiXCircle, FiLoader, FiArrowRight } from 'react-icons/fi';
 import useAxiosSecure from '../../../hooks/useAxiosSecure';
 
 const PaymentSuccess = () => {
@@ -7,11 +8,10 @@ const PaymentSuccess = () => {
     const navigate = useNavigate();
     const axiosSecure = useAxiosSecure();
     const [status, setStatus] = useState('Verifying Payment...');
-    const [clubId, setClubId] = useState(null);
-    const [eventId, setEventId] = useState(null);
     const [paymentType, setPaymentType] = useState(null);
     const sessionId = new URLSearchParams(location.search).get('session_id');
     const hasCalledVerify = useRef(false);
+
     useEffect(() => {
         if (!sessionId) {
             setStatus('Error: No payment session found.');
@@ -19,80 +19,51 @@ const PaymentSuccess = () => {
         }
         if (hasCalledVerify.current) return;
         hasCalledVerify.current = true;
+
         const verifyPayment = async () => {
             try {
                 const response = await axiosSecure.get(`/payment/success?session_id=${sessionId}`);
-                const data= response.data 
-                setClubId(data.clubId || null);
-                setEventId(data.eventId || null);
+                const data = response.data;
                 setPaymentType(data.type);
-                let navigatePath = ''; 
-                let successMessage = 'Payment Successful! Redirecting...';
-                if (data.type === 'membership' && data.clubId) {
-                    successMessage = 'Payment Successful! Membership Activated.';
-                    navigatePath = `/clubs/${data.clubId}`; 
-                } else if (data.type === 'event' && data.eventId) {
-                    successMessage = 'Payment Successful! Event Registration Complete.';
-                    navigatePath = `/events/${data.eventId}`;
-                } else {
-                    navigatePath = `/dashboard/member/${data.type === 'event' ? 'events' : 'clubs'}`;
-                }
-                setStatus(successMessage); 
                 
-                setTimeout(() => {
-                    navigate(navigatePath, { replace: true });
-                }, 5000);
+                const navigatePath = data.type === 'membership' && data.clubId 
+                    ? `/clubs/${data.clubId}` 
+                    : (data.type === 'event' && data.eventId ? `/events/${data.eventId}` : `/dashboard/member/home`);
 
+                setStatus('Payment Successful!');
+                setTimeout(() => navigate(navigatePath, { replace: true }), 3000);
             } catch (error) {
-                
-                console.error("Payment Verification Failed:", error);
-                const errorMessage = error.response?.data?.message || "Verification failed. Please check your dashboard.";
-                setStatus(`Failed: ${errorMessage}`);
+                setStatus(`Failed: ${error.response?.data?.message || "Verification failed."}`);
             }
         };
-
         verifyPayment();
-    }, [sessionId, axiosSecure, navigate,]);
+    }, [sessionId, axiosSecure, navigate]);
 
-    const getButtonPath = () => {
-        if (paymentType === 'membership' && clubId) {
-            return `/clubs/${clubId}`;
-        }
-        if (paymentType === 'event' && eventId) {
-            return `/events/${eventId}`;
-        }
-        return `/dashboard/member/${paymentType === 'event' ? 'events' : 'clubs'}`;
-    }
     return (
-        <div className="flex flex-col items-center justify-center min-h-screen bg-green-50 p-6">
-            <div className="bg-white p-10 rounded-xl shadow-2xl text-center">
-               {status.includes('Successful') && <div className="text-6xl text-success mb-4">🎉</div>}
-                {status.includes('Failed') || status.includes('Error') ? 
-                    <div className="text-6xl text-error mb-4">❌</div> : 
-                    !status.includes('Successful') && <span className="loading loading-spinner loading-lg mb-4 text-primary"></span>
-                }
-                <h1 className="text-3xl font-bold mb-4 text-green-600">
-                    {status.includes('Successful') ? '🎉 Payment Success!' : (status.includes('Error') ? '❌ Verification Failed' : '... Processing ...')}
-                </h1>
-                <p className="text-gray-600 mb-6">{status}</p>
-                
-                {status.includes('Successful') && (
-                    <button 
-                        onClick={() => navigate(getButtonPath())}
-                        className="bg-indigo-600 text-white px-6 py-2 rounded-lg hover:bg-indigo-700 transition"
-                    >
-                      {paymentType === 'event' ? 'Go to Event' : 'Go to Club / Dashboard'}
-                    </button>
+        <div className="flex flex-col items-center justify-center min-h-[90vh] bg-base-200/50 p-6">
+            <div className="bg-base-100 p-10 rounded-2xl shadow-2xl border border-base-content/5 text-center max-w-md w-full">
+                {status === 'Payment Successful!' ? (
+                    <FiCheckCircle className="text-7xl text-success mx-auto mb-6 animate-bounce" />
+                ) : status.includes('Failed') || status.includes('Error') ? (
+                    <FiXCircle className="text-7xl text-error mx-auto mb-6" />
+                ) : (
+                    <FiLoader className="text-7xl text-primary mx-auto mb-6 animate-spin" />
                 )}
+
+                <h1 className={`text-3xl font-black mb-4 ${status.includes('Successful') ? 'text-success' : (status.includes('Failed') ? 'text-error' : 'text-primary')}`}>
+                    {status}
+                </h1>
+                <p className="text-base-content/60 font-medium mb-8">
+                    {status.includes('Successful') ? 'Your transaction was completed. Redirecting shortly...' : 'Please wait while we confirm your payment details.'}
+                </p>
                 
-                {!status.includes('Successful') && !status.includes('Error') && (
-                    <p className="text-sm text-gray-500 mt-4">
-                        Do not refresh this page.
-                    </p>
+                {!status.includes('Successful') && !status.includes('Failed') && (
+                    <div className="p-4 bg-primary/5 rounded-2xl border border-primary/10">
+                        <p className="text-sm text-primary font-bold">Do not refresh or close this page.</p>
+                    </div>
                 )}
             </div>
         </div>
     );
 };
-
 export default PaymentSuccess;

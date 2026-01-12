@@ -3,54 +3,34 @@ import { FcGoogle } from "react-icons/fc";
 import { toast } from "react-hot-toast";
 import { TbFidgetSpinner } from "react-icons/tb";
 import { useForm } from "react-hook-form";
-import { FiEye, FiEyeOff } from "react-icons/fi";
+import { FiEye, FiEyeOff, FiUser, FiMail, FiLock, FiUploadCloud } from "react-icons/fi";
 import { use, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
 import useImageUploadMutations from "../hooks/useImageUploadMutations";
 
 const Register = () => {
     const [showPassword, setShowPassword] = useState(false);
-    const { 
-        register: registerUser, 
-        googleLogin,             
-        loading,
-        setUser
-    } = use(AuthContext);
-    
-    const imageMotation = useImageUploadMutations();
-    const { mutateAsync, isPending } = imageMotation;
-
+    const { register: registerUser, googleLogin, loading, setUser } = use(AuthContext);
+    const { mutateAsync, isPending } = useImageUploadMutations();
     const navigate = useNavigate();
     const location = useLocation();
     const from = location.state?.from?.pathname || "/";
 
-    const {
-        register,
-        handleSubmit,
-        formState: { errors },
-    } = useForm();
+    const { register, handleSubmit, watch, formState: { errors } } = useForm();
+    const selectedFile = watch("image");
     const overallLoading = loading || isPending;
 
     const onSubmit = async (data) => {
         const { name, image, email, password } = data;
-        const imagefile = image[0];
-
         try {
-            const imageURL = await mutateAsync(imagefile);
+            const imageURL = await mutateAsync(image[0]);
             const result = await registerUser(email, password, name, imageURL); 
-
             if (result.user && setUser) {
-                 setUser({
-                    ...result.user,
-                    displayName: name,
-                    photoURL: imageURL,
-                });
+                 setUser({ ...result.user, displayName: name, photoURL: imageURL });
             }
-
             toast.success("Signup Successful");
             navigate(from, { replace: true });
         } catch (err) {
-            console.log(err);
             toast.error(err?.message || "Registration Failed");
         }
     };
@@ -61,199 +41,124 @@ const Register = () => {
             navigate(from, { replace: true });
             toast.success("Signup Successful");
         } catch (err) {
-            console.log(err);
             toast.error(err?.message);
         }
     };
 
     return (
-        <div className="flex justify-center items-center min-h-screen py-12 px-4 bg-[var(--color-card-bg)] text-[var(--color-text-light)]">
-            <div className="card w-full max-w-md shadow-2xl bg-[var(--color-card-bg)]">
-                <div className="card-body">
-                    <div className="mb-8 text-center">
-                        <h2 >
-                            Join ClubSphere
-                        </h2>
-                        <p className="text-sm text-[var(--color-text-muted)]">
-                            Create your account to get started
-                        </p>
+        <div className="min-h-screen flex items-center justify-center py-12 px-4 bg-base-200 dark:bg-base-300 transition-colors duration-300">
+            <div className="card w-full max-w-md shadow-2xl bg-base-100 dark:bg-slate-900 border border-base-content/5">
+                <div className="card-body p-8">
+                    <div className="text-center mb-6">
+                        <h2 className="text-3xl font-black text-base-content tracking-tight">Join ClubSphere</h2>
+                        <p className="text-base-content/60 text-sm mt-2 font-medium">Create your account to get started</p>
                     </div>
-                    <form
-                        onSubmit={handleSubmit(onSubmit)}
-                        noValidate=""
-                        action=""
-                        className="space-y-6"
-                    >
-                        <div className="space-y-4">
-                            <div>
-                                <label
-                                    htmlFor="name"
-                                    className="block mb-2 text-sm text-[var(--color-text-light)] font-semibold"
-                                >
-                                    Name
-                                </label>
+
+                    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+                        <div className="form-control">
+                            <label className="label py-1">
+                                <span className="text-xs font-black uppercase tracking-widest text-base-content/50">Full Name</span>
+                            </label>
+                            <div className="relative">
+                                <span className="absolute inset-y-0 left-3 flex items-center text-base-content/30"><FiUser /></span>
                                 <input
                                     type="text"
-                                    name="name"
-                                    id="name"
-                                    autocomplete="name"
-                                    {...register("name", {
-                                        required: "Name is required",
-                                        maxLength: {
-                                            value: 20,
-                                            message: "Name maximum 20 characters",
-                                        },
-                                    })}
-                                    placeholder="Enter Your Name Here"
-                                    className="w-full px-3 py-2 border rounded-md border-gray-300 focus:outline-[var(--color-primary-accent)] bg-[var(--color-card-bg)] text-[var(--color-text-light)]"
+                                    placeholder="Your Name"
+                                    className={`input input-bordered w-full pl-10 rounded-xl bg-base-200/50 dark:bg-slate-800 font-bold focus:ring-2 focus:ring-primary/20 ${errors.name ? 'border-error' : 'border-base-content/10'}`}
+                                    {...register("name", { required: "Name is required" })}
                                 />
                             </div>
-                            {errors.name && (
-                                <p className="text-[var(--color-error)] text-sm">{errors.name?.message}</p>
-                            )}
+                            {errors.name && <p className="text-error text-[10px] font-bold mt-1 uppercase">{errors.name.message}</p>}
+                        </div>
 
-                            <div>
-                                <label
-                                    htmlFor="image"
-                                    className="block mb-2 text-sm font-semibold text-[var(--color-text-light)]"
-                                >
-                                    Profile Image
-                                </label>
+                        <div className="form-control">
+                            <label className="label py-1">
+                                <span className="text-xs font-black uppercase tracking-widest text-base-content/50">Profile Image</span>
+                            </label>
+                            <div className="relative group">
                                 <input
-                                    name="image"
                                     type="file"
-                                    id="image"
+                                    {...register("image", { required: "Image is required" })}
+                                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
                                     accept="image/*"
-                                    {...register("image", {
-                                        required: "Profile image is required",
-                                    })}
-                                    className="block w-full text-sm text-[var(--color-text-muted)] file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-[var(--color-primary-accent)]/10 file:text-[var(--color-primary-accent)] hover:file:bg-[var(--color-primary-accent)]/20 bg-[var(--color-card-bg)] border border-dashed border-[var(--color-primary-accent)]/50 rounded-md cursor-pointer focus:outline-none focus:ring-2 focus:ring-[var(--color-primary-accent)] py-2"
                                 />
-                                <p className="mt-1 text-xs text-[var(--color-text-muted)]">
-                                    PNG, JPG or JPEG (max 2MB)
-                                </p>
+                                <div className={`p-4 rounded-xl border-2 border-dashed transition-all flex flex-col items-center justify-center gap-1 ${errors.image ? 'border-error bg-error/5' : 'border-base-content/10 bg-base-200/30 group-hover:border-primary/40 group-hover:bg-primary/5'}`}>
+                                    <FiUploadCloud className={`text-xl ${errors.image ? 'text-error' : 'text-primary animate-bounce'}`} />
+                                    <span className="text-[10px] font-black uppercase tracking-tighter text-base-content/60 text-center">
+                                        {selectedFile?.[0] ? selectedFile[0].name : "Click to upload photo"}
+                                    </span>
+                                </div>
                             </div>
-                            {errors.image && (
-                                <p className="text-[var(--color-error)] text-sm">
-                                    {errors.image?.message}
-                                </p>
-                            )}
+                            {errors.image && <p className="text-error text-[10px] font-bold mt-1 uppercase text-center">{errors.image.message}</p>}
+                        </div>
 
-                            <div>
-                                <label
-                                    htmlFor="email"
-                                    className="block mb-2 text-sm text-[var(--color-text-light)] font-semibold"
-                                >
-                                    Email address
-                                </label>
+                        <div className="form-control">
+                            <label className="label py-1">
+                                <span className="text-xs font-black uppercase tracking-widest text-base-content/50">Email Address</span>
+                            </label>
+                            <div className="relative">
+                                <span className="absolute inset-y-0 left-3 flex items-center text-base-content/30"><FiMail /></span>
                                 <input
                                     type="email"
-                                    id="email"
-                                    autocomplete="email"
-                                    {...register("email", {
-                                        required: "Email is required",
-                                        pattern: {
-                                            value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-                                            message: "Email must be valid",
-                                        },
-                                    })}
-                                    placeholder="Enter Your Email Here"
-                                    className="w-full px-3 py-2 border rounded-md border-gray-300 focus:outline-[var(--color-primary-accent)] bg-[var(--color-card-bg)] text-[var(--color-text-light)]"
+                                    placeholder="name@example.com"
+                                    className={`input input-bordered w-full pl-10 rounded-xl bg-base-200/50 dark:bg-slate-800 font-bold focus:ring-2 focus:ring-primary/20 ${errors.email ? 'border-error' : 'border-base-content/10'}`}
+                                    {...register("email", { required: "Email is required" })}
                                 />
                             </div>
-                            {errors.email && (
-                                <p className="text-[var(--color-error)] text-sm">
-                                    {errors.email?.message}
-                                </p>
-                            )}
+                            {errors.email && <p className="text-error text-[10px] font-bold mt-1 uppercase">{errors.email.message}</p>}
+                        </div>
 
-                            <div>
-                                <div className="flex justify-between">
-                                    <label
-                                        htmlFor="password"
-                                        className="text-sm mb-2 text-[var(--color-text-light)] font-semibold"
-                                    >
-                                        Password
-                                    </label>
-                                </div>
-                                <div className="relative">
-                                    <input
-                                        type={showPassword ? "text" : "password"}
-                                        name="password"
-                                        autoComplete="new-password"
-                                        id="password"
-                                        placeholder="*******"
-                                        {...register("password", {
-                                            required: "Password is required",
-                                            minLength: {
-                                                value: 6,
-                                                message: "Password must be at least 6 characters",
-                                            },
-                                            pattern: {
-                                                value: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).+$/,
-                                                message:
-                                                    "Password must contain at least one uppercase letter, one lowercase letter, and one number",
-                                            },
-                                        })}
-                                        className="w-full px-3 py-2 border rounded-md border-gray-300 focus:outline-[var(--color-primary-accent)] bg-[var(--color-card-bg)] text-[var(--color-text-light)] pr-10"
-                                    />
-                                    <button
-                                        type="button"
-                                        onClick={() => setShowPassword(!showPassword)}
-                                        className="absolute right-3 top-1/2 transform -translate-y-1/2 text-[var(--color-text-muted)] hover:text-[var(--color-primary-accent)]"
-                                    >
-                                        {showPassword ? (
-                                            <FiEyeOff size={18} />
-                                        ) : (
-                                            <FiEye size={18} />
-                                        )}
-                                    </button>
-                                </div>
+                        <div className="form-control">
+                            <label className="label py-1">
+                                <span className="text-xs font-black uppercase tracking-widest text-base-content/50">Password</span>
+                            </label>
+                            <div className="relative">
+                                <span className="absolute inset-y-0 left-3 flex items-center text-base-content/30"><FiLock /></span>
+                                <input
+                                    type={showPassword ? 'text' : 'password'}
+                                    placeholder="••••••••"
+                                    className={`input input-bordered w-full pl-10 pr-12 rounded-xl bg-base-200/50 dark:bg-slate-800 font-bold focus:ring-2 focus:ring-primary/20 ${errors.password ? 'border-error' : 'border-base-content/10'}`}
+                                    {...register("password", { 
+                                        required: "Password is required",
+                                        minLength: { value: 6, message: "Min 6 characters" }
+                                    })}
+                                />
+                                <button
+                                    type="button"
+                                    onClick={() => setShowPassword(!showPassword)}
+                                    className="absolute right-3 top-1/2 -translate-y-1/2 p-2 text-base-content/40 hover:text-primary transition-colors"
+                                >
+                                    {showPassword ? <FiEyeOff size={18} /> : <FiEye size={18} />}
+                                </button>
                             </div>
-                            {errors.password && (
-                                <p className="text-[var(--color-error)] text-sm">
-                                    {errors.password?.message}
-                                </p>
-                            )}
+                            {errors.password && <p className="text-error text-[10px] font-bold mt-1 uppercase">{errors.password.message}</p>}
                         </div>
 
-                        <div>
-                            <button
-                                type="submit"
-                                disabled={overallLoading}
-                                className="w-full rounded-md py-3 text-white bg-[var(--color-primary-accent)] hover:bg-[#1E40AF] disabled:opacity-50 flex items-center justify-center transition"
-                            >
-                                {overallLoading ? (
-                                    <TbFidgetSpinner className="animate-spin text-xl" />
-                                ) : (
-                                    "Create Account"
-                                )}
-                            </button>
-                        </div>
-                    </form>
-                    <div className="flex items-center pt-4 space-x-1">
-                        <div className="flex-1 h-px bg-gray-300"></div>
-                        <p className="px-3 text-sm text-[var(--color-text-muted)]">
-                            Signup with social accounts
-                        </p>
-                        <div className="flex-1 h-px bg-gray-300"></div>
-                    </div>
-                    <div
-                        onClick={handleGoogleSignIn}
-                        className="flex justify-center items-center space-x-2 border m-3 p-2 border-gray-300 rounded-md cursor-pointer hover:bg-[var(--color-secondary-action)]/10 transition"
-                    >
-                        <FcGoogle size={32} />
-                        <p>Continue with Google</p>
-                    </div>
-                    <p className="px-6 text-sm text-center text-[var(--color-text-muted)]">
-                        Already have an account?{" "}
-                        <Link
-                            to="/login"
-                            className="text-[var(--color-primary-accent)] font-semibold hover:underline transition"
+                        <button 
+                            type="submit" 
+                            className="btn btn-primary w-full rounded-xl font-black uppercase tracking-widest shadow-lg shadow-primary/20 mt-4"
+                            disabled={overallLoading}
                         >
-                            Login
+                            {overallLoading ? <TbFidgetSpinner className="animate-spin text-xl" /> : 'Create Account'}
+                        </button>
+                    </form>
+
+                    <div className="divider text-[10px] font-black uppercase tracking-[0.3em] text-base-content/30 my-6">OR</div>
+
+                    <button 
+                        onClick={handleGoogleSignIn} 
+                        className="btn btn-outline w-full rounded-xl border-base-content/10 font-bold hover:bg-base-content/5 text-base-content shadow-sm"
+                        disabled={overallLoading}
+                    >
+                        <FcGoogle size={22} />
+                        Continue with Google
+                    </button>
+
+                    <p className="text-center mt-8 text-sm font-bold text-base-content/60">
+                        Already have an account?{' '}
+                        <Link to="/login" className="text-primary hover:underline underline-offset-4 decoration-2">
+                            Login here
                         </Link>
-                        .
                     </p>
                 </div>
             </div>

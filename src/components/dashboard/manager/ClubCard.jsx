@@ -1,80 +1,69 @@
 import React from 'react';
-import { FiUsers, FiEdit3, FiTrash2, FiMapPin, FiList } from 'react-icons/fi';
+import { FiUsers, FiEdit3, FiTrash2, FiMapPin, FiList, FiDollarSign } from 'react-icons/fi';
 
 const getStatusClasses = (status) => {
     switch (status?.toLowerCase()) {
-        case 'approved':
-            return 'bg-green-100 text-green-800 border border-green-200';
-        case 'pending':
-            return 'bg-yellow-100 text-yellow-800 border border-yellow-200';
-        case 'rejected':
-            return 'bg-red-100 text-red-800 border border-red-200';
-        default:
-            return 'bg-gray-100 text-gray-800 border border-gray-200';
+        case 'approved': return 'bg-success/10 text-success border-success/20';
+        case 'pending': return 'bg-warning/10 text-warning border-warning/20';
+        case 'rejected': return 'bg-error/10 text-error border-error/20';
+        default: return 'bg-base-200 text-base-content/50 border-base-300';
     }
 };
 
-const ClubCard = ({ club, onDelete, onEdit, isDeleting ,onViewMembers}) => {
+const ClubCard = ({ club, onDelete, onEdit, isDeleting, onViewMembers }) => {
     return (
-        <div className="bg-white shadow-lg rounded-xl overflow-hidden border border-gray-100 group">
-            
-            <div className="h-40 overflow-hidden">
+        <div className="bg-base-100 rounded-2xl overflow-hidden border border-base-content/5 shadow-sm hover:shadow-xl hover:shadow-primary/5 transition-all group flex flex-col h-full">
+            <div className="relative h-44 overflow-hidden">
                 {club.bannerImage ? (
                     <img 
                         src={club.bannerImage} 
-                        alt={`${club.clubName} Banner`} 
-                        className="w-full h-full object-cover transition duration-300 group-hover:scale-105"
+                        alt={club.clubName} 
+                        className="w-full h-full object-cover transition duration-500 group-hover:scale-110"
                     />
                 ) : (
-                    <div className="w-full h-full flex items-center justify-center bg-gray-200 text-gray-500">
-                        No Image Available
-                    </div>
+                    <div className="w-full h-full flex items-center justify-center bg-base-200 text-base-content/20 font-black uppercase text-[10px]">No Banner</div>
                 )}
+                <div className="absolute top-3 right-3">
+                    <span className={`px-3 py-1 text-[10px] font-black rounded-lg uppercase tracking-widest border backdrop-blur-md shadow-sm ${getStatusClasses(club.status)}`}>
+                        {club.status}
+                    </span>
+                </div>
             </div>
             
-            <div className="p-5">
-                <span className={`px-3 py-1 text-xs font-semibold rounded-full uppercase tracking-wider ${getStatusClasses(club.status)}`}>
-                    {club.status}
-                </span>
+            <div className="p-5 flex-grow space-y-4">
+                <h3 className="text-lg font-black text-base-content leading-tight group-hover:text-primary transition-colors truncate">
+                    {club.clubName}
+                </h3>
                 
-                <h3 className=" mt-3 mb-2 truncate">{club.clubName}</h3>
-                
-                <div className="mt-4 space-y-2 text-gray-600">
-                    <div className="flex items-center text-sm">
-                        <FiUsers className="w-4 h-4 mr-2 text-blue-500" />
-                        <span>Members: {club.membersCount || 0}</span>
+                <div className="space-y-2">
+                    <div className="flex items-center gap-2 text-xs font-bold text-base-content/60">
+                        <div className="p-1.5 rounded-md bg-blue-500/10 text-blue-600"><FiUsers size={14}/></div>
+                        <span>{club.membersCount || 0} Members</span>
                     </div>
-                    <div className="flex items-center text-sm truncate">
-                        <FiMapPin className="w-4 h-4 mr-2 text-purple-500" />
-                        <span>Location:{club.location}</span>
+                    <div className="flex items-center gap-2 text-xs font-bold text-base-content/60">
+                        <div className="p-1.5 rounded-md bg-purple-500/10 text-purple-600"><FiMapPin size={14}/></div>
+                        <span className="truncate">{club.location}</span>
                     </div>
-                    <div className="text-sm font-medium">
-                        Fee: {club.membershipFee === 0 ? 'Free' : `$${club.membershipFee?.toFixed(2)}`}
+                    <div className="flex items-center gap-2 text-xs font-bold text-base-content/60">
+                        <div className="p-1.5 rounded-md bg-success/10 text-success"><FiDollarSign size={14}/></div>
+                        <span>Fee: {club.membershipFee === 0 ? 'Free' : `$${club.membershipFee?.toFixed(2)}`}</span>
                     </div>
                 </div>
             </div>
 
-            <div className="bg-gray-50 border-t grid grid-cols-3 divide-x divide-gray-200">
-                
-                <button 
-                    onClick={() => onViewMembers(club._id)} 
-                    className="p-3 text-sm font-medium text-blue-600 hover:bg-blue-50 transition flex justify-center items-center"
-                >
-                    <FiList className="w-4 h-4 mr-1"/> Members
+            <div className="p-2 grid grid-cols-3 gap-1 bg-base-200/30">
+                <button onClick={() => onViewMembers(club._id)} className="btn btn-ghost btn-xs rounded-lg text-primary hover:bg-primary/10 font-black uppercase text-[9px] h-10 tracking-tighter flex flex-col items-center justify-center gap-1">
+                    <FiList size={14}/> Members
                 </button>
-
-                <button 
-                    onClick={() => onEdit(club)}
-                    className="p-3 text-sm font-medium text-indigo-600 hover:bg-indigo-50 transition flex justify-center items-center"
-                >
-                    <FiEdit3 className="w-4 h-4 mr-1"/> Edit
+                <button onClick={() => onEdit(club)} className="btn btn-ghost btn-xs rounded-lg text-indigo-600 hover:bg-indigo-50 font-black uppercase text-[9px] h-10 tracking-tighter flex flex-col items-center justify-center gap-1">
+                    <FiEdit3 size={14}/> Edit
                 </button>
                 <button 
-                    onClick={() => onDelete(club._id, club.clubName)}
-                    className="p-3 text-sm font-medium text-red-600 hover:bg-red-50 transition flex justify-center items-center"
+                    onClick={() => onDelete(club._id, club.clubName)} 
                     disabled={isDeleting}
+                    className="btn btn-ghost btn-xs rounded-lg text-error hover:bg-error/10 font-black uppercase text-[9px] h-10 tracking-tighter flex flex-col items-center justify-center gap-1"
                 >
-                    {isDeleting ? 'Deleting...' : <><FiTrash2 className="w-4 h-4 mr-1"/> Delete</>}
+                    <FiTrash2 size={14}/> {isDeleting ? '...' : 'Delete'}
                 </button>
             </div>
         </div>

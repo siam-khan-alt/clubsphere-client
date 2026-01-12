@@ -3,7 +3,7 @@ import useAxiosSecure from '../../../hooks/useAxiosSecure';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import Swal from 'sweetalert2';
 import LoadingSpinner from '../../../components/shared/LoadingSpinner';
-import { FiPlusCircle } from 'react-icons/fi';
+import { FiPlusCircle, FiLayers } from 'react-icons/fi';
 import ClubCard from '../../../components/dashboard/manager/ClubCard';
 import UpdateClubModal from '../../../components/dashboard/manager/UpdateClubModal';
 import { Link, useNavigate } from 'react-router-dom';
@@ -32,25 +32,28 @@ const MyClubs = () => {
         },
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['myClubsForManager'] });
-            Swal.fire('Deleted!', 'Your club has been deleted successfully.', 'success');
+            Swal.fire({
+                icon: 'success',
+                title: 'Deleted!',
+                text: 'Your club has been deleted successfully.',
+                showConfirmButton: false,
+                timer: 1500
+            });
         },
         onError: (error) => {
-            console.error(error);
-            Swal.fire('Error!', error.response?.data?.message || 'Failed to delete the club.', 'error');
+            Swal.fire('Error!', error.response?.data?.message || 'Failed to delete.', 'error');
         },
-        onSettled: () => {
-             setDeletingClubId(null); 
-        }
+        onSettled: () => setDeletingClubId(null)
     });
     
     const handleDelete = (clubId, clubName) => {
         Swal.fire({
-            title: `Are you sure you want to delete "${clubName}"?`,
-            text: "You won't be able to revert this!",
+            title: `Delete "${clubName}"?`,
+            text: "This action cannot be undone!",
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonColor: '#d33',
-            cancelButtonColor: '#3085d6',
+            confirmButtonColor: '#ef4444',
+            cancelButtonColor: '#6b7280',
             confirmButtonText: 'Yes, delete it!'
         }).then((result) => {
             if (result.isConfirmed) {
@@ -63,28 +66,35 @@ const MyClubs = () => {
         setSelectedClub(club);
         setIsModalOpen(true);
     };
+
     const handleViewMembers = (clubId) => {
         navigate(`/dashboard/clubManager/members/${clubId}/`);
     };
 
-
-    if (isLoading) {
-        return <LoadingSpinner />;
-    }
-
-    if (isError) {
-        return <div className="text-center p-10 text-red-600">Failed to fetch club data.</div>;
-    }
+    if (isLoading) return <LoadingSpinner />;
+    if (isError) return <div className="p-4 bg-error/10 text-error rounded-2xl font-black uppercase text-xs tracking-widest">Failed to fetch club data.</div>;
 
     return (
-        <div className="p-4 sm:p-6 bg-gray-50 min-h-screen">
-            <h2 className=" mb-8">My Managed Clubs</h2>
-            <h4 className=" mb-6 border-b pb-2">Clubs List ({myClubs.length})</h4>
+        <div className="p-4 space-y-8">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div>
+                    <h2 className="text-2xl font-black flex items-center gap-3 text-base-content">
+                        <FiLayers className="text-primary" /> My Managed Clubs
+                    </h2>
+                    <p className="text-xs font-bold text-base-content/40 uppercase tracking-widest mt-1">Total Clubs: {myClubs.length}</p>
+                </div>
+                <Link 
+                    to="/dashboard/manager/create-club" 
+                    className="btn btn-primary rounded-xl font-black uppercase text-xs tracking-widest shadow-lg shadow-primary/20"
+                >
+                    <FiPlusCircle size={18} /> Create New Club
+                </Link>
+            </div>
             
             {myClubs.length === 0 ? (
-                <div className="text-center p-16 border-2 border-dashed border-gray-300 rounded-lg bg-white shadow-sm">
-                    <FiPlusCircle className="w-12 h-12 mx-auto text-blue-500 mb-4" />
-                    <p className="text-xl font-semibold text-gray-700">You are not managing any clubs yet.</p>
+                <div className="text-center py-20 bg-base-100 rounded-3xl border border-dashed border-base-content/20">
+                    <FiPlusCircle className="w-16 h-16 mx-auto text-base-content/10 mb-4" />
+                    <p className="text-sm font-black uppercase tracking-widest text-base-content/40">You are not managing any clubs yet.</p>
                 </div>
             ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
@@ -107,19 +117,8 @@ const MyClubs = () => {
                     onClose={() => setIsModalOpen(false)}
                 />
             )}
-             <div className="mt-5 flex justify-end">
-                <Link 
-                    to="/dashboard/manager/create-club" 
-                    className="flex items-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-150"
-                >
-                    <FiPlusCircle className="w-5 h-5 mr-2" /> Create New Club
-                </Link>
-            </div>
-
         </div>
     );
 };
 
 export default MyClubs;
-
-

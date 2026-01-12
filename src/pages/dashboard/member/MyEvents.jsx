@@ -5,7 +5,6 @@ import LoadingSpinner from '../../../components/shared/LoadingSpinner';
 import { FiCalendar } from 'react-icons/fi';
 import RegisteredEventsTable from '../../../components/member/RegisteredEventTable';
 
-
 const MyEvents = () => {
     const axiosSecure = useAxiosSecure();
 
@@ -18,18 +17,21 @@ const MyEvents = () => {
     });
 
     if (isLoading) return <LoadingSpinner />;
-    if (error) return <div className="text-red-500 p-4">Error loading events: {error.message}</div>;
+    if (error) return <div className="text-error p-4 bg-error/10 rounded-2xl font-bold">Error loading events: {error.message}</div>;
 
     return (
-        <div className="p-4">
-            <h2 className=" mb-6 flex items-center">
-                <FiCalendar className="w-6 h-6 mr-2 text-amber-600" /> My Event Registrations
+        <div className="p-4 space-y-6">
+            <h2 className="text-2xl font-black flex items-center gap-3 text-base-content">
+                <FiCalendar className="text-amber-500" /> My Event Registrations
             </h2>
-            <div className='overflow-x-auto max-w-64 md:max-w-2xl lg:max-w-3xl'>
-             <RegisteredEventsTable registrations={registrations} />
+
+            <div className="w-full max-w-[80vw] md:max-w-full overflow-hidden bg-base-100 mx-auto rounded-2xl border border-base-content/5 shadow-sm transition-all duration-300">
+                <div className="overflow-x-auto w-full">
+                    <div className="inline-block min-w-full align-middle">
+                        <RegisteredEventsTable registrations={registrations} />
+                    </div>
+                </div>
             </div>
-           
-        
         </div>
     );
 };

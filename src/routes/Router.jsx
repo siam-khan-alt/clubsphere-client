@@ -26,6 +26,8 @@ import MyEvents from "../pages/dashboard/member/MyEvents";
 import PaymentHistory from "../pages/dashboard/member/PaymentHistory";
 import PaymentSuccess from "../pages/dashboard/member/PaymentSuccess";
 import Profile from "../pages/dashboard/Profile";
+import About from "../pages/About/About";
+import Contact from "../pages/Contact/Contact";
 
 const router =createBrowserRouter([
     {
@@ -40,6 +42,13 @@ const router =createBrowserRouter([
       {
         path: '/clubs',
         element:<Clubs />
+      },
+       {
+        path: '/about',
+        element:<About />
+      }, {
+        path: '/contact',
+        element:< Contact/>
       },
       {
         path: '/clubs/:id',

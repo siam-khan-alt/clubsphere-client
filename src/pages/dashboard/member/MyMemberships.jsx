@@ -2,10 +2,11 @@ import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 import useAxiosSecure from '../../../hooks/useAxiosSecure';
 import LoadingSpinner from '../../../components/shared/LoadingSpinner';
-import { FiUsers } from 'react-icons/fi';
+import { FiUsers, FiSearch } from 'react-icons/fi';
 import MemberClubCard from '../../../components/member/MemberClubCard';
 import { Link } from 'react-router-dom';
-const MyClubs = () => {
+
+const MyMemberships = () => {
     const axiosSecure = useAxiosSecure();
     const { data: clubs = [], isLoading, error } = useQuery({
         queryKey: ['memberClubs'],
@@ -16,19 +17,20 @@ const MyClubs = () => {
     });
 
     if (isLoading) return <LoadingSpinner />;
-    if (error) return <div className="text-red-500 p-4">Error loading clubs: {error.message}</div>;
+    if (error) return <div className="text-error p-4 bg-error/10 rounded-2xl font-bold">Error loading clubs: {error.message}</div>;
 
     return (
-        <div className="p-4">
-            <h2 className=" mb-6 flex items-center">
-                <FiUsers className="w-6 h-6 mr-2 text-indigo-600" /> My Clubs & Memberships
+        <div className="p-4 space-y-6">
+            <h2 className="text-2xl font-black flex items-center gap-3 text-base-content">
+                <FiUsers className="text-indigo-500" /> My Clubs & Memberships
             </h2>
             
             {clubs.length === 0 ? (
-                <div className="text-center py-10 bg-white rounded-lg shadow-md">
-                    <p className="text-gray-500 text-lg">You haven't joined any clubs yet.</p>
-                    <Link to="/clubs" className="mt-4 inline-block text-indigo-600 hover:text-indigo-800 font-medium">
-                        Explore Clubs &rarr;
+                <div className="text-center py-20 bg-base-100 rounded-2xl border border-dashed border-base-content/20 shadow-sm">
+                    <FiSearch className="mx-auto text-5xl text-base-content/20 mb-4" />
+                    <p className="text-base-content/50 text-lg font-bold">You haven't joined any clubs yet.</p>
+                    <Link to="/clubs" className="btn btn-primary btn-sm mt-6 rounded-2xl px-8 font-bold">
+                        Explore Clubs
                     </Link>
                 </div>
             ) : (
@@ -42,4 +44,4 @@ const MyClubs = () => {
     );
 };
 
-export default MyClubs;
+export default MyMemberships;

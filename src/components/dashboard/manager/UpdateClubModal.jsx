@@ -3,16 +3,19 @@ import { useForm } from "react-hook-form";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import Swal from "sweetalert2";
-import { FiSave } from "react-icons/fi";
+import { FiSave, FiX, FiImage, FiUploadCloud } from "react-icons/fi";
 import uploadImageToImgBB from "../../../utils/imgbb";
 import { TbFidgetSpinner } from "react-icons/tb";
 
 const UpdateClubModal = ({ club, onClose }) => {
   const [isImageUploading, setIsImageUploading] = useState(false);
+  const axiosSecure = useAxiosSecure();
+  const queryClient = useQueryClient();
 
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors },
   } = useForm({
     defaultValues: {
@@ -24,40 +27,34 @@ const UpdateClubModal = ({ club, onClose }) => {
     },
   });
 
-  const axiosSecure = useAxiosSecure();
-  const queryClient = useQueryClient();
+  const selectedFile = watch("bannerImage");
 
   const updateClubMutation = useMutation({
-    mutationFn: async (updatedData) => {
-      return axiosSecure.patch(`/clubs/${club._id}`, updatedData);
-    },
+    mutationFn: async (updatedData) =>
+      axiosSecure.patch(`/clubs/${club._id}`, updatedData),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["myClubsForManager"] });
       onClose();
       Swal.fire({
         icon: "success",
-        title: "Club Updated!",
-        text: `${club.clubName} details have been successfully modified.`,
+        title: "Updated!",
         showConfirmButton: false,
         timer: 2000,
-        customClass: { popup: "rounded-3xl" }
+        customClass: { popup: "rounded-3xl" },
       });
     },
     onError: (error) => {
-      console.error("Club update failed:", error);
-      Swal.fire({
-        icon: "error",
-        title: "Oops...",
-        text: error.response?.data?.message || "Failed to update club details.",
-      });
+      Swal.fire(
+        "Error!",
+        error.response?.data?.message || "Failed to update.",
+        "error"
+      );
     },
   });
 
   const onSubmit = async (data) => {
     const { bannerImage, membershipFee, ...restClubData } = data;
-
     const imageFile = bannerImage?.length > 0 ? bannerImage[0] : null;
-
     let imageUrl = club.bannerImage;
 
     if (imageFile) {
@@ -65,181 +62,148 @@ const UpdateClubModal = ({ club, onClose }) => {
       try {
         imageUrl = await uploadImageToImgBB(imageFile);
       } catch (error) {
-        Swal.fire(
-          "Upload Failed!",
-          error.message || "Could not upload new image.",
-          "error"
-        );
+        Swal.fire("Upload Failed!", "Could not upload new image.", "error");
         setIsImageUploading(false);
         return;
       }
       setIsImageUploading(false);
     }
 
-    const finalClubData = {
+    updateClubMutation.mutate({
       ...restClubData,
       bannerImage: imageUrl,
       membershipFee: parseFloat(membershipFee) || 0,
-    };
-
-    updateClubMutation.mutate(finalClubData);
+    });
   };
 
   const overallLoading = updateClubMutation.isPending || isImageUploading;
 
   return (
-    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-1000 flex items-center justify-center  p-4">
-      <div className="bg-white rounded-3xl shadow-2xl w-full max-w-lg overflow-y-auto max-h-[90vh]">
-        <div className="p-6 border-b flex justify-between items-center sticky top-0 bg-white z-10">
-          <h3 className="">
-            Edit Club: {club.clubName}
+    <div className="fixed inset-0 bg-base-content/40 backdrop-blur-md z-[100] flex items-center justify-center p-4">
+      <div className="bg-base-100 rounded-[32px] shadow-2xl w-full max-w-lg overflow-hidden border border-base-content/5 animate-in fade-in zoom-in duration-200">
+        <div className="p-6 border-b border-base-content/5 flex justify-between items-center bg-base-100/50 backdrop-blur-sm sticky top-0 z-10">
+          <h3 className="text-xl font-black text-base-content tracking-tight">
+            Edit Club Details
           </h3>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-gray-600 text-3xl leading-none"
+            className="btn btn-ghost btn-circle btn-sm hover:rotate-90 transition-transform"
           >
-            &times;
+            <FiX size={20} />
           </button>
         </div>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="p-6 space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="p-8 space-y-5 max-h-[75vh] overflow-y-auto custom-scrollbar"
+        >
+          <div className="space-y-2">
+            <label className="text-[10px] font-black uppercase tracking-widest text-base-content/40 ml-1">
               Club Name
             </label>
             <input
               type="text"
-              {...register("clubName", { required: "Club Name is required" })}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-2 border "
+              {...register("clubName", { required: "Name is required" })}
+              className="input input-bordered w-full rounded-2xl font-bold focus:ring-primary/20"
             />
             {errors.clubName && (
-              <p className="text-red-500 text-xs mt-1">
+              <p className="text-error text-[10px] font-bold px-1">
                 {errors.clubName.message}
               </p>
             )}
           </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
+
+          <div className="space-y-2">
+            <label className="text-[10px] font-black uppercase tracking-widest text-base-content/40 ml-1">
               Description
             </label>
             <textarea
-              {...register("description", {
-                required: "Description is required",
-              })}
+              {...register("description", { required: "Required" })}
               rows="3"
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-2 border"
+              className="textarea textarea-bordered w-full rounded-2xl font-bold focus:ring-primary/20"
             />
-            {errors.description && (
-              <p className="text-red-500 text-xs mt-1">
-                {errors.description.message}
-              </p>
-            )}
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700">
+
+          <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <label className="text-[10px] font-black uppercase tracking-widest text-base-content/40 ml-1">
                 Category
               </label>
               <select
-                {...register("category", { required: "Category is required" })}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-2 border bg-white"
+                {...register("category", { required: true })}
+                className="select select-bordered w-full rounded-2xl font-bold"
               >
-                <option value="">Select Category</option>
                 <option value="Technology">Technology</option>
                 <option value="Photography">Photography</option>
                 <option value="Sports">Sports</option>
                 <option value="Art">Art</option>
               </select>
-              {errors.category && (
-                <p className="text-red-500 text-xs mt-1">
-                  {errors.category.message}
-                </p>
-              )}
             </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700">
-                Membership Fee ($)
+            <div className="space-y-2">
+              <label className="text-[10px] font-black uppercase tracking-widest text-base-content/40 ml-1">
+                Fee ($)
               </label>
               <input
                 type="number"
                 step="any"
-                {...register("membershipFee", {
-                  min: { value: 0, message: "Fee cannot be negative" },
-                })}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-2 border"
+                {...register("membershipFee")}
+                className="input input-bordered w-full rounded-2xl font-bold"
               />
-              {errors.membershipFee && (
-                <p className="text-red-500 text-xs mt-1">
-                  {errors.membershipFee.message}
-                </p>
-              )}
             </div>
           </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Location (City)
+
+          <div className="space-y-2">
+            <label className="text-[10px] font-black uppercase tracking-widest text-base-content/40 ml-1">
+              Location
             </label>
             <input
               type="text"
-              {...register("location", { required: "Location is required" })}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-2 border"
+              {...register("location", { required: true })}
+              className="input input-bordered w-full rounded-2xl font-bold"
             />
-            {errors.location && (
-              <p className="text-red-500 text-xs mt-1">
-                {errors.location.message}
-              </p>
-            )}
           </div>
-          <div className=" p-4 rounded-md border  border-gray-300">
-            <label className="block text-sm font-medium text-gray-700">
-              Update Banner Image (Will be uploaded to ImgBB)
+
+          <div className="space-y-2">
+            <label className="text-[10px] font-black uppercase tracking-widest text-base-content/40 ml-1">
+              Club Banner
             </label>
-            <input
-              type="file"
-              {...register("bannerImage")}
-              className="w-full text-sm text-gray-500 
-                           file:mr-4 file:py-2 file:px-4 
-                           file:rounded-xl file:border-0 
-                           file:text-xs file:font-bold 
-                           file:bg-[#7C3AED]/10 file:text-[#7C3AED] 
-                           hover:file:bg-[#7C3AED]/20 cursor-pointer"
-              accept="image/*"
-            />
-            <p className="mt-1 text-xs text-gray-500">
-              Leave blank to keep the existing image. Current URL:{" "}
-              <a
-                href={club.bannerImage}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-indigo-500 hover:underline truncate inline-block max-w-xs"
-              >
-                {club.bannerImage.substring(0, 40)}...
-              </a>
-            </p>
-            {errors.bannerImage && (
-              <p className="text-red-500 text-xs mt-1">
-                {errors.bannerImage.message}
-              </p>
-            )}
+            <div className="relative group">
+              <input
+                type="file"
+                {...register("bannerImage")}
+                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                accept="image/*"
+              />
+              <div className="p-6 rounded-2xl border-2 border-dashed border-base-content/10 bg-base-200/30 group-hover:border-primary/40 group-hover:bg-primary/5 transition-all flex flex-col items-center justify-center gap-2">
+                <FiUploadCloud className="text-primary text-2xl animate-bounce" />
+                <span className="text-xs font-black uppercase tracking-tighter text-base-content/60">
+                  {selectedFile?.[0] ? selectedFile[0].name : "Choose New Banner"}
+                </span>
+                <span className="text-[10px] font-bold text-base-content/30 tracking-tight italic">
+                  Current: {club.bannerImage.split("/").pop().substring(0, 20)}...
+                </span>
+              </div>
+            </div>
           </div>
-          <div className="pt-4 flex justify-end gap-3 border-t">
+
+          <div className="pt-6 flex gap-3 sticky bottom-0 bg-base-100 pb-2">
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 py-3 rounded-xl font-semibold text-[#6B7280] bg-[#F3F4F6] hover:bg-[#E5E7EB] transition-colors"
+              className="btn btn-ghost flex-1 rounded-2xl font-black uppercase text-xs tracking-widest border border-base-content/10"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="flex-[2] py-3 rounded-xl font-bold text-white bg-[#7C3AED] hover:bg-indigo-700 transition flex items-center justify-center shadow-lg shadow-green-100 disabled:opacity-50"
               disabled={overallLoading}
+              className="btn btn-primary flex-[2] rounded-2xl font-black uppercase text-xs tracking-widest shadow-lg shadow-primary/20"
             >
               {overallLoading ? (
-                  <TbFidgetSpinner className="animate-spin text-xl" />
-                ): (
+                <TbFidgetSpinner className="animate-spin text-lg" />
+              ) : (
                 <>
-                  <FiSave className="w-4 h-4 mr-1" /> Save Changes
+                  <FiSave /> Save Changes
                 </>
               )}
             </button>

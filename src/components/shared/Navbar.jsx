@@ -97,7 +97,7 @@ const Navbar = () => {
 
   return (
     <nav className="navbar-glass sticky top-0 z-50  transition-all duration-300 shadow-[0_4px_6px_-1px_rgba(0,0,0,0.1)]">
-      <div className="container mx-auto px-4 overflow-x-hidden">
+      <div className="container mx-auto px-4 overflow-visible ">
         <div className="flex justify-between items-center h-20">
           <div className="flex-shrink-0">
             <Link
@@ -131,7 +131,7 @@ const Navbar = () => {
                   </label>
                   <ul
                     tabIndex={0}
-                    className="mt-4 z-[1] p-2 shadow-2xl menu menu-sm dropdown-content rounded- w-60 border border-base-content/10"
+                    className="dropdown-content absolute z-[110] menu p-2 shadow-2xl bg-base-100 rounded-xl w-60 mt-4 border border-base-content/10"
                   >
                     <li className="px-4 py-3 border-b border-base-content/10 mb-2">
                       <p className="font-bold text-primary truncate">{user?.displayName}</p>

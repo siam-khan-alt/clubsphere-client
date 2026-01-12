@@ -7,7 +7,7 @@ import { useQuery } from '@tanstack/react-query';
 import LoadingSpinner from '../../../components/shared/LoadingSpinner';
 
 const AdminDashboard = () => {
-    const axiosSecure=useAxiosSecure()
+    const axiosSecure = useAxiosSecure()
     const { data: adminStats = {}, isLoading, error } = useQuery({
         queryKey: ['adminDashboardStats'],
         queryFn: async () => {
@@ -15,8 +15,10 @@ const AdminDashboard = () => {
             return res.data;
         }
     });
+
     if (isLoading) return <LoadingSpinner />;
-    if (error) return <div className="text-red-500 p-4">Error loading stats: {error.message}</div>;
+    if (error) return <div className="text-error p-4 bg-error/10 rounded-2xl font-bold">Error loading stats: {error.message}</div>;
+
     const {
         totalUsers = 0,
         totalClubs = 0,
@@ -31,114 +33,53 @@ const AdminDashboard = () => {
     } = adminStats;
     
     return (
-        <div className="p-4 sm:p-6 bg-gray-50 min-h-screen">
-            <h2 className=" mb-6">Admin Dashboard Overview 📊</h2>
+        <div className="p-4 space-y-8">
+            <h2 className="text-2xl font-black flex items-center gap-3 text-base-content">
+                <FiActivity className="text-primary" /> Admin Dashboard Overview
+            </h2>
 
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4">
-                
-                <StatCard 
-                    title="Total Users" 
-                    value={totalUsers.toLocaleString()} 
-                    icon={FiUsers} 
-                    colorClass="border-l-4 border-blue-600"
-                    bgColorClass="bg-white"
-                    iconColorClass="bg-blue-500"
-                />
-
-                <StatCard 
-                    title="Total Memberships" 
-                    value={totalMemberships.toLocaleString()} 
-                    icon={FiList} 
-                    colorClass="border-l-4 border-purple-600"
-                    bgColorClass="bg-white"
-                    iconColorClass="bg-purple-500"
-                />
-                
-                <StatCard 
-                    title="Total Revenue" 
-                    value={totalRevenue.toLocaleString()} 
-                    icon={FiDollarSign} 
-                    colorClass="border-l-4 border-yellow-600"
-                    bgColorClass="bg-white"
-                    iconColorClass="bg-yellow-500"
-                />
-
-                <StatCard 
-                    title="Total Clubs" 
-                    value={totalClubs.toLocaleString()} 
-                    icon={FiGlobe} 
-                    colorClass="border-l-4 border-green-600"
-                    bgColorClass="bg-white"
-                    iconColorClass="bg-green-500"
-                />
-                
-                
-                <StatCard 
-                    title="Approved Clubs" 
-                    value={approvedClubs.toLocaleString()} 
-                    icon={FiCheckCircle} 
-                    colorClass="border-l-4 border-emerald-600"
-                    bgColorClass="bg-white"
-                    iconColorClass="bg-emerald-500"
-                />
-
-                 <StatCard 
-                    title="Pending Clubs" 
-                    value={pendingClubs.toLocaleString()} 
-                    icon={FiClock} 
-                    colorClass="border-l-4 border-orange-600"
-                    bgColorClass="bg-white"
-                    iconColorClass="bg-orange-500"
-                />
-                
-                 <StatCard 
-                    title="Rejected Clubs" 
-                    value={rejectedClubs.toLocaleString()} 
-                    icon={FiXCircle} 
-                    colorClass="border-l-4 border-red-600"
-                    bgColorClass="bg-white"
-                    iconColorClass="bg-red-500"
-                />
-                <StatCard 
-                    title="Total Events" 
-                    value={totalEvents.toLocaleString()} 
-                    icon={FiActivity} 
-                    colorClass="border-l-4 border-sky-600"
-                    bgColorClass="bg-white"
-                    iconColorClass="bg-sky-500"
-                />
-                
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+                <StatCard title="Total Users" value={totalUsers} icon={FiUsers} color="text-blue-500" />
+                <StatCard title="Total Memberships" value={totalMemberships} icon={FiList} color="text-purple-500" />
+                <StatCard title="Total Revenue" value={totalRevenue} icon={FiDollarSign} color="text-yellow-500" />
+                <StatCard title="Total Clubs" value={totalClubs} icon={FiGlobe} color="text-green-500" />
+                <StatCard title="Approved Clubs" value={approvedClubs} icon={FiCheckCircle} color="text-emerald-500" />
+                <StatCard title="Pending Clubs" value={pendingClubs} icon={FiClock} color="text-orange-500" />
+                <StatCard title="Rejected Clubs" value={rejectedClubs} icon={FiXCircle} color="text-red-500" />
+                <StatCard title="Total Events" value={totalEvents} icon={FiActivity} color="text-sky-500" />
             </div>
 
-            <div className="mt-8 grid grid-cols-1 lg:grid-cols-2 gap-6">
-                
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 <MembershipChart chartData={membershipsByClub}/>
-                <div className="bg-white p-6 rounded-lg shadow-md">
-                    <h4 className=" mb-4">Recent Platform Activity</h4>
-                    <ul className="space-y-3">{recentActivities.length > 0 ? (
-            recentActivities.map((activity, index) => (
-                <li 
-                    key={index} 
-                    className={`p-3 bg-gray-50 rounded-md border-l-4 text-sm transition-all hover:bg-gray-100 ${
-                        activity.color === 'green' ? 'border-green-400' :
-                        activity.color === 'blue' ? 'border-blue-400' :
-                        activity.color === 'yellow' ? 'border-yellow-400' : 'border-red-400'
-                    }`}
-                >
-                    <span className="mr-2">
-                        {activity.color === 'green' && '✅'}
-                        {activity.color === 'blue' && '👤'}
-                        {activity.color === 'yellow' && '💳'}
-                        {activity.color === 'red' && '🛑'}
-                    </span>
-                    <span className="text-gray-700 font-medium">{activity.text}</span>
-                </li>
-            ))
-        ) : (
-            <div className="text-center py-6 text-gray-400 text-sm">
-                No recent activities found.
-            </div>
-        )}</ul>
+                
+                <div className="bg-base-100 p-6 rounded-2xl border border-base-content/5 shadow-sm">
+                    <h4 className="text-lg font-black mb-6 flex items-center gap-2">
+                        <FiActivity className="text-primary" /> Recent Platform Activity </h4>
+                   <ul className="space-y-4">
+                        {recentActivities.length > 0 ? (
+                            recentActivities.map((activity, index) => (
+                                <li key={index} className="flex items-center gap-4 p-3 rounded-xl hover:bg-base-200 transition-colors border border-transparent hover:border-base-content/5">
+                                    <div className={`flex-shrink-0 p-2.5 rounded-xl flex items-center justify-center ${
+                                        activity.color === 'green' ? 'bg-green-100 text-green-600' :
+                                        activity.color === 'blue' ? 'bg-blue-100 text-blue-600' :
+                                        activity.color === 'yellow' ? 'bg-yellow-100 text-yellow-600' : 'bg-red-100 text-red-600'
+                                    }`}>
+                                        {activity.color === 'green' && <FiCheckCircle size={18} />}
+                                        {activity.color === 'blue' && <FiUsers size={18} />}
+                                        {activity.color === 'yellow' && <FiDollarSign size={18} />}
+                                        {activity.color === 'red' && <FiXCircle size={18} />}
+                                    </div>
+                                    <span className="text-sm font-bold text-base-content/80 leading-snug">
+                                        {activity.text}
+                                    </span>
+                                </li>
+                            ))
+                        ) : (
+                            <div className="text-center py-10 text-base-content/30 text-sm font-bold">
+                                No recent activities found.
+                            </div>
+                        )}
+                    </ul>
                 </div>
             </div>
         </div>

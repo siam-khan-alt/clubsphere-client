@@ -7,94 +7,91 @@ const Profile = () => {
   const { user, updateUser } = use(AuthContext);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const roleStyles = {
-    admin: { bg: "#7C3AED", text: "#FFFFFF" },
-    clubManager: { bg: "#06B6D4", text: "#FFFFFF" },
-    member: { bg: "#00CC99", text: "#FFFFFF" },
+  const roleConfig = {
+    admin: "bg-purple-600",
+    clubManager: "bg-cyan-500",
+    member: "bg-emerald-500",
   };
 
   const userRole = user?.role || "member";
-  const currentStyle = roleStyles[userRole] || roleStyles.member;
+  const roleBadgeColor = roleConfig[userRole] || roleConfig.member;
 
   return (
-    <div className="p-6 flex justify-center items-center min-h-[80vh] bg-[#F8F9FA]">
-      <div className="max-w-2xl w-full bg-[#FFFFFF] rounded-3xl shadow-xl overflow-hidden border border-gray-100">
-        <div className="h-32 w-full" style={{ backgroundColor: "#7C3AED" }}></div>
+    <div className="p-4 md:p-8 flex justify-center items-center min-h-[85vh] bg-base-200/50">
+      <div className="max-w-3xl w-full bg-base-100 rounded-2xl shadow-xl overflow-hidden border border-base-content/5">
+        <div className="h-32 w-full bg-primary/90"></div>
 
-        <div className="px-8 pb-8">
-          <div className="relative flex justify-between items-end -mt-16 mb-6">
-            <div className="relative">
+        <div className="px-6 md:px-10 pb-10">
+          <div className="relative flex justify-between items-end -mt-16 mb-8">
+            <div className="relative group">
               <img
                 src={user?.photoURL || "https://via.placeholder.com/150"}
                 alt="Profile"
-                className="w-32 h-32 rounded-2xl border-4 border-[#FFFFFF] shadow-md object-cover bg-[#FFFFFF]"
+                className="w-36 h-36 rounded-2xl border-4 border-base-100 shadow-xl object-cover bg-base-100"
               />
-              <div className="absolute -bottom-2 -right-2 bg-[#00CC99] w-5 h-5 rounded-full border-2 border-[#FFFFFF]"></div>
+              <div className="absolute -bottom-1 -right-1 bg-success w-6 h-6 rounded-full border-4 border-base-100 shadow-sm"></div>
             </div>
-            <span 
-              className="px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider"
-              style={{ backgroundColor: currentStyle.bg, color: currentStyle.text }}
-            >
+            
+            <span className={`px-5 py-2 rounded-2xl text-xs font-bold uppercase tracking-widest text-white shadow-lg ${roleBadgeColor}`}>
               {userRole}
             </span>
           </div>
 
-          <div className="space-y-1 mb-8">
-            <h1 className="text-3xl font-bold text-[#34495E]">{user?.displayName}</h1>
-            <p className="text-[#6B7280] flex items-center gap-1 italic">
-              User ID: <span className="text-xs font-mono">{user?.uid?.slice(0, 10)}...</span>
+          <div className="space-y-1 mb-10">
+            <h1 className="text-4xl font-black text-base-content tracking-tight">{user?.displayName}</h1>
+            <p className="text-base-content/60 flex items-center gap-2 font-medium">
+              User ID: <span className="text-xs font-mono bg-base-200 px-2 py-0.5 rounded-2xl">{user?.uid?.slice(0, 12)}...</span>
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="flex items-center gap-4 p-4 bg-[#F8F9FA] rounded-2xl border border-gray-100">
-              <div className="p-3 bg-[#FFFFFF] rounded-xl shadow-sm text-[#06B6D4]">
-                <FiMail size={20} />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <div className="flex items-center gap-4 p-5 bg-base-200/40 rounded-2xl border border-base-content/5 transition-colors">
+              <div className="p-3 bg-base-100 rounded-2xl shadow-sm text-primary">
+                <FiMail size={22} />
               </div>
-              <div>
-                <p className="text-xs text-[#6B7280] uppercase font-semibold">Email Address</p>
-                <p className="text-sm font-medium text-[#34495E] truncate">{user?.email}</p>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-4 p-4 bg-[#F8F9FA] rounded-2xl border border-gray-100">
-              <div className="p-3 bg-[#FFFFFF] rounded-xl shadow-sm text-[#7C3AED]">
-                <FiUser size={20} />
-              </div>
-              <div>
-                <p className="text-xs text-[#6B7280] uppercase font-semibold">Full Name</p>
-                <p className="text-sm font-medium text-[#34495E]">{user?.displayName || "N/A"}</p>
+              <div className="overflow-hidden">
+                <p className="text-[10px] text-base-content/50 uppercase font-black">Email Address</p>
+                <p className="text-sm font-semibold text-base-content truncate">{user?.email}</p>
               </div>
             </div>
 
-            <div className="flex items-center gap-4 p-4 bg-[#F8F9FA] rounded-2xl border border-gray-100">
-              <div className="p-3 bg-[#FFFFFF] rounded-xl shadow-sm text-[#06B6D4]">
-                <FiShield size={20} />
+            <div className="flex items-center gap-4 p-5 bg-base-200/40 rounded-2xl border border-base-content/5 transition-colors">
+              <div className="p-3 bg-base-100 rounded-2xl shadow-sm text-secondary">
+                <FiUser size={22} />
               </div>
               <div>
-                <p className="text-xs text-[#6B7280] uppercase font-semibold">Platform Role</p>
-                <p className="text-sm font-medium text-[#34495E] capitalize">{userRole}</p>
+                <p className="text-[10px] text-base-content/50 uppercase font-black">Full Name</p>
+                <p className="text-sm font-semibold text-base-content">{user?.displayName || "Not Set"}</p>
               </div>
             </div>
 
-            <div className="flex items-center gap-4 p-4 bg-[#F8F9FA] rounded-2xl border border-gray-100">
-              <div className="p-3 bg-[#FFFFFF] rounded-xl shadow-sm text-[#00CC99]">
-                <FiCalendar size={20} />
+            <div className="flex items-center gap-4 p-5 bg-base-200/40 rounded-2xl border border-base-content/5 transition-colors">
+              <div className="p-3 bg-base-100 rounded-2xl shadow-sm text-accent">
+                <FiShield size={22} />
               </div>
               <div>
-                <p className="text-xs text-[#6B7280] uppercase font-semibold">Status</p>
-                <p className="text-sm font-medium text-[#34495E]">Active Account</p>
+                <p className="text-[10px] text-base-content/50 uppercase font-black">Platform Role</p>
+                <p className="text-sm font-semibold text-base-content capitalize">{userRole}</p>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-4 p-5 bg-base-200/40 rounded-2xl border border-base-content/5 transition-colors">
+              <div className="p-3 bg-base-100 rounded-2xl shadow-sm text-success">
+                <FiCalendar size={22} />
+              </div>
+              <div>
+                <p className="text-[10px] text-base-content/50 uppercase font-black">Account Status</p>
+                <p className="text-sm font-semibold text-base-content italic text-success">Active Account</p>
               </div>
             </div>
           </div>
 
-          <div className="mt-8">
+          <div className="mt-10">
             <button 
               onClick={() => setIsModalOpen(true)}
-              className="w-full py-3 text-white font-bold rounded-2xl transition shadow-lg flex items-center justify-center gap-2 hover:opacity-90 active:scale-95"
-              style={{ backgroundColor: "#7C3AED" }}
+              className="w-full py-4 btn btn-primary rounded-2xl text-white font-black shadow-lg shadow-primary/20 flex items-center justify-center gap-3 transition-all"
             >
-               <FiEdit2 /> Update Profile Info
+               <FiEdit2 size={18} /> Update Profile Information
             </button>
           </div>
         </div>

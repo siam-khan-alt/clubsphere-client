@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import axios from 'axios';
 import ClubCard from '../public/ClubCard';
 import LoadingSpinner from "../../components/shared/LoadingSpinner";
+import { FiInbox } from 'react-icons/fi';
 
 const containerVariants = {
     hidden: { opacity: 0 },
@@ -20,7 +21,6 @@ const itemVariants = {
     visible: { y: 0, opacity: 1 }  
 };
 
-
 const FeaturedClubsSection = () => {
     
     const { data: clubs = [], isLoading, isError } = useQuery({
@@ -31,12 +31,12 @@ const FeaturedClubsSection = () => {
         },
         staleTime: 1000 * 60 * 5,
     });
- if (isLoading) return <LoadingSpinner />;
+
     if (isError) {
         return (
-            <div className="container mx-auto px-4 py-5 text-center">
-                <h2>Featured Clubs</h2>
-                <p className="text-red-400 font-medium bg-red-100/10 p-4 rounded-lg inline-block">
+            <div className="container bg-base-100 mx-auto px-4 py-20 text-center">
+                <h2 className="text-4xl font-black italic uppercase tracking-tighter mb-4">Featured <span className="text-primary not-italic">Clubs</span></h2>
+                <p className="text-error font-bold bg-error/10 p-4 rounded-2xl inline-block border border-error/20 uppercase text-xs tracking-widest">
                     Error loading clubs. Please check the network connection.
                 </p>
             </div>
@@ -44,38 +44,61 @@ const FeaturedClubsSection = () => {
     }
 
     return (
-        <section className="py-8 bg-base-100 transition-colors duration-300">
+        <section className="py-5 bg-base-100 transition-colors duration-300">
             <div className="container mx-auto px-4">
-                <motion.h2 
-                    initial={{ opacity: 0, y: -20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.6 }}
-                    className='mb-8'
-                >
-                    Featured Clubs
-                </motion.h2>
+                <div className="text-center mb-8">
+                    <motion.h2 
+                        initial={{ opacity: 0, y: -20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.6 }}
+                        className="text-4xl font-black italic uppercase tracking-tighter"
+                    >
+                        Featured <span className="text-primary not-italic">Clubs</span>
+                    </motion.h2>
+                    <div className="w-24 h-1 bg-primary/20 mx-auto mt-2 rounded-full overflow-hidden">
+                        <div className="w-full h-full bg-primary origin-left animate-[scan_1.5s_ease-in-out_infinite]"></div>
+                    </div>
+                </div>
                 
-                <motion.div
-                    variants={containerVariants}
-                    initial="hidden" 
-                    whileInView="visible" 
-                    viewport={{ once: true }}
-                    className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8"
-                >
-                    {clubs.length > 0 ? (
-                        clubs.map((club) => (
-                            <motion.div key={club._id} variants={itemVariants}>
-                                <ClubCard club={club} />
-                            </motion.div>
-                        ))
+                <div className="relative min-h-[350px]">
+                    {isLoading ? (
+                        <div className="absolute inset-0 flex items-center justify-center bg-base-100/10 backdrop-blur-[2px] z-10">
+                            <LoadingSpinner />
+                        </div>
+                    ) : clubs.length > 0 ? (
+                        <motion.div
+                            variants={containerVariants}
+                            initial="hidden" 
+                            whileInView="visible" 
+                            viewport={{ once: true }}
+                            className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8"
+                        >
+                            {clubs.map((club) => (
+                                <motion.div key={club._id} variants={itemVariants}>
+                                    <ClubCard club={club} />
+                                </motion.div>
+                            ))}
+                        </motion.div>
                     ) : (
-                        <p className="col-span-full text-center opacity-60 text-lg">
-                            No featured clubs found at the moment.
-                        </p>
+                        <div className="text-center py-20 border-2 border-dashed border-base-content/10 rounded-[40px] flex flex-col items-center">
+                            <FiInbox size={48} className="text-primary mb-4 opacity-30" />
+                            <p className="text-[10px] font-black uppercase tracking-[0.4em] text-base-content/40">
+                                No featured clubs found at the moment
+                            </p>
+                        </div>
                     )}
-                </motion.div>
+                </div>
             </div>
+
+            <style jsx>{`
+                @keyframes scan {
+                    0% { transform: scaleX(0); transform-origin: left; }
+                    50% { transform: scaleX(1); transform-origin: left; }
+                    50.1% { transform: scaleX(1); transform-origin: right; }
+                    100% { transform: scaleX(0); transform-origin: right; }
+                }
+            `}</style>
         </section>
     );
 };
