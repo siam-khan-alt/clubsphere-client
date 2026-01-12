@@ -116,7 +116,6 @@ const EventsManagement = () => {
                 </div>
             </div>
 
-            {/* Modals */}
             <CreateEventModal isOpen={isCreateModalOpen} onClose={() => setIsCreateModalOpen(false)} />
             <EditEventModal 
                 isOpen={isEditModalOpen}
