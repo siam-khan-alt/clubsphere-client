@@ -10,6 +10,26 @@
 
 ---
 
+## 📸 Platform Previews
+
+<p align="center">
+  <b>Admin Dashboard & Analytics</b><br>
+  <img src="https://i.ibb.co.com/Qjm7D6F5/club-spher-admin.png" width="90%" />
+</p>
+
+<br>
+
+<p align="center">
+  <img src="https://i.ibb.co.com/3msW43VT/Club-sphere-Explore.png" alt="Club Exploration" width="48%" />
+  <img src="https://i.ibb.co.com/whQY4w7x/club-sphere-payment-succes.png" width="48%" />
+</p>
+
+<p align="center">
+  <i>(Left: Club Discovery Page | Right: Integrated Stripe Payment System)</i>
+</p>
+
+---
+
 ## 📖 Project Overview
 ClubSphere is a comprehensive platform for managing local clubs and events. It supports three distinct user roles: **Admin**, **Club Manager**, and **Member**, each with a dedicated dashboard and specific functionalities.
 
@@ -75,7 +95,7 @@ ClubSphere is a comprehensive platform for managing local clubs and events. It s
 1. **Clone the repository**  
  ```base
    git clone https://github.com/siam-khan-alt/clubsphere-client.git
-   cd travel-ease
+   cd clubsphere-client
    npm install
    npm run dev
 ````
