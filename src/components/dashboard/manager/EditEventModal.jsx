@@ -33,7 +33,7 @@ const EditEventModal = ({ event, onClose }) => {
                 title: "Event Updated!",
                 showConfirmButton: false,
                 timer: 1500,
-                customClass: { popup: "rounded-3xl" }
+                customClass: { popup: "rounded-2xl" }
             });
         },
     });

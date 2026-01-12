@@ -92,7 +92,7 @@ const MyClubs = () => {
             </div>
             
             {myClubs.length === 0 ? (
-                <div className="text-center py-20 bg-base-100 rounded-3xl border border-dashed border-base-content/20">
+                <div className="text-center py-20 bg-base-100 rounded-2xl border border-dashed border-base-content/20">
                     <FiPlusCircle className="w-16 h-16 mx-auto text-base-content/10 mb-4" />
                     <p className="text-sm font-black uppercase tracking-widest text-base-content/40">You are not managing any clubs yet.</p>
                 </div>

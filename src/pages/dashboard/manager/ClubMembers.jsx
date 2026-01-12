@@ -92,7 +92,7 @@ const ClubMembers = () => {
             </div>
             
             {members.length === 0 ? (
-                <div className="text-center py-20 bg-base-100 rounded-3xl border border-dashed border-base-content/20 shadow-sm">
+                <div className="text-center py-20 bg-base-100 rounded-2xl border border-dashed border-base-content/20 shadow-sm">
                     <FiUsers className="w-16 h-16 mx-auto text-base-content/10 mb-4" />
                     <p className="text-sm font-black uppercase tracking-widest text-base-content/40">No members have joined yet.</p>
                 </div>

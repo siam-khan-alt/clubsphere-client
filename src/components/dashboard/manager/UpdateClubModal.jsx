@@ -40,7 +40,7 @@ const UpdateClubModal = ({ club, onClose }) => {
         title: "Updated!",
         showConfirmButton: false,
         timer: 2000,
-        customClass: { popup: "rounded-3xl" },
+        customClass: { popup: "rounded-2xl" },
       });
     },
     onError: (error) => {

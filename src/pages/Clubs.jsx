@@ -78,7 +78,7 @@ const Clubs = () => {
           )}
 
           {!isLoading && clubs?.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
               {clubs.map((club, index) => (
                 <motion.div key={club._id} initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: index * 0.05 }}>
                   <ClubCard club={club} />
@@ -86,7 +86,7 @@ const Clubs = () => {
               ))}
             </div>
           ) : !isLoading && (
-            <div className="text-center py-24 border-2 border-dashed border-base-content/10 rounded-3xl flex flex-col items-center">
+            <div className="text-center py-24 border-2 border-dashed border-base-content/10 rounded-2xl flex flex-col items-center">
               <FiInbox size={48} className="text-primary mb-4 opacity-50" />
               <h3 className="text-2xl font-bold opacity-80 uppercase tracking-widest">No Clubs Found</h3>
             </div>

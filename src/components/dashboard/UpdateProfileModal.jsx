@@ -36,7 +36,7 @@ const UpdateProfileModal = ({ isOpen, onClose, user, onUpdate }) => {
       isOpen={isOpen}
       onRequestClose={onClose}
       contentLabel="Update Profile Modal"
-      className="max-w-md w-full mx-auto mt-20 bg-white rounded-3xl outline-none p-0 shadow-2xl overflow-hidden"
+      className="max-w-md w-full mx-auto mt-20 bg-white rounded-2xl outline-none p-0 shadow-2xl overflow-hidden"
       overlayClassName="fixed inset-0 bg-black/60 backdrop-blur-sm z-[1000] flex justify-center items-start p-4"
     >
       <div className="relative p-8">

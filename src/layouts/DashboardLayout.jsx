@@ -56,15 +56,6 @@ const DashboardLayout = () => {
 
                 <SideNavbar theme={theme} toggleTheme={toggleTheme} />
                 
-                <div className="absolute bottom-8 left-6 right-6">
-                    <div className="p-4 bg-primary/5 rounded-2xl border border-primary/10">
-                        <p className="text-[10px] font-black uppercase tracking-[0.2em] text-primary/60">System Status</p>
-                        <div className="flex items-center gap-2 mt-1">
-                            <div className="w-2 h-2 bg-success rounded-full animate-pulse"></div>
-                            <span className="text-[10px] font-bold opacity-50 uppercase">Operational</span>
-                        </div>
-                    </div>
-                </div>
             </div>
             
             <div 

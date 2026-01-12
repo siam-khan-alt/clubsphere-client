@@ -120,13 +120,17 @@ const EventsManagement = () => {
           </div>
         </div>
 
-        <div className="w-full max-w-[85vw] lg:max-w-full">
-          <EventListTable
-            events={events}
-            onViewRegistrations={handleViewRegistrations}
-            onEditEvent={handleEditEvent}
-            onDeleteEvent={handleDeleteEvent}
-          />
+        <div className="w-full max-w-[80vw] md:max-w-full overflow-hidden bg-base-100 mx-auto rounded-2xl border border-base-content/5 shadow-sm">
+          <div className="overflow-x-auto w-full custom-scrollbar">
+            <div className="inline-block min-w-full align-middle">
+              <EventListTable
+                events={events}
+                onViewRegistrations={handleViewRegistrations}
+                onEditEvent={handleEditEvent}
+                onDeleteEvent={handleDeleteEvent}
+              />
+            </div>
+          </div>
         </div>
       </div>
 

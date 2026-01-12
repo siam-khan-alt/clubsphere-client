@@ -25,7 +25,7 @@ const CreateEventModal = ({ clubId, onClose }) => {
                 title: "Event Created!",
                 showConfirmButton: false,
                 timer: 2000,
-                customClass: { popup: "rounded-3xl" },
+                customClass: { popup: "rounded-2xl" },
             });
         },
         onError: (error) => {
@@ -33,7 +33,7 @@ const CreateEventModal = ({ clubId, onClose }) => {
                 icon: "error",
                 title: "Error!",
                 text: error.response?.data?.message || "Failed to create.",
-                customClass: { popup: "rounded-3xl" },
+                customClass: { popup: "rounded-2xl" },
             });
         },
     });

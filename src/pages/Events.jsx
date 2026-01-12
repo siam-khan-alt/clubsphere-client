@@ -89,7 +89,7 @@ const Events = () => {
                     )}
 
                     {!isLoading && events.length > 0 ? (
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
                             {events.map((event, index) => (
                                 <motion.div
                                     key={event._id}
@@ -102,7 +102,7 @@ const Events = () => {
                             ))}
                         </div>
                     ) : !isLoading && (
-                        <div className="text-center py-24 border-2 border-dashed border-base-content/10 rounded-3xl flex flex-col items-center">
+                        <div className="text-center py-24 border-2 border-dashed border-base-content/10 rounded-2xl flex flex-col items-center">
                             <FiInbox size={48} className="text-primary mb-4 opacity-50" />
                             <h3 className="text-2xl font-bold opacity-80 uppercase tracking-widest">No Events Found</h3>
                         </div>
