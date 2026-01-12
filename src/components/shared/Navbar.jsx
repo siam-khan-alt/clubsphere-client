@@ -86,10 +86,24 @@ const Navbar = () => {
           Events
         </NavLink>
       </li>
+        <li><NavLink to="/about"  className={({ isActive }) =>
+            isActive
+              ? "text-primary font-bold underline underline-offset-8 transition-all"
+              : "hover:text-primary transition-all"
+          }>About</NavLink></li>
+          <li><NavLink to="/contact"  className={({ isActive }) =>
+            isActive
+              ? "text-primary font-bold underline underline-offset-8 transition-all"
+              : "hover:text-primary transition-all"
+          }>Contact</NavLink></li>
       {user && (
         <>
-          <li><NavLink to="/about" className="hover:text-primary transition-all">About</NavLink></li>
-          <li><NavLink to="/contact" className="hover:text-primary transition-all">Contact</NavLink></li>
+        
+          <li><NavLink  to={goDashboardRoute()}  className={({ isActive }) =>
+            isActive
+              ? "text-primary font-bold underline underline-offset-8 transition-all"
+              : "hover:text-primary transition-all"
+          }>Dashboard</NavLink></li>
         </>
       )}
     </>

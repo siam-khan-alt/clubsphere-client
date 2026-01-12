@@ -35,15 +35,13 @@ const Footer = () => {
                             <li><Link to="/" className="opacity-70 hover:text-primary hover:opacity-100 transition-all">Home</Link></li>
                             <li><Link to="/clubs" className="opacity-70 hover:text-primary hover:opacity-100 transition-all">Find a Club</Link></li>
                             <li><Link to="/events" className="opacity-70 hover:text-primary hover:opacity-100 transition-all">Upcoming Events</Link></li>
-                            <li><Link to="/about" className="opacity-70 hover:text-primary hover:opacity-100 transition-all">About Us</Link></li>
                         </ul>
                     </div>
 
                     <div>
                         <h4 className="text-lg font-bold mb-6 ">Resources</h4>
                         <ul className="space-y-3 text-sm">
-                            <li><Link to="/privacy" className="opacity-70 hover:text-primary hover:opacity-100 transition-all">Privacy Policy</Link></li>
-                            <li><Link to="/terms" className="opacity-70 hover:text-primary hover:opacity-100 transition-all">Terms of Service</Link></li>
+                            <li><Link to="/about" className="opacity-70 hover:text-primary hover:opacity-100 transition-all">About Us</Link></li>
                             <li><Link to="/contact" className="opacity-70 hover:text-primary hover:opacity-100 transition-all">Support Center</Link></li>
                         </ul>
                     </div>
