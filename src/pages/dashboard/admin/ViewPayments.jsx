@@ -22,13 +22,13 @@ const ViewPayments = () => {
 
     return (
         <div className="p-4 space-y-8">
-            <h2 className="text-2xl font-black flex items-center gap-3 text-base-content">
-                <FiCreditCard className="text-primary" /> Platform Payment Overview
+            <h2 className="text-2xl font-black flex items-center gap-2 text-base-content">
+                <FiCreditCard className="text-primary" /> Payment Overview
             </h2>
 
             <div className="bg-base-100 p-4 rounded-2xl border border-base-content/5 shadow-sm relative overflow-hidden group">
                 <div className="absolute right-0 top-0 p-8 opacity-5 group-hover:scale-110 transition-transform">
-                    <FiTrendingUp size={100} />
+                    <FiTrendingUp size={90} />
                 </div>
                 <div className="relative z-10">
                     <p className="text-xs font-black uppercase tracking-[0.2em] text-base-content/50">Total Revenue Generated</p>

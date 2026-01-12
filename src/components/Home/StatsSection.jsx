@@ -13,6 +13,15 @@ const StatsSection = () => {
     return (
         <section className="pt-10 pb-5 bg-base-100 transition-colors duration-300">
             <div className="container mx-auto px-4">
+                <motion.h2 
+                                    initial={{ opacity: 0, y: -20 }}
+                                    whileInView={{ opacity: 1, y: 0 }}
+                                    viewport={{ once: true }}
+                                    transition={{ duration: 0.6 }}
+                                    className='mb-8'
+                                >
+                                    Our Stats Data
+                                </motion.h2>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-6 lg:gap-8">
                     {stats.map((stat, index) => (
                         <motion.div 

@@ -9,7 +9,7 @@ const faqs = [
 const FAQSection = () => {
     return (
         <section className="py-5 bg-base-100">
-            <div className="container mx-auto px-4 max-w-4xl">
+            <div className="container mx-auto px-4 ">
                 <h2 className='mb-8'>Got Questions? We Have Answers</h2>
                 <div className="space-y-4 mt-12">
                     {faqs.map((faq, i) => (

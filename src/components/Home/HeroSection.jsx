@@ -38,7 +38,7 @@ const sliderData = [
 
 const HeroSection = () => {
   return (
-    <section className="h-[60vh] min-h-[450px] md:min-h-[420px] relative overflow-hidden bg-base-100">
+    <section className="h-[60vh] min-h-[450px]  relative overflow-hidden bg-base-100">
       <Swiper
         modules={[Autoplay, EffectFade, Pagination]}
         effect="fade"
