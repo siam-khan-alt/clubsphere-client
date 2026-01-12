@@ -75,7 +75,7 @@ const MyClubs = () => {
     if (isError) return <div className="p-4 bg-error/10 text-error rounded-2xl font-black uppercase text-xs tracking-widest">Failed to fetch club data.</div>;
 
     return (
-        <div className="p-4 space-y-8">
+        <div className="p-4 container mx-auto space-y-8">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
                     <h2 className="text-2xl font-black flex items-center gap-3 text-base-content">

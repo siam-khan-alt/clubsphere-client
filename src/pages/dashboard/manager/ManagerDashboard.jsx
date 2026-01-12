@@ -48,7 +48,7 @@ const ManagerDashboard = () => {
   }
 
   return (
-    <div className="p-4 space-y-8">
+    <div className="p-4 container mx-auto space-y-8">
       <h2 className="text-2xl font-black flex items-center gap-3 text-base-content">
         <FiActivity className="text-primary" /> Manager Overview
       </h2>

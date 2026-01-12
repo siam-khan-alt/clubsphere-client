@@ -92,10 +92,10 @@ const EventsManagement = () => {
   if (isLoading) return <LoadingSpinner />;
 
   return (
-    <div className="p-4 space-y-8 animate-in fade-in duration-500">
+    <div className="p-4 container mx-auto space-y-8 animate-in fade-in duration-500">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
-          <h2 className="text-3xl font-black flex items-center gap-3 text-base-content uppercase italic tracking-tighter">
+          <h2 className="md:text-3xl sm:text-2xl text-xl font-black flex flex-col md:flex-row  items-center gap-3 text-base-content uppercase italic tracking-tighter">
             <FiCalendar className="text-primary" /> Event{" "}
             <span className="text-primary not-italic">Management</span>
           </h2>

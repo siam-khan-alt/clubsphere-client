@@ -84,10 +84,10 @@ const CreateClub = () => {
     };
 
     return (
-        <div className="min-h-screen py-10 px-4 animate-in fade-in duration-500">
+        <div className="min-h-screen container mx-auto py-10 px-4 animate-in fade-in duration-500">
             <div className="max-w-3xl mx-auto">
                 <div className="mb-10 text-center md:text-left">
-                    <h2 className="text-3xl font-black flex items-center justify-center md:justify-start gap-3 text-base-content uppercase italic tracking-tighter">
+                    <h2 className="md:text-3xl sm:text-2xl text-xl font-black flex flex-col md:flex-row items-center justify-center md:justify-start gap-3 text-base-content uppercase italic tracking-tighter">
                         <FiPlusCircle className="text-primary" /> Create <span className="text-primary not-italic">New Club</span>
                     </h2>
                     <p className="text-[10px] font-black uppercase tracking-[0.3em] text-base-content/30 italic mt-1 ml-1">
