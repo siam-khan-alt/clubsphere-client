@@ -6,7 +6,7 @@ import LoadingSpinner from '../../../components/shared/LoadingSpinner';
 import EventListTable from '../../../components/dashboard/manager/EventListTable';
 import CreateEventModal from '../../../components/dashboard/manager/CreateEventModal';
 import EditEventModal from '../../../components/dashboard/manager/EditEventModal';
-import { FiPlusCircle } from 'react-icons/fi';
+import { FiPlus, FiCalendar, FiActivity } from 'react-icons/fi';
 import ViewRegistrationModal from '../../../components/dashboard/manager/ViewRegistrationModal';
 
 const EventsManagement = () => {
@@ -14,12 +14,12 @@ const EventsManagement = () => {
     const queryClient = useQueryClient(); 
 
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
-    
     const [isEditModalOpen, setIsEditModalOpen] = useState(false); 
     const [eventToEdit, setEventToEdit] = useState(null); 
     const [isViewRegModalOpen, setIsViewRegModalOpen] = useState(false);
     const [viewingEventId, setViewingEventId] = useState(null);
     const [viewingEventTitle, setViewingEventTitle] = useState('');
+
     const { data: events = [], isLoading } = useQuery({
         queryKey: ['managerEvents'],
         queryFn: async () => {
@@ -27,11 +27,8 @@ const EventsManagement = () => {
             return res.data;
         }
     });
-const { 
-        data: registrationData, 
-        isLoading: isRegLoading,
-        isFetching: isRegFetching
-    } = useQuery({
+
+    const { data: registrationData, isLoading: isRegLoading, isFetching: isRegFetching } = useQuery({
         queryKey: ['eventRegistrations', viewingEventId],
         queryFn: async () => {
             const res = await axiosSecure.get(`/manager/events/${viewingEventId}/registrations`);
@@ -39,15 +36,16 @@ const {
         },
         enabled: !!viewingEventId && isViewRegModalOpen,
     });
-    const handleViewRegistrations = async (eventId, eventTitle) => {
+
+    const handleViewRegistrations = (eventId, eventTitle) => {
         setViewingEventId(eventId);
         setViewingEventTitle(eventTitle);
         setIsViewRegModalOpen(true);
     };
+
     const handleCloseViewRegModal = () => {
         setIsViewRegModalOpen(false);
         setViewingEventId(null); 
-        setViewingEventTitle('');
     };
     
     const handleEditEvent = (event) => {
@@ -56,53 +54,75 @@ const {
     };
 
     const deleteEventMutation = useMutation({
-        mutationFn: async (eventId) => {
-            const res = await axiosSecure.delete(`/manager/events/${eventId}`);
-            return res.data;
-        },
+        mutationFn: async (eventId) => axiosSecure.delete(`/manager/events/${eventId}`),
         onSuccess: () => {
-            Swal.fire('Deleted!', 'The event has been successfully deleted.', 'success');
+            Swal.fire({ icon: 'success', title: 'Event Axed!', showConfirmButton: false, timer: 1500, customClass: { popup: 'rounded-2xl' } });
             queryClient.invalidateQueries({ queryKey: ['managerEvents'] });
-        },
-        onError: (error) => {
-            Swal.fire('Error!', error.response?.data?.message || 'Failed to delete event.', 'error');
         }
     });
 
     const handleDeleteEvent = (eventId, eventTitle) => {
         Swal.fire({
-            title: `Are you sure?`,
-            text: `You are about to delete the event: "${eventTitle}". This action cannot be undone.`,
+            title: `Delete Event?`,
+            text: `Remove "${eventTitle}" permanently?`,
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonColor: '#d33',
-            cancelButtonColor: '#3085d6',
-            confirmButtonText: 'Yes, delete it!'
+            confirmButtonColor: '#ef4444',
+            cancelButtonColor: '#3b82f6',
+            confirmButtonText: 'Yes, Delete!',
+            customClass: { popup: 'rounded-2xl' }
         }).then((result) => {
-            if (result.isConfirmed) {
-                deleteEventMutation.mutate(eventId);
-            }
+            if (result.isConfirmed) deleteEventMutation.mutate(eventId);
         });
     };
 
     if (isLoading) return <LoadingSpinner/>
-    return (
-        <div className="p-4 sm:p-6 bg-gray-50 min-h-screen">
-            <div className="flex justify-between items-center mb-6">
-                <h2 >Event Management</h2>
-                
-            </div>
-            <div className='overflow-x-auto max-w-64 md:max-w-2xl lg:max-w-3xl  '>
-              <EventListTable 
-                events={events}
-                onViewRegistrations={handleViewRegistrations}
-                onEditEvent={handleEditEvent} 
-                onDeleteEvent={handleDeleteEvent} 
-            />
 
+    return (
+        <div className="p-4 space-y-8 animate-in fade-in duration-500">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+                <div>
+                    <h2 className="text-3xl font-black flex items-center gap-3 text-base-content uppercase italic tracking-tighter">
+                        <FiCalendar className="text-primary" /> Event <span className="text-primary not-italic">Management</span>
+                    </h2>
+                    <p className="text-[10px] font-black uppercase tracking-[0.3em] text-base-content/30 italic mt-1 ml-1">
+                        Control center for all club activities
+                    </p>
+                </div>
+                <button
+                    onClick={() => setIsCreateModalOpen(true)}
+                    className="btn btn-primary rounded-2xl font-black uppercase text-xs tracking-widest shadow-xl shadow-primary/20 gap-2"
+                >
+                    <FiPlus size={18} /> Host New Event
+                </button>
             </div>
-           
+
+            <div className="grid grid-cols-1 gap-6">
+                <div className="flex items-center justify-between px-2">
+                    <div className="flex items-center gap-4">
+                        <div className="px-4 py-2 bg-base-200 rounded-2xl text-[10px] font-black uppercase tracking-widest text-base-content/60 border border-base-content/5">
+                            Active Events: {events.length}
+                        </div>
+                    </div>
+                </div>
+
+                <div className="w-full max-w-[85vw] lg:max-w-full">
+                    <EventListTable 
+                        events={events}
+                        onViewRegistrations={handleViewRegistrations}
+                        onEditEvent={handleEditEvent} 
+                        onDeleteEvent={handleDeleteEvent} 
+                    />
+                </div>
+            </div>
+
+            {/* Modals */}
             <CreateEventModal isOpen={isCreateModalOpen} onClose={() => setIsCreateModalOpen(false)} />
+            <EditEventModal 
+                isOpen={isEditModalOpen}
+                onClose={() => setIsEditModalOpen(false)}
+                eventToEdit={eventToEdit}
+            />
             <ViewRegistrationModal 
                 isOpen={isViewRegModalOpen} 
                 onClose={handleCloseViewRegModal} 
@@ -111,21 +131,14 @@ const {
                 isLoading={isRegLoading || isRegFetching}
             />
 
-            <EditEventModal 
-                isOpen={isEditModalOpen}
-                onClose={() => setIsEditModalOpen(false)}
-                eventToEdit={eventToEdit}
-            />
-            <button
-                    onClick={() => setIsCreateModalOpen(true)}
-                    className="flex items-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-150"
-                >
-                    <FiPlusCircle className="mr-2" />
-                    Create New Event
-                </button>
+            <div className="flex items-center gap-2 pt-10">
+                <div className="h-1 w-12 bg-primary rounded-2xl"></div>
+                <p className="text-[10px] font-black uppercase tracking-[0.3em] text-base-content/30 italic">
+                    ClubSphere Event Logic v2.4
+                </p>
+            </div>
         </div>
     );
 };
 
 export default EventsManagement;
-
