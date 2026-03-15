@@ -7,7 +7,7 @@ const EventListTable = ({ events, onViewRegistrations, onEditEvent, onDeleteEven
         <div className="bg-base-100 rounded-2xl border border-base-content/5 shadow-2xl overflow-hidden">
             <table className="table w-full border-separate border-spacing-y-2 px-4">
                 <thead>
-                    <tr className="border-none text-base-content/40 italic">
+                    <tr className="border-none text-base-content/40 ">
                         <th className="font-black uppercase text-[10px] tracking-[0.2em] py-6">Event Details</th>
                         <th className="font-black uppercase text-[10px] tracking-[0.2em]">Club</th>
                         <th className="font-black uppercase text-[10px] tracking-[0.2em]">Schedule</th>

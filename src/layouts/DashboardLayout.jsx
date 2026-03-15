@@ -49,7 +49,7 @@ const DashboardLayout = () => {
                 `}
             >
                 <div className="flex items-center justify-between mb-10 px-2">
-                    <div className="text-2xl font-black tracking-tighter italic uppercase">
+                    <div className="text-2xl font-black tracking-tighter  uppercase">
                         Club<span className="text-primary not-italic">Sphere</span>
                     </div>
                 </div>

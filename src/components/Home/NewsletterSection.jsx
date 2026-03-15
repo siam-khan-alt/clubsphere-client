@@ -30,7 +30,7 @@ const NewsletterSection = () => {
                                 Subscribe Now
                             </button>
                         </form>
-                        <p className="text-xs opacity-50 mt-4 italic">We respect your privacy. Unsubscribe at any time.</p>
+                        <p className="text-xs opacity-50 mt-4 ">We respect your privacy. Unsubscribe at any time.</p>
                     </div>
                 </motion.div>
             </div>

@@ -43,7 +43,7 @@ const Clubs = () => {
     <div className="min-h-screen bg-base-100 transition-colors duration-300">
       <div className="container mx-auto px-4 py-12">
         <div className="text-center mb-6">
-          <motion.h2 initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="text-4xl font-black italic uppercase tracking-tighter">
+          <motion.h2 initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="text-4xl font-black  uppercase tracking-tighter">
             Explore Local <span className="text-primary not-italic">Clubs</span>
           </motion.h2>
         </div>

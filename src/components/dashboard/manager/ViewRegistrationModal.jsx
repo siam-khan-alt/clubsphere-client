@@ -9,7 +9,7 @@ const ViewRegistrationModal = ({ isOpen, onClose, registrations, eventTitle, isL
         <div className="fixed inset-0 bg-base-content/40 backdrop-blur-md z-[100] flex justify-center items-center p-4">
             <div className="bg-base-100 rounded-2xl shadow-2xl w-full max-w-3xl overflow-hidden border border-base-content/5 animate-in fade-in zoom-in duration-200">
                 <div className="p-6 border-b border-base-content/5 flex justify-between items-center bg-base-100/50 backdrop-blur-sm sticky top-0 z-10">
-                    <h3 className="text-xl font-black text-base-content tracking-tight flex items-center gap-3 italic uppercase">
+                    <h3 className="text-xl font-black text-base-content tracking-tight flex items-center gap-3  uppercase">
                         <FiUsers className="text-primary not-italic" /> Registrations: <span className="text-primary not-italic">{eventTitle}</span>
                     </h3>
                     <button onClick={onClose} className="btn btn-ghost btn-circle btn-sm hover:rotate-90 transition-transform">

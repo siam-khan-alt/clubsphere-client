@@ -95,11 +95,11 @@ const EventsManagement = () => {
     <div className="p-4 container mx-auto space-y-8 animate-in fade-in duration-500">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
-          <h2 className="md:text-3xl sm:text-2xl text-xl font-black flex flex-col md:flex-row  items-center gap-3 text-base-content uppercase italic tracking-tighter">
+          <h2 className="md:text-3xl sm:text-2xl text-xl font-black flex flex-col md:flex-row  items-center gap-3 text-base-content uppercase  tracking-tighter">
             <FiCalendar className="text-primary" /> Event{" "}
             <span className="text-primary not-italic">Management</span>
           </h2>
-          <p className="text-[10px] font-black uppercase tracking-[0.3em] text-base-content/30 italic mt-1 ml-1">
+          <p className="text-[10px] font-black uppercase tracking-[0.3em] text-base-content/30  mt-1 ml-1">
             Control center for all club activities
           </p>
         </div>
@@ -161,7 +161,7 @@ const EventsManagement = () => {
 
       <div className="flex items-center gap-2 pt-10">
         <div className="h-1 w-12 bg-primary rounded-2xl"></div>
-        <p className="text-[10px] font-black uppercase tracking-[0.3em] text-base-content/30 italic">
+        <p className="text-[10px] font-black uppercase tracking-[0.3em] text-base-content/30 ">
           ClubSphere Event Logic v2.4
         </p>
       </div>

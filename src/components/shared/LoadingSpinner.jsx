@@ -27,7 +27,7 @@ const LoadingSpinner = () => {
 
         <div className="mt-10 text-center space-y-2">
           <div className="relative">
-            <h2 className="text-4xl font-black tracking-tighter text-base-content dark:text-white uppercase italic">
+            <h2 className="text-4xl font-black tracking-tighter text-base-content dark:text-white uppercase ">
               Club<span className="text-primary not-italic">Sphere</span>
             </h2>
             <div className="absolute -bottom-1 left-0 w-full h-[2px] bg-primary/20 overflow-hidden">

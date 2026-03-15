@@ -57,7 +57,7 @@ const ManageClubs = () => {
     return (
         <div className="p-4 container mx-auto space-y-6"> 
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                <h2 className="text-xl sm:text-2xl md:text-3xl font-black flex items-center gap-3 text-base-content uppercase italic tracking-tighter">
+                <h2 className="text-xl sm:text-2xl md:text-3xl font-black flex items-center gap-3 text-base-content uppercase  tracking-tighter">
                     <FiLayout className="text-primary" /> Manage All <span className="text-primary not-italic">Clubs</span>
                 </h2>
                 <div className="px-4 py-2 bg-base-200 rounded-full text-[10px] font-black uppercase tracking-[0.2em] text-base-content/60 border border-base-content/5">
@@ -77,7 +77,7 @@ const ManageClubs = () => {
                     <div className="inline-block min-w-full align-middle">
                         <table className="table w-full border-separate border-spacing-y-2 px-4">
                             <thead>
-                                <tr className="border-none text-base-content/40 italic">
+                                <tr className="border-none text-base-content/40 ">
                                     <th className="font-black uppercase text-[10px] tracking-[0.2em] py-6">Club Identity</th>
                                     <th className="hidden lg:table-cell font-black uppercase text-[10px] tracking-[0.2em]">Authority</th>
                                     <th className="font-black uppercase text-[10px] tracking-[0.2em]">Valuation</th>
@@ -104,7 +104,7 @@ const ManageClubs = () => {
 
             <div className="flex items-center gap-2">
                 <div className="h-1 w-12 bg-primary rounded-full"></div>
-                <p className="text-[10px] font-black uppercase tracking-[0.3em] text-base-content/30 italic">
+                <p className="text-[10px] font-black uppercase tracking-[0.3em] text-base-content/30 ">
                     ClubSphere Administrative Console v2.0
                 </p>
             </div>

@@ -179,7 +179,7 @@ const UpdateClubModal = ({ club, onClose }) => {
                 <span className="text-xs font-black uppercase tracking-tighter text-base-content/60">
                   {selectedFile?.[0] ? selectedFile[0].name : "Choose New Banner"}
                 </span>
-                <span className="text-[10px] font-bold text-base-content/30 tracking-tight italic">
+                <span className="text-[10px] font-bold text-base-content/30 tracking-tight ">
                   Current: {club.bannerImage.split("/").pop().substring(0, 20)}...
                 </span>
               </div>

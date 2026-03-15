@@ -87,10 +87,10 @@ const CreateClub = () => {
         <div className="min-h-screen container mx-auto py-10 px-4 animate-in fade-in duration-500">
             <div className="max-w-3xl mx-auto">
                 <div className="mb-10 text-center md:text-left">
-                    <h2 className="md:text-3xl sm:text-2xl text-xl font-black flex flex-col md:flex-row items-center justify-center md:justify-start gap-3 text-base-content uppercase italic tracking-tighter">
+                    <h2 className="md:text-3xl sm:text-2xl text-xl font-black flex flex-col md:flex-row items-center justify-center md:justify-start gap-3 text-base-content uppercase  tracking-tighter">
                         <FiPlusCircle className="text-primary" /> Create <span className="text-primary not-italic">New Club</span>
                     </h2>
-                    <p className="text-[10px] font-black uppercase tracking-[0.3em] text-base-content/30 italic mt-1 ml-1">
+                    <p className="text-[10px] font-black uppercase tracking-[0.3em] text-base-content/30  mt-1 ml-1">
                         Register your community club on ClubSphere
                     </p>
                 </div>
@@ -227,7 +227,7 @@ const CreateClub = () => {
                     </form>
                 </div>
                 
-                <p className="text-center mt-8 text-[10px] font-black uppercase tracking-[0.4em] text-base-content/20 italic">
+                <p className="text-center mt-8 text-[10px] font-black uppercase tracking-[0.4em] text-base-content/20 ">
                     Secured Club Registration System
                 </p>
             </div>

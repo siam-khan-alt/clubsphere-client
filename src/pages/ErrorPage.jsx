@@ -17,7 +17,7 @@ const ErrorPage = ({ status = '404', title = 'Page Not Found', message = 'The pa
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ duration: 0.5 }}
                 >
-                    <h1 className="text-[12rem] sm:text-[16rem] font-black italic leading-none tracking-tighter opacity-10 select-none">
+                    <h1 className="text-[12rem] sm:text-[16rem] font-black  leading-none tracking-tighter opacity-10 select-none">
                         {status}
                     </h1>
                     
@@ -32,7 +32,7 @@ const ErrorPage = ({ status = '404', title = 'Page Not Found', message = 'The pa
                             <span className="text-[10px] font-black uppercase tracking-[0.2em]">System Alert</span>
                         </motion.div>
                         
-                        <h2 className="text-4xl sm:text-6xl font-black uppercase italic tracking-tighter mb-4 text-base-content">
+                        <h2 className="text-4xl sm:text-6xl font-black uppercase  tracking-tighter mb-4 text-base-content">
                             {title}
                         </h2>
                         

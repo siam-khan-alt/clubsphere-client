@@ -53,7 +53,7 @@ const AdminPaymentHistoryTable = ({ payments }) => {
                                         {payment.type === 'event' ? payment.eventName : payment.clubName}
                                     </p>
                                     {payment.type === 'event' && (
-                                        <p className="text-[10px] font-bold text-base-content/40 italic truncate">
+                                        <p className="text-[10px] font-bold text-base-content/40  truncate">
                                             via {payment.clubName}
                                         </p>
                                     )}

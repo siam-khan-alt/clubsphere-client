@@ -62,7 +62,7 @@ const CreateEventModal = ({ clubId, onClose }) => {
         <div className="fixed inset-0 bg-base-content/40 backdrop-blur-md z-[100] flex items-center justify-center p-4">
             <div className="bg-base-100 dark:bg-slate-900 rounded-[32px] shadow-2xl w-full max-w-lg overflow-hidden border border-base-content/5 animate-in fade-in zoom-in duration-200">
                 <div className="p-6 border-b border-base-content/5 flex justify-between items-center">
-                    <h3 className="text-xl font-black text-base-content tracking-tight uppercase italic">Host New <span className="text-primary not-italic">Event</span></h3>
+                    <h3 className="text-xl font-black text-base-content tracking-tight uppercase ">Host New <span className="text-primary not-italic">Event</span></h3>
                     <button onClick={onClose} className="btn btn-ghost btn-circle btn-sm hover:rotate-90 transition-transform">
                         <FiX size={20} />
                     </button>

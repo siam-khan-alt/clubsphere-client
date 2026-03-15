@@ -35,7 +35,7 @@ const TestimonialSection = () => {
                                     <svg stroke="currentColor" fill="currentColor" strokeWidth="0" viewBox="0 0 24 24" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M14.017 21L14.017 18C14.017 16.8954 14.9124 16 16.017 16H19.017C19.5693 16 20.017 15.5523 20.017 15V9C20.017 8.44772 19.5693 8 19.017 8H15.017C14.4647 8 14.017 8.44772 14.017 9V12H12.017V9C12.017 6.79086 13.8079 5 16.017 5H19.017C21.2261 5 23.017 6.79086 23.017 9V15C23.017 17.2091 21.2261 19 19.017 19H17.017L17.017 21H14.017ZM3.017 21L3.017 18C3.017 16.8954 3.91243 16 5.017 16H8.017C8.56928 16 9.017 15.5523 9.017 15V9C9.017 8.44772 8.56928 8 8.017 8H4.017C3.46472 8 3.017 8.44772 3.017 9V12H1.017V9C1.017 6.79086 2.80787 5 5.017 5H8.017C10.2261 5 12.017 6.79086 12.017 9V15C12.017 17.2091 10.2261 19 8.017 19H6.017L6.017 21H3.017Z"></path></svg>
                                 </div>
                             </div>
-                            <p className="italic opacity-70 mb-6 leading-relaxed">"{rev.text}"</p>
+                            <p className=" opacity-70 mb-6 leading-relaxed">"{rev.text}"</p>
                             <h4 className="text-lg font-bold mb-0">{rev.name}</h4>
                             <span className="text-sm text-primary font-semibold tracking-wider uppercase mt-1">{rev.role}</span>
                         </motion.div>

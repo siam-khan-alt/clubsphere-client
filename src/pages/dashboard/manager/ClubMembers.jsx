@@ -86,7 +86,7 @@ const ClubMembers = () => {
                         <div className="px-3 py-1 bg-primary/10 text-primary rounded-lg text-xs font-black uppercase tracking-widest">
                             {members.length} Total Members
                         </div>
-                        <p className="text-xs font-bold text-base-content/40 italic">Managed by you</p>
+                        <p className="text-xs font-bold text-base-content/40 ">Managed by you</p>
                     </div>
                 </div>
             </div>

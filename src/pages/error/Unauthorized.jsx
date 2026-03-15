@@ -31,7 +31,7 @@ const Unauthorized = () => {
                     </div>
                 </div>
 
-                <h2 className="text-4xl font-black uppercase italic tracking-tighter mb-2">
+                <h2 className="text-4xl font-black uppercase  tracking-tighter mb-2">
                     Access <span className="text-error not-italic">Denied</span>
                 </h2>
                 
@@ -53,7 +53,7 @@ const Unauthorized = () => {
                 </Link>
 
                 <div className="mt-8 pt-8 border-t border-base-content/5">
-                    <p className="text-[9px] font-black uppercase tracking-[0.4em] opacity-20 italic">
+                    <p className="text-[9px] font-black uppercase tracking-[0.4em] opacity-20 ">
                         ClubSphere Security Clearance Required
                     </p>
                 </div>

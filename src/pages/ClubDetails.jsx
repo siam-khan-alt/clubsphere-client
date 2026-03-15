@@ -155,7 +155,7 @@ const ClubDetails = () => {
               </div>
 
               <div className="bg-base-200/50 p-6 rounded-2xl border border-base-content/5 text-center">
-                <p className="text-sm font-medium text-base-content/40 italic">
+                <p className="text-sm font-medium text-base-content/40 ">
                   Need help? Contact our support team for any membership inquiries.
                 </p>
               </div>

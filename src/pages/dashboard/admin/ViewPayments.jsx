@@ -43,7 +43,7 @@ const ViewPayments = () => {
                         <div className="px-3 py-1 bg-success/10 text-success rounded-lg text-xs font-black uppercase">
                             {payments.length} Transactions
                         </div>
-                        <p className="text-xs font-bold text-base-content/40 italic">Live platform data</p>
+                        <p className="text-xs font-bold text-base-content/40 ">Live platform data</p>
                     </div>
                 </div>
             </div>

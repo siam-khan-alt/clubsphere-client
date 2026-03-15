@@ -40,7 +40,7 @@ const FeaturedClubsSection = () => {
   if (isError) {
     return (
       <div className="container bg-base-100 mx-auto px-4 py-20 text-center">
-        <h2 className="text-4xl font-black italic uppercase tracking-tighter mb-4">
+        <h2 className="text-4xl font-black  uppercase tracking-tighter mb-4">
           Featured <span className="text-primary not-italic">Clubs</span>
         </h2>
         <p className="text-error font-bold bg-error/10 p-4 rounded-2xl inline-block border border-error/20 uppercase text-xs tracking-widest">

@@ -45,7 +45,7 @@ const PaymentHistoryTable = ({ payments }) => {
                     {payment.eventName || payment.clubName}
                   </span>
                   {payment.type === "event" && (
-                    <span className="text-[10px] text-base-content/50 italic font-medium">@{payment.clubName}</span>
+                    <span className="text-[10px] text-base-content/50  font-medium">@{payment.clubName}</span>
                   )}
                 </div>
               </td>

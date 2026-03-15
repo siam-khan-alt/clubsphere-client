@@ -81,7 +81,7 @@ const Profile = () => {
               </div>
               <div>
                 <p className="text-[10px] text-base-content/50 uppercase font-black">Account Status</p>
-                <p className="text-sm font-semibold text-base-content italic text-success">Active Account</p>
+                <p className="text-sm font-semibold text-base-content  text-success">Active Account</p>
               </div>
             </div>
           </div>

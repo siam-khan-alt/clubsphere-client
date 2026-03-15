@@ -46,7 +46,7 @@ const MemberClubCard = ({ club }) => {
                         <span>{club.location}</span>
                     </div>
                     {club.expiresAt && (
-                        <div className="flex items-center text-xs font-bold text-base-content/50 italic">
+                        <div className="flex items-center text-xs font-bold text-base-content/50 ">
                             Expires: {format(new Date(club.expiresAt), 'MMM d, yyyy')}
                         </div>
                     )}

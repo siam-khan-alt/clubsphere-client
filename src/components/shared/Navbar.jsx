@@ -6,225 +6,156 @@ import Swal from "sweetalert2";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
-
   const { user, logout } = use(AuthContext);
   const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
+
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", theme);
     localStorage.setItem("theme", theme);
   }, [theme]);
 
-  const toggleTheme = () => {
-    setTheme(theme === "light" ? "dark" : "light");
-  };
+  const toggleTheme = () => setTheme(theme === "light" ? "dark" : "light");
 
   const handleLogout = () => {
     Swal.fire({
       title: "Are you sure?",
-      text: "You will be logged out from the dashboard.",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, log me out!",
+      confirmButtonColor: "var(--color-primary)",
+      cancelButtonColor: "#ef4444",
+      confirmButtonText: "Logout",
+      background: "var(--color-background)",
+      color: "var(--color-text-body)",
     }).then((result) => {
       if (result.isConfirmed) {
         logout();
-
-        Swal.fire({
-          title: "Logged Out!",
-          text: "You have been successfully logged out.",
-          icon: "success",
-          timer: 1500,
-          showConfirmButton: false,
-        });
+        setIsOpen(false);
       }
     });
-    setIsOpen(false);
-  };
-
-  const goDashboardRoute = () => {
-    const role = user?.role || "member";
-    return `/dashboard/${role}/home`;
   };
 
   const navLinks = (
     <>
-      <li>
-        <NavLink
-          to="/"
-          className={({ isActive }) =>
-            isActive
-              ? "text-primary font-bold underline underline-offset-8 transition-all"
-              : "hover:text-primary transition-all"
-          }
-        >
-          Home
-        </NavLink>
-      </li>
-      <li>
-        <NavLink
-          to="/clubs"
-          className={({ isActive }) =>
-            isActive
-              ? "text-primary font-bold underline underline-offset-8 transition-all"
-              : "hover:text-primary transition-all"
-          }
-        >
-          Clubs
-        </NavLink>
-      </li>
-      <li>
-        <NavLink
-          to="/events"
-          className={({ isActive }) =>
-            isActive
-              ? "text-primary font-bold underline underline-offset-8 transition-all"
-              : "hover:text-primary transition-all"
-          }
-        >
-          Events
-        </NavLink>
-      </li>
-        <li><NavLink to="/about"  className={({ isActive }) =>
-            isActive
-              ? "text-primary font-bold underline underline-offset-8 transition-all"
-              : "hover:text-primary transition-all"
-          }>About</NavLink></li>
-          <li><NavLink to="/contact"  className={({ isActive }) =>
-            isActive
-              ? "text-primary font-bold underline underline-offset-8 transition-all"
-              : "hover:text-primary transition-all"
-          }>Contact</NavLink></li>
-      {user && (
-        <>
-        
-          <li><NavLink  to={goDashboardRoute()}  className={({ isActive }) =>
-            isActive
-              ? "text-primary font-bold underline underline-offset-8 transition-all"
-              : "hover:text-primary transition-all"
-          }>Dashboard</NavLink></li>
-        </>
-      )}
+      {["Home", "Clubs", "Events", "About", "Contact"].map((item) => (
+        <li key={item}>
+          <NavLink
+            to={item === "Home" ? "/" : `/${item.toLowerCase()}`}
+            className={({ isActive }) =>
+              `relative px-5 py-2 transition-all duration-300 font-semibold rounded-xl ${
+                isActive
+                  ? "text-primary bg-primary/10"
+                  : "text-slate-600 dark:text-slate-300 hover:text-primary"
+              }`
+            }
+          >
+            {item}
+          </NavLink>
+        </li>
+      ))}
     </>
   );
 
   return (
-    <nav className="navbar-glass sticky top-0 z-50  transition-all duration-300 shadow-[0_4px_6px_-1px_rgba(0,0,0,0.1)]">
-      <div className="container mx-auto px-4 overflow-visible ">
-        <div className="flex justify-between items-center h-20">
-          <div className="flex-shrink-0">
-            <Link
-              to="/"
-              className="text-2xl font-black tracking-tighter text-primary"
-            >
+    <nav 
+      style={{ backgroundColor: "var(--color-background)" }}
+      className="sticky top-0 z-[100] py-5 "
+    >
+      <div className="container mx-auto px-6">
+        <div className="flex justify-between items-center">
+          
+          {/* Logo Section */}
+          <Link to="/" className="flex items-center gap-2 group">
+            <div className="w-10 h-10 bg-gradient-to-br from-primary to-secondary rounded-xl flex items-center justify-center shadow-lg shadow-primary/20">
+              <span className="text-white font-black text-xl">C</span>
+            </div>
+            <span className="text-2xl font-black tracking-tighter text-primary">
               Club<span className="text-secondary">Sphere</span>
-            </Link>
-          </div>
+            </span>
+          </Link>
 
-          <div className="hidden md:flex items-center space-x-8">
-            <ul className="flex space-x-8 items-center font-medium">{navLinks}</ul>
-            <div className="flex items-center gap-4">
-              <button onClick={toggleTheme} className="p-2 rounded-full bg-base-200 dark:bg-slate-800 text-xl transition-all active:scale-90">
-                {theme === "light" ? <FiMoon className="text-slate-700" /> : <FiSun className="text-yellow-400" />}
+          {/* Desktop Navigation */}
+          <div className="hidden lg:flex items-center gap-8">
+            <ul className="flex items-center gap-1">
+              {navLinks}
+            </ul>
+
+            <div className="flex items-center gap-4 border-l border-slate-200 dark:border-slate-800 pl-6">
+              <button
+                onClick={toggleTheme}
+                style={{ backgroundColor: "var(--color-accent-plaid)" }}
+                className="w-10 h-10 flex items-center justify-center rounded-xl text-slate-600 dark:text-slate-300 hover:text-primary transition-all active:scale-95"
+              >
+                {theme === "light" ? <FiMoon size={20} /> : <FiSun size={20} className="text-yellow-400" />}
               </button>
+
               {user ? (
                 <div className="dropdown dropdown-end">
-                  <label
-                    tabIndex={0}
-                    className="btn btn-ghost btn-circle avatar ring-2 ring-primary ring-offset-2 ring-offset-base-100"
-                  >
-                    <div className="w-10 rounded-full ">
-                      <img
-                        src={
-                          user?.photoURL || "https://via.placeholder.com/150"
-                        }
-                        alt={user?.displayName || "User"}
-                      />
+                  <label tabIndex={0} className="cursor-pointer">
+                    <div className="avatar ring-2 ring-primary ring-offset-2" style={{ "--tw-ring-offset-color": "var(--color-background)" }}>
+                      <div className="w-10 rounded-xl">
+                        <img src={user?.photoURL || "https://i.ibb.co/m0p99m8/user.png"} alt="User" />
+                      </div>
                     </div>
                   </label>
-                  <ul
-                    tabIndex={0}
-                    className="dropdown-content absolute z-[110] menu p-2 shadow-2xl bg-base-100 rounded-xl w-60 mt-4 border border-base-content/10"
+                  <ul 
+                    tabIndex={0} 
+                    style={{ backgroundColor: "var(--color-card)" }}
+                    className="dropdown-content menu p-2 mt-4 shadow-2xl rounded-2xl w-64 border border-slate-100 dark:border-slate-800"
                   >
-                    <li className="px-4 py-3 border-b border-base-content/10 mb-2">
-                      <p className="font-bold text-primary truncate">{user?.displayName}</p>
-                      <p className="text-xs opacity-60 truncate">{user?.email}</p>
-                    </li>
-                    <li>
-                      <Link
-                        to="/dashboard/profile"
-                        className="py-3 flex gap-3"
-                      >
-                        <FiUser className="text-lg" /> Profile
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        to={goDashboardRoute()}
-                        className="flex py-3 gap-3 "
-                      >
-                        <FiGrid /> Dashboard
-                      </Link>
-                    </li>
-                    <li>
-                      <button
-                        onClick={handleLogout}
-                        className="flex py-3 gap-3"
-                      >
-                        <FiLogOut /> Logout
-                      </button>
-                    </li>
+                    <div className="px-4 py-3 mb-2 bg-primary/5 rounded-xl">
+                      <p className="font-bold text-primary truncate text-sm">{user?.displayName}</p>
+                      <p className="text-[11px] opacity-70 truncate" style={{ color: "var(--color-text-body)" }}>{user?.email}</p>
+                    </div>
+                    <li><Link to="/dashboard/profile" className="rounded-lg py-2.5 hover:bg-primary/10"><FiUser className="text-primary"/> Profile</Link></li>
+                    <li><Link to="/dashboard" className="rounded-lg py-2.5 hover:bg-primary/10"><FiGrid className="text-primary"/> Dashboard</Link></li>
+                    <div className="my-1 border-t border-slate-100 dark:border-slate-800"></div>
+                    <li><button onClick={handleLogout} className="rounded-lg py-2.5 text-error hover:bg-red-500/10"><FiLogOut /> Logout</button></li>
                   </ul>
                 </div>
               ) : (
-                <>
-                  <Link
-                    to="/login"
-                    className="btn btn-ghost btn-sm text-primary"
-                  >
-                    Login
-                  </Link>
-                  <Link
-                    to="/register"
-                    className="btn btn-primary-gradient btn-sm border-none shadow-lg"
-                  >
-                    Register
-                  </Link>
-                </>
+                <Link to="/login" className="btn-primary-gradient">
+                  Join Now
+                </Link>
               )}
             </div>
           </div>
-          
 
-        <div className="md:hidden flex items-center gap-3">
-            <button onClick={toggleTheme} className="p-2 text-xl">
-              {theme === "light" ? <FiMoon /> : <FiSun className="text-yellow-400" />}
-            </button>
-            <button onClick={() => setIsOpen(!isOpen)} className="btn btn-ghost btn-circle">
-              {isOpen ? <FiX size={26} /> : <FiMenu size={26} />}
-            </button>
+          {/* Mobile Menu Button */}
+          <div className="lg:hidden flex items-center gap-3">
+             <button onClick={toggleTheme}
+                style={{ backgroundColor: "var(--color-accent-plaid)" }}
+                className="w-10 h-10 flex items-center justify-center rounded-xl text-slate-600 dark:text-slate-300 hover:text-primary transition-all active:scale-95">
+               {theme === "light" ? <FiMoon size={22} /> : <FiSun size={22} className="text-yellow-400" />}
+             </button>
+             <button onClick={() => setIsOpen(!isOpen)} className="text-primary p-2 bg-primary/5 rounded-lg">
+               {isOpen ? <FiX size={24} /> : <FiMenu size={24} />}
+             </button>
           </div>
         </div>
 
-        {isOpen && (
-          <div className="md:hidden pb-6 animate-in slide-in-from-top duration-300">
-            <ul className="menu bg-base-200 rounded-2xl p-4 gap-2 font-semibold">
+        {/* Mobile Menu Drawer */}
+        <div className={`fixed inset-0 bg-slate-950/70 lg:hidden transition-all duration-300 ${isOpen ? "opacity-100 visible" : "opacity-0 invisible"}`} onClick={() => setIsOpen(false)}>
+          <div 
+            style={{ backgroundColor: "var(--color-background)" }}
+            className={`absolute right-0 top-0 h-full w-[280px] p-8 shadow-2xl transition-transform duration-300 ${isOpen ? "translate-x-0" : "translate-x-full"}`} 
+            onClick={e => e.stopPropagation()}
+          >
+            <div className="flex justify-between items-center mb-10">
+              <span className="font-black text-xl text-primary">MENU</span>
+              <button onClick={() => setIsOpen(false)} className="p-2 bg-slate-100 dark:bg-slate-800 rounded-lg text-primary"><FiX size={20}/></button>
+            </div>
+            <ul className="flex flex-col gap-4">
               {navLinks}
-              {!user ? (
-                <div className="grid grid-cols-2 gap-2 mt-4">
-                  <Link to="/login" className="btn btn-outline btn-primary btn-sm" onClick={() => setIsOpen(false)}>Login</Link>
-                  <Link to="/register" className="btn btn-primary btn-sm" onClick={() => setIsOpen(false)}>Register</Link>
-                </div>
-              ) : (
-                <div className="mt-4 border-t border-base-content/10 pt-4">
-                  <li><Link to={goDashboardRoute()} onClick={() => setIsOpen(false)}>Go to Dashboard</Link></li>
-                  <li><button onClick={handleLogout} className="text-error">Logout</button></li>
-                </div>
-              )}
             </ul>
+            <div className="absolute bottom-10 left-8 right-8">
+              {!user ? (
+                <Link to="/register" className="btn-primary-gradient w-full block text-center shadow-lg" onClick={() => setIsOpen(false)}>Create Account</Link>
+              ) : (
+                <button onClick={handleLogout} className="w-full py-3.5 rounded-xl bg-red-50 dark:bg-red-500/10 text-error font-bold flex items-center justify-center gap-2"><FiLogOut /> Sign Out</button>
+              )}
+            </div>
           </div>
-        )}
+        </div>
       </div>
     </nav>
   );
