@@ -3,7 +3,7 @@ import HeroSection from '../components/Home/HeroSection';
 import FeaturedClubsSection from '../components/Home/FeaturedClubsSection';
 import CategorySection from '../components/Home/PopularCategorySection';
 import HowItWorksSection from '../components/Home/HowItWorksSection';
-import StatsSection from '../components/Home/StatsSection';
+import EcosystemSection from '../components/Home/EcosystemSection';
 import TestimonialSection from '../components/Home/TestimonialSection';
 import NewsletterSection from '../components/Home/NewsletterSection';
 import FAQSection from '../components/Home/FAQSection';
@@ -14,7 +14,7 @@ const Home = () => {
     return (
         <div>
             <HeroSection/>
-            <StatsSection/>
+            <EcosystemSection/>
             <CategorySection/>
             <FeaturedClubsSection/>
             <HowItWorksSection/>

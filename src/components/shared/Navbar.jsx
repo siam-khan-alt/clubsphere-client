@@ -58,7 +58,7 @@ const Navbar = () => {
   return (
     <nav 
       style={{ backgroundColor: "var(--color-background)" }}
-      className="sticky top-0 z-[100] py-5 "
+      className="sticky top-0 z-[100] py-4 "
     >
       <div className="container mx-auto px-6">
         <div className="flex justify-between items-center">

@@ -1,123 +1,192 @@
 import React from "react";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Autoplay, EffectFade, Pagination } from "swiper/modules";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import { FiArrowRight } from "react-icons/fi";
-
-import "swiper/css";
-import "swiper/css/effect-fade";
-import "swiper/css/pagination";
-
-const sliderData = [
-  {
-    id: 1,
-    title: "Discover Your <span class='text-primary '>Perfect Club</span>",
-    description: "Connect with communities that share your passion. From coding to photography, find your tribe today.",
-    image: "https://i.ibb.co.com/fYfS6kYd/mens-talk-working-hard-new-project-54111652.jpg",
-    cta: "Explore Clubs",
-    link: "/clubs"
-  },
-  {
-    id: 2,
-    title: "Lead & <span class='text-secondary '>Manage Events</span>",
-    description: "Organize campus events seamlessly. Empower your club members and track growth with our dashboard.",
-    image: "https://i.ibb.co.com/hFnjh404/tech-conference-speech-stockcake.jpg",
-    cta: "Start Hosting",
-    link: "/dashboard/manager/my-clubs"
-  },
-  {
-    id: 3,
-    title: "Shape Your <span class='text-accent '>Future Skills</span>",
-    description: "Participate in workshops, competitions, and collaborative projects. Turn your academic knowledge into real-world impact.",
-    image: "https://i.ibb.co.com/FS7Ff7p/pngtree-collaborative-team-concept-image-15740876.png",
-    cta: "View All Events",
-    link: "/events"
-  }
-];
+import {
+  FiArrowUpRight,
+  FiZap,
+  FiShield,
+  FiCreditCard,
+  FiLayers,
+  FiPlus,
+  FiCheckCircle,
+} from "react-icons/fi";
+import { FaArrowRight } from "react-icons/fa";
 
 const HeroSection = () => {
   return (
-    <section className="h-[60vh] min-h-[450px]  relative overflow-hidden bg-base-100">
-      <Swiper
-        modules={[Autoplay, EffectFade, Pagination]}
-        effect="fade"
-        speed={1000}
-        autoplay={{ delay: 5000, disableOnInteraction: false }}
-        pagination={{ clickable: true }}
-        className="h-full w-full"
-      >
-        {sliderData.map((slide) => (
-          <SwiperSlide key={slide.id}>
-            {({ isActive }) => (
-              <div className="relative h-full w-full flex items-center justify-center">
-                <div className="absolute inset-0 overflow-hidden">
-                  <motion.div
-                    initial={{ scale: 1 }}
-                    animate={{ scale: isActive ? 1.1 : 1 }}
-                    transition={{ duration: 5 }}
-                    className="h-full w-full bg-cover bg-center"
-                    style={{ backgroundImage: `url(${slide.image})` }}
-                  >
-                    <div className="absolute inset-0 bg-black/10 dark:bg-black/70"></div>
-                  </motion.div>
-                </div>
+    <section className="relative min-h-[70vh] flex flex-col overflow-hidden bg-background transition-colors duration-500">
+      {/* Background Plaid Effect */}
+      <div className="plaid-bg absolute inset-0 opacity-[0.07] pointer-events-none"></div>
 
-                <div className="container mx-auto px-4 relative z-10 text-center flex flex-col items-center">
-                  <div className="max-w-3xl text-white">
-                    <AnimatePresence>
-                      {isActive && (
-                        <>
-                          <motion.h1
-                            initial={{ y: 30, opacity: 0 }}
-                            animate={{ y: 0, opacity: 1 }}
-                            transition={{ duration: 0.8, delay: 0.2 }}
-                            className="text-4xl md:text-6xl lg:text-7xl font-black leading-tight mb-6 drop-shadow-2xl"
-                            dangerouslySetInnerHTML={{ __html: slide.title }}
-                          />
-                          
-                          <motion.p
-                            initial={{ y: 20, opacity: 0 }}
-                            animate={{ y: 0, opacity: 1 }}
-                            transition={{ duration: 0.8, delay: 0.4 }}
-                            className="text-lg md:text-xl text-slate-200 mb-10 max-w-2xl mx-auto drop-shadow-lg"
-                          >
-                            {slide.description}
-                          </motion.p>
+      <div className="flex-grow grid grid-cols-1 lg:grid-cols-12 w-full relative z-10">
+        {/* --- LEFT SIDE: Content --- */}
+        <div className="lg:col-span-6 p-6  flex flex-col justify-between relative">
+          {/* Decorative Plus Markers */}
+          <FiPlus className="absolute top-10 right-0 text-slate-300 dark:text-slate-700 hidden lg:block" />
+          <FiPlus className="absolute bottom-10 right-0 text-slate-300 dark:text-slate-700 hidden lg:block" />
 
-                          <motion.div
-                            initial={{ scale: 0.9, opacity: 0 }}
-                            animate={{ scale: 1, opacity: 1 }}
-                            transition={{ duration: 0.5, delay: 0.6 }}
-                            className="flex flex-col sm:flex-row gap-4 justify-center items-center"
-                          >
-                            <Link to={slide.link} className="btn-primary-gradient px-10 py-4 flex items-center justify-center gap-2 group min-w-[200px]">
-                              {slide.cta} <FiArrowRight className="group-hover:translate-x-1 transition-transform" />
-                            </Link>
-                            <Link to="/about" className="px-10 py-4 border-2 border-white/50 text-white font-bold rounded-full backdrop-blur-md hover:bg-white hover:text-slate-900 transition-all duration-300 shadow-lg min-w-[200px]">
-                              Learn More
-                            </Link>
-                          </motion.div>
-                        </>
-                      )}
-                    </AnimatePresence>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+          >
+            {/* Role Badges */}
+            <div className="flex gap-6 mb-8">
+              {[
+                { name: "Admin", dot: "bg-primary" },
+                { name: "Manager", dot: "bg-secondary" },
+                { name: "Member", dot: "bg-slate-400 dark:bg-slate-600" },
+              ].map((role) => (
+                <div
+                  key={role.name}
+                  className="flex items-center gap-2 group cursor-default"
+                >
+                  {/* Minimalist Indicator */}
+                  <div className="relative flex items-center justify-center">
+                    <span
+                      className={`h-1.5 w-1.5 rounded-full ${role.dot} z-10`}
+                    ></span>
+                    <span
+                      className={`absolute h-3 w-3 rounded-full ${role.dot} opacity-20 group-hover:scale-150 transition-transform duration-500`}
+                    ></span>
                   </div>
-                </div>
-              </div>
-            )}
-          </SwiperSlide>
-        ))}
-      </Swiper>
 
-      <style dangerouslySetInnerHTML={{ __html: `
-        .swiper-pagination-bullet { background: rgba(255,255,255,0.7) !important; }
-        .swiper-pagination-bullet-active { 
-          background: #7C3AED !important; 
-          width: 30px !important; 
-          border-radius: 5px !important; 
-          transition: all 0.3s ease;
-        }
-      `}} />
+                  {/* Label */}
+                  <span className="text-[10px] font-black text-text-heading tracking-[0.2em] uppercase opacity-60 group-hover:opacity-100 transition-opacity">
+                    {role.name}
+                  </span>
+                </div>
+              ))}
+            </div>
+
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-[10px] font-bold mb-6 tracking-[0.2em] uppercase">
+              <FiZap className="animate-pulse" /> Future of Campus Life
+            </div>
+
+            {/* Project Name (Clean & Balanced Size) */}
+            <h1
+              style={{ fontFamily: "Outfit, sans-serif" }}
+              className="text-4xl md:text-5xl lg:text-6xl font-black text-primary leading-[1.1] text-text-heading mb-8 tracking-tighter"
+            >
+              CLUB <span className="text-secondary ">SPHERE.</span>
+            </h1>
+
+            <p className="text-lg text-text-body max-w-lg font-medium mb-8 leading-relaxed">
+              Managing leadership, events, and membership in one{" "}
+              <span className="text-text-heading font-bold underline decoration-primary/30">
+                decentralized portal.
+              </span>
+            </p>
+
+            {/* Core Feature Checklist */}
+            <div className="grid grid-cols-2 gap-y-3 mb-10">
+              {[
+                "Real-time Data Sync",
+                "Secure Stripe Payment",
+                "Adaptive Workspaces", // Updated
+                "Dynamic Event Tracking",
+              ].map((item, index) => (
+                <div
+                  key={index}
+                  className="flex items-center gap-2 text-[11px] font-bold text-text-body"
+                >
+                  <FiCheckCircle className="text-primary" /> {item}
+                </div>
+              ))}
+            </div>
+
+            <div className="flex items-center gap-8">
+              <Link
+                to="/clubs"
+                className="btn-primary-gradient px-10 py-4 !rounded-full text-md font-bold flex items-center gap-3 "
+              >
+                Join Now <FiArrowUpRight size={20} />
+              </Link>
+              <div className="hidden sm:flex flex-col border-l border-slate-200 dark:border-slate-800 pl-6">
+                <span className="text-xl font-black text-text-heading leading-none">
+                  2.4k+
+                </span>
+                <span className="text-[9px] uppercase font-bold text-text-body tracking-widest mt-1">
+                  Active Members
+                </span>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+
+        {/* --- RIGHT SIDE: Grid Matrix (Minimalist) --- */}
+        <div className="lg:col-span-6 grid grid-cols-1 md:grid-cols-2 relative h-full">
+          {/* Central Intersection Plus Symbol */}
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 hidden md:flex items-center justify-center w-10 h-10 text-slate-300 dark:text-slate-700 font-light">
+            <FiPlus size={30} />
+          </div>
+
+          {/* Feature 1: Governance */}
+          <div className="p-6 lg:p-10 flex flex-col justify-center border-b border-slate-200 dark:border-slate-800 md:border-r">
+            <FiShield size={28} className="text-primary mb-5" />
+            <h4 className="font-bold text-text-heading text-xl mb-3">
+              Governance
+            </h4>
+            <p className="text-xs text-text-body leading-relaxed max-w-[180px]">
+              Robust RBAC systems for secure campus-wide role management.
+            </p>
+          </div>
+
+          {/* Feature 2: Intelligence */}
+          <div className="p-6 lg:p-10 flex flex-col justify-center border-b border-slate-200 dark:border-slate-800 group">
+            <div className="flex gap-1 items-end h-6 mb-5">
+              {[40, 70, 50, 90].map((h, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ height: 0 }}
+                  animate={{ height: `${h}%` }}
+                  className="w-1.5 bg-secondary/40 rounded-full"
+                />
+              ))}
+            </div>
+            <h4 className="font-bold text-text-heading text-xl mb-3">
+              Intelligence
+            </h4>
+            <p className="text-xs text-text-body leading-relaxed max-w-[180px]">
+              Data-driven insights to track community engagement levels.
+            </p>
+          </div>
+
+          {/* Feature 3: Commerce */}
+          <div className="p-6 lg:p-10 flex flex-col justify-center border-slate-200 dark:border-slate-800 md:border-r">
+            <FiCreditCard size={28} className="text-green-500 mb-5" />
+            <h4 className="font-bold text-text-heading text-xl mb-3">
+              Commerce
+            </h4>
+            <p className="text-xs text-text-body leading-relaxed max-w-[180px]">
+              Secure Stripe billing for memberships and event ticketing.
+            </p>
+          </div>
+
+          {/* Feature 4: Command Center (Updated) */}
+          <Link
+            to="/dashboard"
+            className="p-6 lg:p-10 flex flex-col justify-center bg-slate-50/50 dark:bg-slate-900/30 group hover:bg-primary transition-all duration-700"
+          >
+            <div className="flex justify-between items-start mb-5">
+              <FiLayers
+                size={28}
+                className="text-primary group-hover:text-white transition-colors"
+              />
+              <FaArrowRight
+                size={20}
+                className="text-slate-400 group-hover:text-white  transition-all"
+              />
+            </div>
+            <h4 className="font-bold text-text-heading text-xl group-hover:text-white transition-colors">
+              Command Center
+            </h4>
+            <p className="text-xs text-text-body group-hover:text-white/80 transition-colors">
+              Tailored interface synchronized with your rank.
+            </p>
+          </Link>
+        </div>
+      </div>
     </section>
   );
 };
