@@ -1,9 +1,11 @@
 import React from 'react';
 import { useQuery } from '@tanstack/react-query';
+import { FiCalendar, FiArrowRight } from 'react-icons/fi';
 import useAxiosSecure from '../../../hooks/useAxiosSecure';
-import LoadingSpinner from '../../../components/shared/LoadingSpinner';
-import { FiCalendar } from 'react-icons/fi';
 import RegisteredEventsTable from '../../../components/member/RegisteredEventTable';
+import DashboardHeader from '../../../components/shared/ui/DashboardHeader';
+import { TableSkeleton } from '../../../components/shared/skeletons/user/payment/TableSkeletons';
+import DashboardHeaderSkeleton from '../../../components/shared/skeletons/dashboadCommon/DashboardHeaderSkeleton';
 
 const MyEvents = () => {
     const axiosSecure = useAxiosSecure();
@@ -16,18 +18,53 @@ const MyEvents = () => {
         }
     });
 
-    if (isLoading) return <LoadingSpinner />;
-    if (error) return <div className="text-error p-4 bg-error/10 rounded-2xl font-bold">Error loading events: {error.message}</div>;
+    // --- Loading State with Skelletons ---
+    if (isLoading) return (
+        <div className="space-y-10">
+            <DashboardHeaderSkeleton />
+            <div className="w-full max-w-[80vw] md:max-w-full overflow-hidden bg-card mx-auto rounded-2xl border-standard shadow-sm p-2">
+                <TableSkeleton rows={8} />
+            </div>
+        </div>
+    );
+
+    if (error) return (
+        <div className="p-6 bg-red-500/10 border border-red-500/20 rounded-2xl text-red-500 font-bold animate-in fade-in">
+            Error loading events: {error.message}
+        </div>
+    );
 
     return (
-        <div className="p-4 space-y-6">
-            <h2 className="text-2xl font-black flex items-center gap-3 text-base-content">
-                <FiCalendar className="text-amber-500" /> My Event Registrations
-            </h2>
+        <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-700 pb-10">
+            
+            {/* --- Reusable Dashboard Header --- */}
+            <DashboardHeader 
+                title="My Event Registrations"
+                description={
+                    <p>
+                        Review your upcoming schedules. You have <span className="text-secondary font-bold">{registrations.length} events</span> confirmed.
+                    </p>
+                }
+                badgeText="Event Hub"
+                buttonText="Browse New Events"
+                buttonLink="/events"
+                showSmile={true}
+            />
 
-            <div className="w-full max-w-[80vw] md:max-w-full overflow-hidden bg-base-100 mx-auto rounded-2xl border border-base-content/5 shadow-sm transition-all duration-300">
+            {/* --- Table Section --- */}
+            <div className="w-full max-w-[80vw] md:max-w-full overflow-hidden bg-card mx-auto rounded-2xl border-standard shadow-sm transition-all duration-300">
                 <div className="overflow-x-auto w-full">
-                    <div className="inline-block min-w-full align-middle">
+                    {/* Header for Table (Optional but looks premium) */}
+                    <div className="px-6 py-5 border-b border-primary/50 flex items-center justify-between bg-card/50">
+                        <h4 className="font-black text-text-heading flex items-center gap-2">
+                            <FiCalendar className="text-primary" /> Active Bookings
+                        </h4>
+                        <span className="text-[10px] font-black uppercase tracking-widest opacity-40">
+                            Synced in Real-time
+                        </span>
+                    </div>
+
+                    <div className="inline-block min-w-full align-middle p-2">
                         <RegisteredEventsTable registrations={registrations} />
                     </div>
                 </div>

@@ -1,31 +1,30 @@
 @import "tailwindcss";
 @plugin "daisyui";
 
-
 :root {
   /* --- Light Mode: Modern & Energetic --- */
-  --color-primary: #0284C7;        /* Sky Blue */
-  --color-secondary: #7C3AED;      /* Electric Violet (Updated - Non-sleepy!) */
-  --color-background: #F8FAFC;     
-  --color-card: #FFFFFF;           
-  --color-text-heading: #0F172A;   
-  --color-text-body: #475569; 
+  --color-primary: #0284c7; /* Sky Blue */
+  --color-secondary: #7c3aed; /* Electric Violet (Updated - Non-sleepy!) */
+  --color-background: #f8fafc;
+  --color-card: #ffffff;
+  --color-text-heading: #0f172a;
+  --color-text-body: #475569;
 
   /* DaisyUI Mapping */
   --p: 2 132 199;
-  --s: 124 58 237;  /* RGB for Violet */
+  --s: 124 58 237; /* RGB for Violet */
   --b1: 248 250 252;
   --bc: 15 23 42;
 }
 
-[data-theme='dark'] {
+[data-theme="dark"] {
   /* --- Dark Mode: High Contrast Tech --- */
-  --color-primary: #38BDF8;        
-  --color-secondary: #A78BFA;   
-  --color-background: #030712;     
-  --color-card: #111827;           
- --color-text-heading: #F1F5F9; 
-  --color-text-body: #F8FAFC;  
+  --color-primary: #38bdf8;
+  --color-secondary: #a78bfa;
+  --color-background: #030712;
+  --color-card: #111827;
+  --color-text-heading: #f1f5f9;
+  --color-text-body: #f8fafc;
 
   /* DaisyUI Mapping */
   --p: 56 189 248;
@@ -37,7 +36,7 @@
   html {
     scroll-behavior: smooth;
   }
-  
+
   body {
     background-color: var(--color-background);
     color: var(--color-text-body);
@@ -47,31 +46,41 @@
 
   /* --- Headings --- */
   h2 {
-  font-family: "Outfit", sans-serif;
-  @apply text-3xl md:text-4xl lg:text-[40px] font-bold text-center mb-8;
-  
-  background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  
-  @apply dark:from-[#38BDF8] dark:to-[#A78BFA];
-}
+    font-family: "Outfit", sans-serif;
+    @apply text-3xl md:text-4xl lg:text-[40px] font-bold text-center mb-8;
+
+    background: linear-gradient(
+      135deg,
+      var(--color-primary),
+      var(--color-secondary)
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+
+    @apply dark:from-[#38BDF8] dark:to-[#A78BFA];
+  }
 
   h3 {
-   font-family: "Outfit", sans-serif;
-  @apply text-2xl md:text-3xl  font-bold text-center mb-6;
-  
-  background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  
-  @apply dark:from-[#38BDF8] dark:to-[#A78BFA];
+    font-family: "Outfit", sans-serif;
+    @apply text-2xl md:text-3xl  font-bold text-center mb-6;
+
+    background: linear-gradient(
+      135deg,
+      var(--color-primary),
+      var(--color-secondary)
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+
+    @apply dark:from-[#38BDF8] dark:to-[#A78BFA];
   }
 
   /* --- Form Inputs --- */
-  input, textarea, select {
+  input,
+  textarea,
+  select {
     background-color: var(--color-card);
     @apply border border-slate-200 dark:border-slate-800 text-slate-900 dark:text-white rounded-lg px-4 py-2 focus:ring-2 focus:ring-primary outline-none transition-all;
   }
@@ -79,9 +88,13 @@
 
 @layer components {
   /* --- Buttons --- */
- .btn-primary-gradient {
+  .btn-primary-gradient {
     /* Sky Blue to Electric Violet */
-    background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+    background: linear-gradient(
+      135deg,
+      var(--color-primary),
+      var(--color-secondary)
+    );
     @apply px-7 py-3 rounded-xl text-white font-bold transition-all duration-300 
            hover:shadow-[0_4px_15px_rgba(2,132,199,0.3)] 
            hover:-translate-y-0.5 active:scale-95 border-none;
@@ -100,16 +113,19 @@
   }
 
   .plaid-bg {
-  background-image: 
-    linear-gradient(to right, var(--color-text-body) 0.05px, transparent 1px),
-    linear-gradient(to bottom, var(--color-text-body) 0.05px, transparent 1px);
-  background-size: 40px 40px;
-  opacity: 0.1; 
-}
-.bg-background {
+    background-image: linear-gradient(
+        to right,
+        var(--color-text-body) 0.05px,
+        transparent 1px
+      ),
+      linear-gradient(to bottom, var(--color-text-body) 0.05px, transparent 1px);
+    background-size: 40px 40px;
+    opacity: 0.1;
+  }
+  .bg-background {
     background-color: var(--color-background);
   }
-  
+
   .bg-card {
     background-color: var(--color-card);
   }
@@ -129,20 +145,20 @@
   .text-secondary {
     color: var(--color-secondary);
   }
- .border-standard {
-  border: 1px solid color-mix(in srgb, var(--color-primary) 50%, transparent);
-  @apply transition-colors duration-300;
-}
+  .border-standard {
+    border: 1px solid color-mix(in srgb, var(--color-primary) 50%, transparent);
+    @apply transition-colors duration-300;
+  }
 
-.input-field-custom {
-    background-color: #FFFFFF;
+  .input-field-custom {
+    background-color: #ffffff;
     color: var(--color-text-heading);
     @apply border border-slate-200 rounded-2xl px-5 py-4 font-bold outline-none transition-all duration-300;
   }
 
-  [data-theme='dark'] .input-field-custom {
-    background-color: #1F2937;
-    color: #FFFFFF;
+  [data-theme="dark"] .input-field-custom {
+    background-color: #1f2937;
+    color: #ffffff;
     @apply border-slate-700;
   }
 
@@ -155,7 +171,7 @@
   }
 }
 
-[data-theme='dark'] body {
+[data-theme="dark"] body {
   background-color: var(--color-background);
   color: var(--color-text-body);
 }

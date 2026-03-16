@@ -1,67 +1,83 @@
 import React from "react";
 import { format } from "date-fns";
-import { FiDollarSign, FiCreditCard, FiArrowUpRight } from "react-icons/fi";
+import { FiDollarSign, FiCreditCard, FiCalendar, FiTag } from "react-icons/fi";
 
 const PaymentHistoryTable = ({ payments }) => {
   if (payments.length === 0) {
     return (
-      <div className="text-center py-16 bg-base-100 rounded-2xl border border-dashed border-base-content/20 shadow-sm">
-        <FiCreditCard className="mx-auto text-5xl text-base-content/20 mb-4" />
-        <p className="text-base-content/50 text-lg font-bold">You have no payment records yet.</p>
+      <div className="text-center py-20 bg-card border-standard border-dashed rounded-[2rem] space-y-4">
+        <div className="w-20 h-20 bg-background rounded-full flex items-center justify-center mx-auto text-primary/20">
+            <FiCreditCard size={40} className="text-primary" />
+        </div>
+        <h3 className="!mb-0 !text-xl font-bold text-text-heading">No Payments Yet</h3>
+        <p className="text-text-body opacity-60">Your transaction history will appear here.</p>
       </div>
     );
   }
 
   return (
-    <div className="bg-base-100 rounded-2xl border border-base-content/5 shadow-sm overflow-hidden">
-      <table className="table w-full">
-        <thead className="bg-base-200/50">
-          <tr className="border-b border-base-content/5">
-            <th className="bg-transparent text-base-content/70 font-bold uppercase text-[10px] tracking-widest">Date</th>
-            <th className="bg-transparent text-base-content/70 font-bold uppercase text-[10px] tracking-widest">Amount</th>
-            <th className="bg-transparent text-base-content/70 font-bold uppercase text-[10px] tracking-widest">Category</th>
-            <th className="bg-transparent text-base-content/70 font-bold uppercase text-[10px] tracking-widest">Reference</th>
-            <th className="bg-transparent text-base-content/70 font-bold uppercase text-[10px] tracking-widest">Status</th>
-          </tr>
-        </thead>
-        <tbody className="divide-y divide-base-content/5">
-          {payments.map((payment) => (
-            <tr key={payment._id} className="hover:bg-base-200/30 transition-colors">
-              <td className="text-sm font-medium text-base-content/60">
-                {format(new Date(payment.createdAt), "MMM d, yyyy")}
-              </td>
-              <td className="font-black text-success flex items-center gap-1 text-base">
-                <FiDollarSign size={14} />
-                {payment.amount.toFixed(2)}
-              </td>
-              <td>
-                <span className="badge badge-outline border-base-content/10 rounded-2xl text-[10px] font-bold uppercase px-3 py-3">
-                  {payment.type}
-                </span>
-              </td>
-              <td className="max-w-[200px]">
-                <div className="flex flex-col">
-                  <span className="text-sm font-bold text-base-content truncate">
-                    {payment.eventName || payment.clubName}
-                  </span>
-                  {payment.type === "event" && (
-                    <span className="text-[10px] text-base-content/50  font-medium">@{payment.clubName}</span>
-                  )}
-                </div>
-              </td>
-              <td>
-                <span className={`badge rounded-2xl font-black text-[10px] border-none px-4 ${
-                  (payment.status === "paid" || payment.paymentStatus === "succeeded")
-                    ? "bg-success/10 text-success"
-                    : "bg-error/10 text-error"
-                }`}>
-                  {(payment.status || payment.paymentStatus || "unknown").toUpperCase()}
-                </span>
-              </td>
+    <div className="bg-card border-standard rounded-2xl overflow-hidden shadow-sm">
+      <div className="overflow-x-auto">
+        <table className="w-full text-left border-collapse">
+          <thead>
+            <tr className="bg-background/50 border-b border-standard">
+              <th className="px-6 py-5 text-[10px] font-black uppercase tracking-widest text-text-body opacity-70">Date</th>
+              <th className="px-6 py-5 text-[10px] font-black uppercase tracking-widest text-text-body opacity-70">Amount</th>
+              <th className="px-6 py-5 text-[10px] font-black uppercase tracking-widest text-text-body opacity-70">Category</th>
+              <th className="px-6 py-5 text-[10px] font-black uppercase tracking-widest text-text-body opacity-70">Reference</th>
+              <th className="px-6 py-5 text-[10px] font-black uppercase tracking-widest text-text-body opacity-70 text-right">Status</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody className="divide-y divide-standard">
+            {payments.map((payment) => {
+              // Status Logic based on your theme colors
+              const isSuccess = payment.status === "paid" || payment.paymentStatus === "succeeded";
+              
+              return (
+                <tr key={payment._id} className="hover:bg-primary/5 transition-colors group">
+                  <td className="px-6 py-5">
+                     <div className="flex items-center gap-2 text-sm font-bold text-text-heading">
+                        <FiCalendar className="text-primary" />
+                        {format(new Date(payment.createdAt), "MMM d, yyyy")}
+                     </div>
+                  </td>
+                  <td className="px-6 py-5">
+                    <div className="flex items-center gap-1 font-black text-primary">
+                      <FiDollarSign size={14} />
+                      {payment.amount.toFixed(2)}
+                    </div>
+                  </td>
+                  <td className="px-6 py-5">
+                    <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-primary/5 text-primary text-[10px] font-black uppercase border border-primary/10">
+                      <FiTag size={10} />
+                      {payment.type}
+                    </span>
+                  </td>
+                  <td className="px-6 py-5">
+                    <div className="flex flex-col max-w-[250px]">
+                      <span className="text-sm font-bold text-text-heading truncate group-hover:text-primary transition-colors">
+                        {payment.eventName || payment.clubName}
+                      </span>
+                      {payment.type === "event" && (
+                        <span className="text-[10px] text-secondary font-bold uppercase tracking-tighter">@{payment.clubName}</span>
+                      )}
+                    </div>
+                  </td>
+                  <td className="px-6 py-5 text-right">
+                    <span className={`inline-block px-4 py-1.5 rounded-full font-black text-[10px] uppercase border transition-all ${
+                      isSuccess
+                        ? "bg-primary/10 text-primary border-primary/20"
+                        : "bg-secondary/10 text-secondary border-secondary/20"
+                    }`}>
+                      {payment.status || payment.paymentStatus || "unknown"}
+                    </span>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };
