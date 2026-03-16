@@ -133,6 +133,26 @@
   border: 1px solid color-mix(in srgb, var(--color-primary) 50%, transparent);
   @apply transition-colors duration-300;
 }
+
+.input-field-custom {
+    background-color: #FFFFFF;
+    color: var(--color-text-heading);
+    @apply border border-slate-200 rounded-2xl px-5 py-4 font-bold outline-none transition-all duration-300;
+  }
+
+  [data-theme='dark'] .input-field-custom {
+    background-color: #1F2937;
+    color: #FFFFFF;
+    @apply border-slate-700;
+  }
+
+  .input-field-custom:focus {
+    @apply ring-4 ring-primary/10 border-primary shadow-sm;
+  }
+
+  textarea.input-field-custom {
+    @apply resize-none min-h-[120px];
+  }
 }
 
 [data-theme='dark'] body {

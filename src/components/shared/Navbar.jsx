@@ -79,7 +79,7 @@ const Navbar = () => {
               {navLinks}
             </ul>
 
-            <div className="flex items-center gap-4 border-l border-slate-200 dark:border-slate-800 pl-6">
+            <div className="flex items-center gap-4 border-l border-primary/50 pl-6">
               <button
                 onClick={toggleTheme}
                 style={{ backgroundColor: "var(--color-accent-plaid)" }}
@@ -91,8 +91,8 @@ const Navbar = () => {
               {user ? (
                 <div className="dropdown dropdown-end">
                   <label tabIndex={0} className="cursor-pointer">
-                    <div className="avatar ring-2 ring-primary ring-offset-2" style={{ "--tw-ring-offset-color": "var(--color-background)" }}>
-                      <div className="w-10 rounded-xl">
+                    <div className="avatar  " style={{ "--tw-ring-offset-color": "var(--color-background)" }}>
+                      <div className="w-10 rounded-full">
                         <img src={user?.photoURL || "https://i.ibb.co/m0p99m8/user.png"} alt="User" />
                       </div>
                     </div>

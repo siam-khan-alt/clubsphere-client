@@ -1,7 +1,8 @@
-import React, { use, useState, useEffect, Suspense } from 'react';
+import React, { use, useState, useEffect } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import SideNavbar from '../components/shared/SideNavbar';
-import { Outlet, useNavigation } from 'react-router-dom';
+import DashboardNavbar from '../components/shared/DashboardNavbar'; // নতুন ইমপোর্ট
+import { Link, Outlet, useNavigation } from 'react-router-dom';
 import LoadingSpinner from '../components/shared/LoadingSpinner';
 import { FaBars, FaTimes } from 'react-icons/fa';
 
@@ -16,70 +17,71 @@ const DashboardLayout = () => {
         localStorage.setItem("theme", theme);
     }, [theme]);
 
-    const toggleTheme = () => {
-        setTheme(theme === "light" ? "dark" : "light");
-    };
+    const toggleTheme = () => setTheme(theme === "light" ? "dark" : "light");
 
-    if (loading) {
-        return <LoadingSpinner />;
-    }
-
-    const toggleSidebar = () => {
-        setIsSidebarOpen(!isSidebarOpen);
-    };
+    if (loading) return <LoadingSpinner />;
 
     const isNavigating = navigation.state === "loading";
 
     return (
-        <div className="flex min-h-screen bg-base-100 transition-colors duration-300 relative">
-            <button 
-                className="lg:hidden fixed top-4 left-4 z-[60] p-2 rounded-xl bg-primary text-white shadow-2xl"
-                onClick={toggleSidebar}
-            >
-                {isSidebarOpen ? <FaTimes className="w-6 h-6" /> : <FaBars className="w-6 h-6" />}
-            </button>
-            
-            <div 
+        <div className="flex min-h-screen bg-background transition-colors duration-300">
+            {/* Sidebar */}
+            <aside 
                 className={`
-                    w-72 bg-base-200 text-base-content shadow-2xl p-6 
-                    fixed lg:static top-0 min-h-screen z-50 
-                    transition-transform duration-500 cubic-bezier(0.4, 0, 0.2, 1) transform 
-                    ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} 
-                    lg:translate-x-0 lg:block border-r border-base-content/5
+                    fixed lg:static inset-y-0 left-0 z-50 w-72 bg-card border-r border-slate-200 dark:border-slate-800 p-6
+                    transition-transform duration-300 ease-in-out transform
+                    ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
                 `}
             >
                 <div className="flex items-center justify-between mb-10 px-2">
-                    <div className="text-2xl font-black tracking-tighter  uppercase">
-                        Club<span className="text-primary not-italic">Sphere</span>
+                     <Link to="/" className="  flex items-center gap-2 group">
+                    <div className="w-10 h-10 bg-gradient-to-br from-primary to-secondary rounded-xl flex items-center justify-center shadow-lg shadow-primary/20">
+                      <span className="text-white font-black text-xl">C</span>
                     </div>
+                    <span className="text-2xl font-black tracking-tighter text-primary">
+                      Club<span className="text-secondary">Sphere</span>
+                    </span>
+                  </Link>
+                    <button className="lg:hidden text-text-body" onClick={() => setIsSidebarOpen(false)}>
+                        <FaTimes size={20} />
+                    </button>
                 </div>
+                <SideNavbar />
+            </aside>
 
-                <SideNavbar theme={theme} toggleTheme={toggleTheme} />
+            {/* Overlay for mobile sidebar */}
+            {isSidebarOpen && (
+                <div 
+                    className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 lg:hidden"
+                    onClick={() => setIsSidebarOpen(false)}
+                ></div>
+            )}
+
+            {/* Main Content Area */}
+            <div className="flex-1 flex flex-col min-h-screen">
+                <DashboardNavbar theme={theme} toggleTheme={toggleTheme} />
                 
-            </div>
-            
-            <div 
-                className={`flex-1 min-h-screen transition-all duration-500 
-                ${isSidebarOpen ? 'blur-md lg:blur-none opacity-50 lg:opacity-100' : ''}`}
-                onClick={() => isSidebarOpen && setIsSidebarOpen(false)}
-            >
-                <div className="p-4 lg:p-8 pt-20 lg:pt-8 container mx-auto h-full flex flex-col">
-                    <div className="relative flex-1 bg-base-100 rounded-2xl border border-base-content/5 shadow-sm min-h-[85vh] overflow-hidden">
-                        
+                {/* Mobile Menu Trigger */}
+                <button 
+                    className="lg:hidden fixed bottom-6 right-6 z-50 p-4 rounded-full btn-primary-gradient shadow-xl"
+                    onClick={() => setIsSidebarOpen(true)}
+                >
+                    <FaBars size={20} />
+                </button>
+
+                <main className="p-4 lg:p-8 flex-1 overflow-y-auto">
+                    <div className="relative min-h-[80vh]">
                         {isNavigating && (
-                            <div className="absolute inset-0 z-40 flex flex-col items-center justify-center bg-base-100/60 backdrop-blur-md transition-all duration-300">
+                            <div className="absolute inset-0 z-30 flex flex-col items-center justify-center bg-background/60 backdrop-blur-sm rounded-2xl">
                                 <LoadingSpinner />
-                                <p className="mt-4 text-[10px] font-black uppercase tracking-[0.3em] opacity-40 animate-pulse">
-                                    Loading Interface...
-                                </p>
+                                <span className="mt-4 text-[10px] font-black uppercase tracking-[0.3em] opacity-40">Syncing Data...</span>
                             </div>
                         )}
-
-                        <div className={`h-full transition-all duration-500 ${isNavigating ? 'opacity-20 scale-[0.98] blur-sm' : 'opacity-100 scale-100 blur-0'}`}>
+                        <div className={`transition-all duration-300 ${isNavigating ? 'opacity-30 scale-[0.99] blur-sm' : 'opacity-100'}`}>
                             <Outlet />
                         </div>
                     </div>
-                </div>
+                </main>
             </div>
         </div>
     );

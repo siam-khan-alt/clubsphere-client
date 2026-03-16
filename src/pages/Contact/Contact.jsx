@@ -13,105 +13,117 @@ const Contact = () => {
             title: 'Message Sent!',
             text: 'Thank you for contacting ClubSphere. We will get back to you soon.',
             icon: 'success',
-            confirmButtonColor: '#7C3AED',
+            confirmButtonColor: '#0284C7',
             customClass: {
-                popup: 'rounded-2xl'
+                popup: 'rounded-2xl border-none shadow-2xl bg-card text-text-heading'
             }
         });
         reset();
     };
 
     return (
-        <div className="pt-10 pb-20 bg-base-100">
-            <div className="container mx-auto px-4">
+        <div className="min-h-screen bg-background relative overflow-hidden py-20">
+            {/* Background Decor */}
+            <div className="plaid-bg absolute inset-0 opacity-[0.03] pointer-events-none"></div>
+            <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/5 blur-[120px] rounded-full -z-10"></div>
+            <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-secondary/5 blur-[120px] rounded-full -z-10"></div>
+
+            <div className="container mx-auto px-6 relative z-10">
+                {/* --- Header Section --- */}
                 <motion.div 
                     initial={{ opacity: 0, y: -20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="text-center max-w-2xl mx-auto mb-16"
+                    className="text-center max-w-2xl mx-auto mb-20"
                 >
-                    <h2 className="text-4xl font-black mb-4">Get In Touch</h2>
-                    <p className="opacity-70">Have questions about ClubSphere? Whether you're a student or a manager, we're here to help.</p>
+                    <h2 className="!text-5xl !mb-4 leading-tight">Get In Touch</h2>
+                    <p className="text-text-body font-medium opacity-80">
+                        Have questions about ClubSphere? Whether you're a student or a manager, we're here to help.
+                    </p>
                 </motion.div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
+                    {/* --- Contact Info Cards --- */}
                     <div className="lg:col-span-1 space-y-6">
                         {[
-                            { icon: FiMail, title: "Email Us", info: "nssiam99@gmail.com", color: "text-primary" },
-                            { icon: FiPhone, title: "Call Us", info: "+880 1881361160", color: "text-secondary" },
-                            { icon: FiMapPin, title: "Our Location", info: "Dhaka, Bangladesh", color: "text-accent" }
+                            { icon: FiMail, title: "Email Us", info: "nssiam99@gmail.com", color: "text-primary", bg: "bg-primary/10" },
+                            { icon: FiPhone, title: "Call Us", info: "+880 1881361160", color: "text-secondary", bg: "bg-secondary/10" },
+                            { icon: FiMapPin, title: "Our Location", info: "Dhaka, Bangladesh", color: "text-primary", bg: "bg-primary/10" }
                         ].map((item, index) => (
                             <motion.div 
                                 key={index}
                                 initial={{ opacity: 0, x: -20 }}
                                 whileInView={{ opacity: 1, x: 0 }}
                                 transition={{ delay: index * 0.1 }}
-                                className="p-6 rounded-2xl border border-base-content/5 bg-base-100 shadow-sm flex items-center gap-5"
+                                viewport={{ once: true }}
+                                className="p-6 rounded-2xl border-standard bg-card shadow-sm flex items-center gap-5 group hover:border-primary/50 transition-all"
                             >
-                                <div className="p-4 rounded-xl bg-base-200 dark:bg-slate-800">
+                                <div className={`p-4 rounded-2xl ${item.bg} group-hover:scale-110 transition-transform`}>
                                     <item.icon className={`w-6 h-6 ${item.color}`} />
                                 </div>
                                 <div>
-                                    <p className="text-xs font-bold opacity-50 uppercase tracking-widest">{item.title}</p>
-                                    <p className="font-semibold text-base-content">{item.info}</p>
+                                    <p className="text-[10px] font-black opacity-50 uppercase tracking-widest mb-1">{item.title}</p>
+                                    <p className="font-bold text-text-heading">{item.info}</p>
                                 </div>
                             </motion.div>
                         ))}
                     </div>
 
+                    {/* --- Contact Form --- */}
                     <motion.div 
                         initial={{ opacity: 0, y: 30 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
-                        className="lg:col-span-2 p-8 lg:p-12 rounded-2xl border border-base-content/5 bg-base-100 shadow-sm"
+                        className="lg:col-span-2 p-8 lg:p-12 rounded-2xl border-standard bg-card shadow-sm"
                     >
                         <form onSubmit={handleSubmit(onSubmit)} className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div className="form-control">
-                                <label className="label">
-                                    <span className="label-text font-bold">Your Name</span>
-                                </label>
+                            {/* Full Name */}
+                            <div className="flex flex-col gap-2">
+                                <label className="text-[11px] font-black uppercase tracking-widest text-text-heading ml-1 opacity-60">Your Name</label>
                                 <input 
                                     {...register("name", { required: true })}
                                     type="text" 
                                     placeholder="Siam Khan"
-                                    className='input input-bordered w-full rounded-2xl bg-base-200/50 dark:bg-slate-800 font-bold focus:ring-2 focus:ring-primary/20' 
+                                    className="input-field-custom" 
                                 />
                             </div>
-                            <div className="form-control">
-                                <label className="label">
-                                    <span className="label-text font-bold">Your Email</span>
-                                </label>
+
+                            {/* Email */}
+                            <div className="flex flex-col gap-2">
+                                <label className="text-[11px] font-black uppercase tracking-widest text-text-heading ml-1 opacity-60">Your Email</label>
                                 <input 
                                     {...register("email", { required: true })}
                                     type="email" 
                                     placeholder="example@mail.com" 
-                                    className='input input-bordered w-full rounded-2xl bg-base-200/50 dark:bg-slate-800 font-bold focus:ring-2 focus:ring-primary/20' 
+                                    className="input-field-custom" 
                                 />
                             </div>
-                            <div className="form-control md:col-span-2">
-                                <label className="label">
-                                    <span className="label-text font-bold">Subject</span>
-                                </label>
+
+                            {/* Subject */}
+                            <div className="md:col-span-2 flex flex-col gap-2">
+                                <label className="text-[11px] font-black uppercase tracking-widest text-text-heading ml-1 opacity-60">Subject</label>
                                 <input 
                                     {...register("subject", { required: true })}
                                     type="text" 
                                     placeholder="Membership Inquiry" 
-                                    className='input input-bordered w-full rounded-2xl bg-base-200/50 dark:bg-slate-800 font-bold focus:ring-2 focus:ring-primary/20' 
+                                    className="input-field-custom" 
                                 />
                             </div>
-                            <div className="form-control md:col-span-2">
-                                <label className="label">
-                                    <span className="label-text font-bold">Message</span>
-                                </label>
+
+                            {/* Message */}
+                            <div className="md:col-span-2 flex flex-col gap-2">
+                                <label className="text-[11px] font-black uppercase tracking-widest text-text-heading ml-1 opacity-60">Message</label>
                                 <textarea 
                                     {...register("message", { required: true })}
-                                    rows="5" 
                                     placeholder="Write your message here..." 
-                                    className='textarea textarea-bordered w-full rounded-2xl bg-base-200/50 dark:bg-slate-800 font-bold focus:ring-2 focus:ring-primary/20'
+                                    className="input-field-custom"
                                 ></textarea>
                             </div>
-                            <div className="md:col-span-2 pt-2">
-                                <button type="submit" className="btn btn-primary rounded-2xl w-full md:w-auto px-10 flex items-center justify-center gap-2 group font-black uppercase text-xs tracking-widest">
-                                    Send Message <FiSend className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+
+                            {/* Submit Button */}
+                            <div className="md:col-span-2 pt-4">
+                                <button type="submit" className="btn-primary-gradient flex items-center gap-3 group">
+                                    Send Message 
+                                    <FiSend className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
                                 </button>
                             </div>
                         </form>
