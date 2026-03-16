@@ -40,15 +40,13 @@ const WORK_STEPS = [
 
 const HowItWorksSection = () => {
     return (
-        <section className="py-20 bg-background relative overflow-hidden">
+        <section className="py-12 md:py-16 lg:py-20  bg-background relative overflow-hidden">
             
-            {/* Ambient Background Glow */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-primary/5 blur-[120px] rounded-full pointer-events-none" />
 
-            <div className="container mx-auto px-4 relative">
+            <div className="container mx-auto px-6 relative">
                 
                 {/* Section Header */}
-                <div className="text-center max-w-4xl mx-auto mb-16">
+                <div className="text-center max-w-5xl mx-auto mb-16">
                     <h2 className="mb-4 tracking-tight">How <span className="text-primary ">ClubSphere</span> Accelerates Growth</h2>
                     <p className="text-text-body text-sm md:text-base opacity-70 leading-relaxed max-w-2xl mx-auto">
                         A seamless transition from newcomer to community leader. 
@@ -83,7 +81,7 @@ const HowItWorksSection = () => {
                                         transition={{ duration: 0.5, ease: "easeOut" }}
                                         className={`w-full lg:w-[44%] ${isLeft ? 'lg:mr-auto text-left lg:text-right' : 'lg:ml-auto text-left'}`}
                                     >
-                                        <div className="relative p-6 md:p-8 rounded-2xl border-standard bg-card/50 backdrop-blur-sm hover:border-primary/30 transition-all duration-500 group shadow-sm hover:shadow-xl">
+                                        <div className="relative p-6 md:p-8 rounded-2xl border-standard bg-card backdrop-blur-sm hover:border-primary/30 transition-all duration-500 group shadow-sm hover:shadow-xl">
                                             
                                             {/* Phase Label & Icon */}
                                             <div className={`flex items-center gap-3 mb-4 ${isLeft ? 'lg:flex-row-reverse' : ''}`}>
@@ -122,21 +120,6 @@ const HowItWorksSection = () => {
                         })}
                     </div>
                 </div>
-
-                {/* Final CTA */}
-                <motion.div 
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    className="text-center mt-20 relative z-30"
-                >
-                    <Link 
-                        to="/clubs"
-                        className="btn-primary-gradient px-10 py-4 !rounded-full inline-flex items-center gap-3 group shadow-lg"
-                    >
-                        <span className="font-black tracking-widest text-[10px] uppercase">Get Started Now</span>
-                        <FiArrowRight className="group-hover:translate-x-1 transition-transform" />
-                    </Link>
-                </motion.div>
 
             </div>
         </section>

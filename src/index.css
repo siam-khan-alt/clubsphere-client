@@ -10,7 +10,6 @@
   --color-card: #FFFFFF;           
   --color-text-heading: #0F172A;   
   --color-text-body: #475569; 
-  --color-border: rgba(15, 23, 42, 0.08);    
 
   /* DaisyUI Mapping */
   --p: 2 132 199;
@@ -27,7 +26,6 @@
   --color-card: #111827;           
  --color-text-heading: #F1F5F9; 
   --color-text-body: #F8FAFC;  
-  --color-border: rgba(255, 255, 255, 0.15);  
 
   /* DaisyUI Mapping */
   --p: 56 189 248;
@@ -131,10 +129,10 @@
   .text-secondary {
     color: var(--color-secondary);
   }
-  border-standard {
-    border: 1px solid var(--color-border);
-    @apply transition-colors duration-300;
-  }
+ .border-standard {
+  border: 1px solid color-mix(in srgb, var(--color-primary) 50%, transparent);
+  @apply transition-colors duration-300;
+}
 }
 
 [data-theme='dark'] body {

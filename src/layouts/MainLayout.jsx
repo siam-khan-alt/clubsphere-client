@@ -5,9 +5,9 @@ import Footer from '../components/shared/Footer';
 
 const MainLayout = () => {
     return (
-        <div className='container mx-auto'>
+        <div className=' bg-background'>
             <Navbar/>
-            <div className='bg-[#FFFFFF]'>
+            <div className='bg-background'>
             <Outlet/>
             </div>
             <Footer/>

@@ -19,12 +19,10 @@ const CLUB_CATEGORIES = [
 
 const PopularCategorySection = () => {
   return (
-    <section className="py-28 bg-background relative overflow-hidden transition-colors duration-300">
+    <section className="py-12 md:py-16 lg:py-20 bg-background relative overflow-hidden transition-colors duration-300">
       
-      {/* Background Decorative Element */}
-      <div className="absolute -top-24 -left-24 w-96 h-96 bg-secondary/5 blur-[100px] rounded-full pointer-events-none" />
 
-      <div className="container mx-auto px-4 relative z-10">
+      <div className="container mx-auto px-6 relative z-10">
         
         {/* Header Section */}
         <div className="max-w-5xl grid justify-center items-center text-center mx-auto mb-20">
@@ -52,7 +50,7 @@ const PopularCategorySection = () => {
               className="group relative"
             >
               {/* Image Container */}
-              <div className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-card  transition-all duration-500 group-hover:shadow-[0_20px_50px_rgba(2,132,199,0.15)] group-hover:-translate-y-2">
+              <div className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-card  transition-all duration-500  group-hover:-translate-y-2">
                 
                 <img 
                   src={cat.img} 
@@ -87,7 +85,7 @@ const PopularCategorySection = () => {
         </div>
 
         {/* Bottom Navigation Element */}
-        <div className="mt-24 flex flex-col md:flex-row items-center justify-between border-t border-slate-100 dark:border-slate-800 pt-10 gap-6">
+        <div className="mt-24 flex flex-col md:flex-row items-center justify-between border-t border-primary/50 pt-10 gap-6">
             <div className="flex -space-x-3">
                 {[1,2,3,4].map(i => (
                     <div key={i} className="w-10 h-10 rounded-full border-2 border-background overflow-hidden bg-slate-200">

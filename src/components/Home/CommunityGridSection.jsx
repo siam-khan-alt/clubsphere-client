@@ -40,7 +40,7 @@ const CommunityGridSection = () => {
   ];
 
   return (
-    <section className="py-20 bg-background relative">
+    <section className="py-12 md:py-16 lg:py-20  bg-background relative">
       <div className="container mx-auto px-6">
         
         <div className="mb-16 grid text-center items-center justify-center md:mb-24 mx-auto max-w-3xl">
@@ -74,7 +74,7 @@ const CommunityGridSection = () => {
             ))}
           </div>
 
-          <div className="lg:col-span-5 relative h-[350px] lg:h-auto rounded-2xl overflow-hidden grayscale hover:grayscale-0 transition-all duration-700 shadow-2xl">
+          <div className="lg:col-span-5 relative h-[350px] lg:h-auto rounded-2xl overflow-hidden transition-all duration-700 shadow-2xl">
              <img 
                src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&q=80&w=800" 
                alt="Collaboration"
@@ -83,7 +83,7 @@ const CommunityGridSection = () => {
           </div>
 
           {/* Bottom Row: Image (5 columns) & Points (7 columns) */}
-          <div className="lg:col-span-5 relative h-[350px] lg:h-auto rounded-2xl overflow-hidden grayscale hover:grayscale-0 transition-all duration-700 shadow-2xl order-last lg:order-none">
+          <div className="lg:col-span-5 relative h-[350px] lg:h-auto rounded-2xl overflow-hidden  transition-all duration-700 shadow-2xl order-last lg:order-none">
              <img 
                src="https://images.unsplash.com/photo-1515187029135-18ee286d815b?auto=format&fit=crop&q=80&w=800" 
                alt="Growth"

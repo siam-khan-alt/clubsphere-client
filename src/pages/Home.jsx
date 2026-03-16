@@ -15,13 +15,16 @@ const Home = () => {
     return (
         <div>
             <HeroSection/>
+           <CategorySection/>
             <CommunityGridSection/>
-            <EcosystemSection/>
-            <CategorySection/>
             <FeaturedClubsSection/>
+            
+            <EcosystemSection/>
             <HowItWorksSection/>
+            
             <TopManagersSection/>
             <TestimonialSection/>
+            
             <FAQSection/>
             <ContactSupport/>
             <NewsletterSection/>
