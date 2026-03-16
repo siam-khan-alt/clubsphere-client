@@ -2,17 +2,27 @@ import { useQuery } from '@tanstack/react-query';
 import React, { useEffect, useState } from 'react';
 import ClubCard from '../components/public/ClubCard';
 import axios from 'axios';
-import { motion } from 'framer-motion'; 
-import { FiFilter, FiSearch, FiInbox, FiAlertCircle } from 'react-icons/fi';
+import { motion, AnimatePresence } from 'framer-motion'; 
+import { FiFilter, FiSearch, FiInbox, FiAlertCircle, FiChevronDown, FiCheck } from 'react-icons/fi';
 import LoadingSpinner from '../components/shared/LoadingSpinner';
 
 const categories = ["All", "Technology", "Photography", "Sports", "Book Club", "Art & Design", "Hiking & Travel", "Music & Film", "Food & Cooking"];
+const sortOptions = [
+  { label: "Newest First", value: "newest" },
+  { label: "Oldest First", value: "oldest" },
+  { label: "Price: High to Low", value: "fee_desc" },
+  { label: "Price: Low to High", value: "fee_asc" },
+];
 
 const Clubs = () => {
   const [search, setSearch] = useState('');
   const [category, setCategory] = useState('All');
   const [sort, setSort] = useState('newest'); 
   const [debouncedSearch, setDebouncedSearch] = useState('');
+  
+  // Custom Dropdown States
+  const [isCatOpen, setIsCatOpen] = useState(false);
+  const [isSortOpen, setIsSortOpen] = useState(false);
 
   useEffect(() => {
     const handler = setTimeout(() => setDebouncedSearch(search), 500);
@@ -31,64 +41,124 @@ const Clubs = () => {
     },
   });
 
-  if (isError) return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-8 bg-base-100">
-      <FiAlertCircle size={50} className="text-error mb-4" />
-      <h5 className="text-3xl font-bold text-error">Error Loading Clubs</h5>
-      <p className="opacity-70 mt-2">{error.message}</p>
-    </div>
-  );
-
   return (
-    <div className="min-h-screen bg-base-100 transition-colors duration-300">
-      <div className="container mx-auto px-4 py-12">
-        <div className="text-center mb-6">
-          <motion.h2 initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="text-4xl font-black  uppercase tracking-tighter">
-            Explore Local <span className="text-primary not-italic">Clubs</span>
+    <div className="min-h-screen bg-background relative overflow-hidden">
+      <div className="plaid-bg absolute inset-0 opacity-[0.05] pointer-events-none"></div>
+      
+      <div className="container mx-auto px-4 py-16 relative z-10">
+        
+        {/* --- Heading --- */}
+        <div className="mb-12">
+          <motion.h2 initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}>
+            Discover Your <span className="not-italic">Creative Empire</span>
           </motion.h2>
         </div>
 
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="flex flex-col lg:flex-row gap-4 mb-12 p-6 bg-base-200/50 backdrop-blur-md rounded-2xl border border-base-content/5 shadow-sm">
-          <div className="relative flex-1">
-            <FiSearch className="absolute left-4 top-1/2 -translate-y-1/2 opacity-40" />
-            <input type="text" placeholder="Search club name..." className="w-full pl-11 focus:ring-2 focus:ring-primary h-12 rounded-xl border-base-content/10 bg-base-100" value={search} onChange={(e) => setSearch(e.target.value)} />
-          </div>
+        {/* --- UNIQUE CONTROLS --- */}
+        <div className="max-w-6xl mx-auto mb-16 flex flex-col lg:flex-row gap-4">
           
-          <div className="flex flex-col md:flex-row gap-4 flex-1">
-            <div className="relative flex-1">
-                <FiFilter className="absolute left-4 top-1/2 -translate-y-1/2 opacity-40 z-10" />
-                <select className="w-full pl-11 h-12 rounded-xl bg-base-100 border-base-content/10" value={category} onChange={(e) => setCategory(e.target.value)}>
-                  {categories.map(cat => <option key={cat} value={cat}>{cat}</option>)}
-                </select>
-            </div>
-            <select className="flex-1 h-12 rounded-xl bg-base-100 border-base-content/10" value={sort} onChange={(e) => setSort(e.target.value)}>
-              <option value="newest">Sort By: Newest First</option>
-              <option value="oldest">Sort By: Oldest First</option>
-              <option value="fee_desc">Fee: High to Low</option>
-              <option value="fee_asc">Fee: Low to High</option>
-            </select>
+          {/* Custom Search */}
+          <div className="relative flex-grow group">
+            <FiSearch className="absolute left-5 top-1/2 -translate-y-1/2 text-primary z-10" />
+            <input 
+              type="text" 
+              placeholder="Search by club name..." 
+              className="w-full pl-14 pr-6 py-4 bg-card border border-slate-200 dark:border-slate-800 rounded-2xl focus:border-primary transition-all outline-none text-text-heading font-medium shadow-sm"
+              value={search} 
+              onChange={(e) => setSearch(e.target.value)} 
+            />
           </div>
-        </motion.div>
 
+          {/* --- Custom Category Dropdown --- */}
+          <div className="relative min-w-[200px]">
+            <button 
+              onClick={() => { setIsCatOpen(!isCatOpen); setIsSortOpen(false); }}
+              className="w-full flex items-center justify-between px-6 py-4 bg-card border border-slate-200 dark:border-slate-800 rounded-2xl text-text-heading font-bold shadow-sm hover:border-secondary transition-all"
+            >
+              <div className="flex items-center gap-2">
+                <FiFilter className="text-secondary" />
+                <span>{category}</span>
+              </div>
+              <FiChevronDown className={`transition-transform duration-300 ${isCatOpen ? 'rotate-180' : ''}`} />
+            </button>
+
+            <AnimatePresence>
+              {isCatOpen && (
+                <motion.div 
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 10 }}
+                  className="absolute top-[110%] left-0 w-full bg-card border border-slate-200 dark:border-slate-800 rounded-2xl shadow-2xl z-[50] py-2 overflow-hidden"
+                >
+                  {categories.map((cat) => (
+                    <button
+                      key={cat}
+                      onClick={() => { setCategory(cat); setIsCatOpen(false); }}
+                      className={`w-full flex items-center justify-between px-5 py-3 text-sm font-semibold transition-colors hover:bg-primary/10 hover:text-primary ${category === cat ? 'text-primary bg-primary/5' : 'text-text-body'}`}
+                    >
+                      {cat}
+                      {category === cat && <FiCheck />}
+                    </button>
+                  ))}
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+
+          {/* --- Custom Sort Dropdown --- */}
+          <div className="relative min-w-[220px]">
+            <button 
+              onClick={() => { setIsSortOpen(!isSortOpen); setIsCatOpen(false); }}
+              className="w-full flex items-center justify-between px-6 py-4 bg-card border border-slate-200 dark:border-slate-800 rounded-2xl text-text-heading font-bold shadow-sm hover:border-primary transition-all"
+            >
+              <span>{sortOptions.find(o => o.value === sort)?.label}</span>
+              <FiChevronDown className={`transition-transform duration-300 ${isSortOpen ? 'rotate-180' : ''}`} />
+            </button>
+
+            <AnimatePresence>
+              {isSortOpen && (
+                <motion.div 
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 10 }}
+                  className="absolute top-[110%] right-0 w-full bg-card border border-slate-200 dark:border-slate-800 rounded-2xl shadow-2xl z-[50] py-2 overflow-hidden"
+                >
+                  {sortOptions.map((opt) => (
+                    <button
+                      key={opt.value}
+                      onClick={() => { setSort(opt.value); setIsSortOpen(false); }}
+                      className={`w-full flex items-center justify-between px-5 py-3 text-sm font-semibold transition-colors hover:bg-primary/10 hover:text-primary ${sort === opt.value ? 'text-primary bg-primary/5' : 'text-text-body'}`}
+                    >
+                      {opt.label}
+                      {sort === opt.value && <FiCheck />}
+                    </button>
+                  ))}
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+        </div>
+
+        {/* Results Grid */}
         <div className="relative min-h-[400px]">
           {(isLoading || isFetching) && (
-            <div className="absolute inset-0 z-10 flex items-center justify-center bg-base-100/10 backdrop-blur-[2px]">
-               <LoadingSpinner />
+            <div className="absolute inset-0 z-20 flex items-center justify-center bg-background/50 backdrop-blur-[2px]">
+                <LoadingSpinner />
             </div>
           )}
 
           {!isLoading && clubs?.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
               {clubs.map((club, index) => (
-                <motion.div key={club._id} initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: index * 0.05 }}>
+                <motion.div key={club._id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: index * 0.05 }}>
                   <ClubCard club={club} />
                 </motion.div>
               ))}
             </div>
           ) : !isLoading && (
-            <div className="text-center py-24 border-2 border-dashed border-base-content/10 rounded-2xl flex flex-col items-center">
-              <FiInbox size={48} className="text-primary mb-4 opacity-50" />
-              <h3 className="text-2xl font-bold opacity-80 uppercase tracking-widest">No Clubs Found</h3>
+            <div className="text-center py-24 border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-[2rem] flex flex-col items-center">
+              <FiInbox size={48} className="text-primary mb-4 opacity-30" />
+              <h3 className="text-2xl font-black text-text-heading opacity-50 uppercase !bg-none !-webkit-text-fill-color-inherit">No Clubs Found</h3>
             </div>
           )}
         </div>
