@@ -1,14 +1,16 @@
-import React from 'react';
-import ClubTableRow from '../../../components/dashboard/admin/ClubTableRow'; 
+import React, { useState } from 'react';
 import useAxiosSecure from '../../../hooks/useAxiosSecure';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import Swal from 'sweetalert2';
-import LoadingSpinner from '../../../components/shared/LoadingSpinner'
-import { FiLayout, FiAlertCircle } from 'react-icons/fi';
+import { FiClock, FiXCircle, FiActivity } from 'react-icons/fi';
+import DashboardHeader from '../../../components/shared/ui/DashboardHeader';
+import AdminClubTable from '../../../components/dashboard/admin/AdminClubTable';
+import ManageClubsSkeleton from '../../../components/shared/skeletons/admin/ManageClubsSkeleton';
 
 const ManageClubs = () => {
     const axiosSecure = useAxiosSecure();
     const queryClient = useQueryClient();
+    const [activeTab, setActiveTab] = useState('pending');
 
     const { data: clubs = [], isLoading, isFetching, isError } = useQuery({
         queryKey: ['allClubsForAdmin'],
@@ -17,6 +19,8 @@ const ManageClubs = () => {
             return res.data;
         }
     });
+
+    const filteredClubs = clubs.filter(club => club.status.toLowerCase() === activeTab);
 
     const updateClubStatusMutation = useMutation({
         mutationFn: async ({ clubId, newStatus }) => {
@@ -28,16 +32,11 @@ const ManageClubs = () => {
             Swal.fire({
                 icon: 'success',
                 title: `Club ${variables.newStatus === 'approved' ? 'Approved' : 'Rejected'}!`,
-                text: `Status updated to ${variables.newStatus.toUpperCase()}`,
+                background: 'var(--color-card)',
+                color: 'var(--color-text-heading)',
+                confirmButtonColor: 'var(--color-primary)',
                 timer: 1500,
                 showConfirmButton: false
-            });
-        },
-        onError: (error) => {
-            Swal.fire({
-                icon: 'error',
-                title: 'Operation Failed',
-                text: error.response?.data?.message || 'Could not update club status.',
             });
         }
     });
@@ -46,67 +45,74 @@ const ManageClubs = () => {
     const handleReject = (clubId) => updateClubStatusMutation.mutate({ clubId, newStatus: 'rejected' });
 
     if (isError) return (
-        <div className="p-8 text-center bg-base-100 min-h-[400px] flex flex-col items-center justify-center">
-            <FiAlertCircle size={40} className="text-error mb-4" />
-            <div className="text-error font-black uppercase tracking-widest">Failed to fetch clubs data.</div>
+        <div className="p-8 text-center min-h-[400px] flex flex-col items-center justify-center bg-card rounded-3xl border-standard">
+            <FiXCircle size={40} className="text-secondary mb-4" />
+            <div className="text-text-heading font-black uppercase tracking-widest">Connection lost. Failed to fetch data.</div>
         </div>
     );
-    
-    const isMutating = updateClubStatusMutation.isPending;
 
+    if (isLoading) return <ManageClubsSkeleton />;
     return (
-        <div className="p-4 container mx-auto space-y-6"> 
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                <h2 className="text-xl sm:text-2xl md:text-3xl font-black flex items-center gap-3 text-base-content uppercase  tracking-tighter">
-                    <FiLayout className="text-primary" /> Manage All <span className="text-primary not-italic">Clubs</span>
-                </h2>
-                <div className="px-4 py-2 bg-base-200 rounded-full text-[10px] font-black uppercase tracking-[0.2em] text-base-content/60 border border-base-content/5">
-                    Live Directory: {clubs.length} Units
+        <div className="space-y-6 md:space-y-10 pb-10">
+            <DashboardHeader 
+                title="Club Directory"
+                description="Monitor and manage all campus clubs. Review pending registration requests."
+                badgeText="Administrative Node"
+                showSmile={false}
+            />
+
+            {/* Tab Bar Section */}
+            <div className="flex flex-col lg:flex-row items-center justify-between gap-6 border-b border-standard/20 pb-6">
+                <div className="flex flex-wrap justify-center gap-2 bg-card border-standard p-1.5 rounded-2xl w-full lg:w-auto">
+                    {['pending', 'approved', 'rejected'].map((tab) => (
+                        <button
+                            key={tab}
+                            onClick={() => setActiveTab(tab)}
+                            className={`flex-1 lg:flex-none px-6 md:px-8 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-[0.2em] transition-all duration-300 ${
+                                activeTab === tab 
+                                ? 'bg-primary text-white shadow-lg' 
+                                : 'text-text-body opacity-50 hover:opacity-100 hover:bg-background'
+                            }`}
+                        >
+                            {tab}
+                        </button>
+                    ))}
+                </div>
+                <div className="flex items-center justify-center gap-3 px-6 py-3 bg-card border-standard rounded-2xl w-full lg:w-auto shadow-sm">
+                    <FiActivity className="text-primary animate-pulse" />
+                    <span className="text-[10px] font-black uppercase tracking-widest text-text-heading">
+                        Total {activeTab}: {clubs.filter(c => c.status.toLowerCase() === activeTab).length} Units
+                    </span>
                 </div>
             </div>
-            
-            <div className="relative w-full max-w-[80vw] md:max-w-full bg-base-100 rounded-[32px] border border-base-content/5 shadow-2xl overflow-hidden">
-                
-                {(isLoading || isFetching) && (
-                    <div className="absolute inset-0 z-50 flex items-center justify-center bg-base-100/40 backdrop-blur-md transition-all">
-                        <LoadingSpinner />
+
+            {/* Content Area */}
+            <div className="relative">
+                {isFetching ? (
+                    /* Tab change-er somoy shudhu table skeleton */
+                    <div className="w-full overflow-hidden rounded-2xl bg-card border-standard shadow-sm p-6 space-y-4">
+                         {[1, 2, 3].map((i) => (
+                             <div key={i} className="h-20 w-full bg-slate-100 dark:bg-slate-800/50 rounded-2xl animate-pulse"></div>
+                         ))}
+                    </div>
+                ) : filteredClubs.length > 0 ? (
+                    <div className="w-full max-w-[85vw] md:max-w-full overflow-hidden rounded-2xl bg-card border-standard shadow-sm">
+                        <AdminClubTable 
+                            clubs={filteredClubs} 
+                            handleApprove={handleApprove} 
+                            handleReject={handleReject} 
+                            isMutating={updateClubStatusMutation.isPending}
+                        />
+                    </div>
+                ) : (
+                    /* No Data State */
+                    <div className="bg-card border-standard rounded-2xl py-32 text-center flex flex-col items-center shadow-sm">
+                        <div className="h-20 w-20 bg-background rounded-full flex items-center justify-center mb-6">
+                            <FiClock className="text-primary opacity-20" size={40} />
+                        </div>
+                        <p className="text-text-heading font-black uppercase tracking-[0.4em] text-xs">No {activeTab} records found</p>
                     </div>
                 )}
-
-                <div className="overflow-x-auto w-full min-h-[400px]">
-                    <div className="inline-block min-w-full align-middle">
-                        <table className="table w-full border-separate border-spacing-y-2 px-4">
-                            <thead>
-                                <tr className="border-none text-base-content/40 ">
-                                    <th className="font-black uppercase text-[10px] tracking-[0.2em] py-6">Club Identity</th>
-                                    <th className="hidden lg:table-cell font-black uppercase text-[10px] tracking-[0.2em]">Authority</th>
-                                    <th className="font-black uppercase text-[10px] tracking-[0.2em]">Valuation</th>
-                                    <th className="font-black uppercase text-[10px] tracking-[0.2em]">Verification</th>
-                                    <th className="hidden lg:table-cell font-black uppercase text-[10px] tracking-[0.2em]">Activity</th>
-                                    <th className="text-right font-black uppercase text-[10px] tracking-[0.2em]">Control</th>
-                                </tr>
-                            </thead>
-                            <tbody className="relative">
-                                {clubs.map((club) => (
-                                    <ClubTableRow 
-                                        key={club._id}
-                                        club={club}
-                                        handleApprove={handleApprove}
-                                        handleReject={handleReject}
-                                        isMutating={isMutating}
-                                    />
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-            <div className="flex items-center gap-2">
-                <div className="h-1 w-12 bg-primary rounded-full"></div>
-                <p className="text-[10px] font-black uppercase tracking-[0.3em] text-base-content/30 ">
-                    ClubSphere Administrative Console v2.0
-                </p>
             </div>
         </div>
     );

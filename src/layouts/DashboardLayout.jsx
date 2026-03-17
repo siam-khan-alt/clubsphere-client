@@ -1,10 +1,11 @@
 import React, { use, useState, useEffect } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import SideNavbar from '../components/shared/SideNavbar';
-import DashboardNavbar from '../components/shared/DashboardNavbar'; // নতুন ইমপোর্ট
+import DashboardNavbar from '../components/shared/DashboardNavbar'; 
 import { Link, Outlet, useNavigation } from 'react-router-dom';
 import LoadingSpinner from '../components/shared/LoadingSpinner';
 import { FaBars, FaTimes } from 'react-icons/fa';
+import DashboardLayoutSkeleton from '../components/shared/skeletons/DashboardLayoutSkeleton';
 
 const DashboardLayout = () => {
     const { loading } = use(AuthContext);
@@ -19,7 +20,7 @@ const DashboardLayout = () => {
 
     const toggleTheme = () => setTheme(theme === "light" ? "dark" : "light");
 
-    if (loading) return <LoadingSpinner />;
+    if (loading) return <DashboardLayoutSkeleton />;
 
     const isNavigating = navigation.state === "loading";
 
@@ -28,7 +29,7 @@ const DashboardLayout = () => {
             {/* Sidebar */}
             <aside 
                 className={`
-                    fixed lg:static inset-y-0 left-0 z-50 w-72 bg-card border-r border-slate-200 dark:border-slate-800 p-6
+                    fixed lg:sticky top-0 left-0 z-50 h-screen bg-card p-6
                     transition-transform duration-300 ease-in-out transform
                     ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
                 `}

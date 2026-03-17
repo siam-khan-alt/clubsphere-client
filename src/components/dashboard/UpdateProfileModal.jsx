@@ -2,11 +2,9 @@ import React, { useState } from "react";
 import ReactModal from "react-modal";
 import { useForm } from "react-hook-form";
 import { TbFidgetSpinner } from "react-icons/tb";
-import { FiX } from "react-icons/fi";
+import { FiX, FiCamera } from "react-icons/fi";
 import toast from "react-hot-toast";
 import useImageUploadMutations from "../../hooks/useImageUploadMutations";
-
-ReactModal.setAppElement("#root");
 
 const UpdateProfileModal = ({ isOpen, onClose, user, onUpdate }) => {
   const { register, handleSubmit, reset } = useForm();
@@ -21,7 +19,7 @@ const UpdateProfileModal = ({ isOpen, onClose, user, onUpdate }) => {
         imageURL = await uploadImage(data.image[0]);
       }
       await onUpdate(data.name, imageURL);
-      toast.success("Profile updated successfully!");
+      toast.success("Profile updated!");
       onClose();
       reset();
     } catch (err) {
@@ -35,54 +33,56 @@ const UpdateProfileModal = ({ isOpen, onClose, user, onUpdate }) => {
     <ReactModal
       isOpen={isOpen}
       onRequestClose={onClose}
-      contentLabel="Update Profile Modal"
-      className="max-w-md w-full mx-auto mt-20 bg-white rounded-2xl outline-none p-0 shadow-2xl overflow-hidden"
-      overlayClassName="fixed inset-0 bg-black/60 backdrop-blur-sm z-[1000] flex justify-center items-start p-4"
+      className="max-w-md w-full mx-auto mt-20 bg-card rounded-2xl outline-none p-0 shadow-2xl overflow-hidden border border-standard/10"
+      overlayClassName="fixed inset-0 bg-black/40 backdrop-blur-md z-[1000] flex justify-center items-start p-4"
     >
       <div className="relative p-8">
         <button 
           onClick={onClose}
-          className="absolute top-4 right-4 p-2 hover:bg-gray-100 rounded-full transition text-[#6B7280]"
+          className="absolute top-6 right-6 p-2 hover:bg-primary/10 rounded-full transition text-text-body"
         >
           <FiX size={20} />
         </button>
 
-        <h2 className="text-2xl font-bold text-[#34495E] mb-2">Edit Profile</h2>
-        <p className="text-sm text-[#6B7280] mb-6">Change your display name or profile picture.</p>
+        <h2 className="text-2xl font-black text-text-heading mb-1 text-left">Edit Profile</h2>
+        <p className="text-sm text-text-body mb-8">Update your personal identification.</p>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
-          <div>
-            <label className="block text-sm font-semibold text-[#34495E] mb-2">Full Name</label>
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+          <div className="space-y-2">
+            <label className="text-xs font-black uppercase tracking-widest text-text-body/60 ml-1">Display Name</label>
             <input
               type="text"
               defaultValue={user?.displayName}
               {...register("name", { required: "Name is required" })}
-              className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#7C3AED]/50 bg-white text-[#34495E]"
+              className="input-field-custom w-full"
+              placeholder="Enter your name"
             />
           </div>
 
-          <div>
-            <label className="block text-sm font-semibold text-[#34495E] mb-2">Profile Photo</label>
-            <input
-              type="file"
-              accept="image/*"
-              {...register("image")}
-              className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-[#7C3AED]/10 file:text-[#7C3AED] hover:file:bg-[#7C3AED]/20 cursor-pointer"
-            />
+          <div className="space-y-2">
+            <label className="text-xs font-black uppercase tracking-widest text-text-body/60 ml-1">Profile Picture</label>
+            <div className="relative">
+               <input
+                type="file"
+                accept="image/*"
+                {...register("image")}
+                className="w-full text-xs text-text-body file:mr-4 file:py-3 file:px-6 file:rounded-xl file:border-0 file:text-xs file:font-black file:uppercase file:bg-primary/10 file:text-primary hover:file:bg-primary/20 cursor-pointer bg-background rounded-2xl border border-standard/5"
+              />
+            </div>
           </div>
 
-          <div className="flex gap-3 pt-4">
+          <div className="flex gap-4 pt-4">
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 py-3 rounded-xl font-semibold text-[#34495E] bg-gray-100 hover:bg-gray-200 transition"
+              className="flex-1 py-4 rounded-2xl font-bold text-text-body bg-background hover:bg-slate-200 dark:hover:bg-slate-800 transition-all"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={isUploading || isUpdating}
-              className="flex-1 py-3 rounded-xl font-semibold text-white bg-[#7C3AED] hover:bg-indigo-700 transition flex items-center justify-center shadow-lg shadow-purple-200"
+              className="btn-primary-gradient flex-1 flex items-center justify-center gap-2"
             >
               {isUploading || isUpdating ? (
                 <TbFidgetSpinner className="animate-spin text-xl" />

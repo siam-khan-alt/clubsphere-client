@@ -1,75 +1,104 @@
 import React from 'react';
 import { format } from 'date-fns';
-import { FiDollarSign, FiCalendar, FiMail, FiLayers, FiActivity, FiCreditCard } from 'react-icons/fi';
+import { FiDollarSign, FiCalendar, FiUser, FiLayers, FiCheckCircle, FiInfo } from 'react-icons/fi';
 
 const AdminPaymentHistoryTable = ({ payments }) => {
     if (payments.length === 0) {
         return (
-            <div className="text-center py-16 bg-base-100 rounded-2xl border border-dashed border-base-content/20">
-                <FiCreditCard className="mx-auto text-base-content/20 mb-4" size={48} />
-                <p className="text-base-content/40 font-black uppercase tracking-widest text-sm">No payment records found yet.</p>
+            <div className="text-center py-24 bg-card border-standard rounded-2xl">
+                <div className="h-20 w-20 bg-background rounded-full flex items-center justify-center mx-auto mb-6">
+                    <FiInfo className="text-primary opacity-30" size={40} />
+                </div>
+                <p className="text-text-heading font-black uppercase tracking-[0.4em] text-xs opacity-40">No records found in this sector</p>
             </div>
         );
     }
 
     return (
-        <div className="overflow-x-auto w-full">
-            <table className="table w-full">
-                <thead className="bg-base-200/50">
-                    <tr className="border-none text-base-content/70">
-                        <th className="font-black uppercase text-[11px] tracking-wider"><span className="flex items-center gap-2"><FiCalendar /> Date</span></th>
-                        <th className="font-black uppercase text-[11px] tracking-wider"><span className="flex items-center gap-2"><FiMail /> User</span></th>
-                        <th className="font-black uppercase text-[11px] tracking-wider"><span className="flex items-center gap-2"><FiDollarSign /> Amount</span></th>
-                        <th className="font-black uppercase text-[11px] tracking-wider text-center">Type</th>
-                        <th className="font-black uppercase text-[11px] tracking-wider"><span className="flex items-center gap-2"><FiLayers /> Source</span></th>
-                        <th className="text-right font-black uppercase text-[11px] tracking-wider"><span className="flex items-center gap-2 justify-end"><FiActivity /> Status</span></th>
+        <div className="overflow-x-auto mx-2">
+            <table className="table w-full  border-separate border-spacing-y-2">
+                <thead>
+                    <tr className="text-text-heading border-none">
+                        <th className="bg-transparent font-black uppercase text-[10px] tracking-widest py-4 px-6">
+                            <span className="flex items-center gap-2"><FiCalendar className="text-primary"/> Date</span>
+                        </th>
+                        <th className="bg-transparent font-black uppercase text-[10px] tracking-widest py-4 px-6">
+                            <span className="flex items-center gap-2"><FiUser className="text-primary"/> User</span>
+                        </th>
+                        <th className="bg-transparent font-black uppercase text-[10px] tracking-widest py-4 px-6">
+                            <span className="flex items-center gap-2"><FiDollarSign className="text-primary"/> Amount</span>
+                        </th>
+                        <th className="bg-transparent font-black uppercase text-[10px] tracking-widest py-4 px-6">
+                            <span className="flex items-center gap-2"><FiLayers className="text-primary"/> Source</span>
+                        </th>
+                        <th className="bg-transparent font-black uppercase text-[10px] tracking-widest py-4 px-6 text-right">
+                            Status
+                        </th>
                     </tr>
                 </thead>
-                <tbody className="divide-y divide-base-content/5">
-                    {payments.map((payment) => (
-                        <tr key={payment._id} className="hover:bg-base-200/30 transition-colors border-base-content/5">
-                            <td className="text-xs font-bold text-base-content/60">
-                                {format(new Date(payment.createdAt), 'MMM dd, yyyy')}
-                            </td>
-                            <td className="font-bold text-base-content">
-                                {payment.userEmail}
-                            </td>
-                            <td className="font-black text-success">
-                                <div className="flex items-center tracking-tighter">
-                                    <FiDollarSign size={14} />
-                                    {payment.amount.toFixed(2)}
-                                </div>
-                            </td>
-                            <td className="text-center">
-                                <span className={`px-2 py-0.5 text-[10px] font-black uppercase tracking-tighter rounded-md ${
-                                    payment.type === 'event' ? 'bg-orange-100 text-orange-600' : 'bg-blue-100 text-blue-600'
-                                }`}>
-                                    {payment.type}
-                                </span>
-                            </td>
-                            <td>
-                                <div className="max-w-[180px]">
-                                    <p className="font-black text-xs truncate text-base-content/80">
-                                        {payment.type === 'event' ? payment.eventName : payment.clubName}
+                <tbody className="space-y-2 border-standard">
+                    {payments.map((payment) => {
+                        const isEvent = payment.type === 'event';
+                        const displayType = payment.type === 'membership' ? 'Club' : payment.type;
+
+                        return (
+                            <tr key={payment._id} className="group  transition-all duration-300">
+                                {/* Date Column */}
+                                <td className="py-5  px-6 bg-card first:rounded-l-2xl  transition-colors">
+                                    <p className="text-xs font-bold text-text-heading">
+                                        {format(new Date(payment.createdAt), 'MMM dd, yyyy')}
                                     </p>
-                                    {payment.type === 'event' && (
-                                        <p className="text-[10px] font-bold text-base-content/40  truncate">
-                                            via {payment.clubName}
-                                        </p>
-                                    )}
-                                </div>
-                            </td>
-                            <td className="text-right">
-                                <span className={`px-3 py-1 text-[10px] font-black uppercase tracking-widest rounded-full border ${
-                                    payment.paymentStatus === 'paid' || payment.paymentStatus === 'succeeded' 
-                                    ? 'bg-green-100 text-green-600 border-green-200' 
-                                    : 'bg-red-100 text-red-600 border-red-200'
-                                }`}>
-                                    {payment.paymentStatus || 'unknown'}
-                                </span>
-                            </td>
-                        </tr>
-                    ))}
+                                    <p className="text-[9px] font-black opacity-30 uppercase tracking-tighter text-text-body">
+                                        {format(new Date(payment.createdAt), 'hh:mm a')}
+                                    </p>
+                                </td>
+
+                                {/* User Column */}
+                                <td className="py-5 px-6 bg-card  transition-colors">
+                                    <span className="text-xs font-bold text-text-body group-hover:text-primary transition-colors">
+                                        {payment.userEmail}
+                                    </span>
+                                </td>
+
+                                {/* Amount Column */}
+                                <td className="py-5 px-6 bg-card  transition-colors">
+                                    <div className="flex items-center gap-1">
+                                        <span className="text-xs font-black text-primary">$</span>
+                                        <span className="text-lg font-black text-text-heading tracking-tighter">
+                                            {payment.amount.toFixed(2)}
+                                        </span>
+                                    </div>
+                                </td>
+
+                                {/* Source Column */}
+                                <td className="py-5 px-6 bg-card  transition-colors">
+                                    <div className="flex flex-col gap-1">
+                                        <div className="flex items-center gap-2">
+                                            <span className={`w-1.5 h-1.5 rounded-full ${isEvent ? 'bg-secondary' : 'bg-primary'}`}></span>
+                                            <p className="text-[11px] font-black text-text-heading uppercase tracking-wider truncate max-w-[150px]">
+                                                {isEvent ? payment.eventName : payment.clubName}
+                                            </p>
+                                        </div>
+                                        <span className="text-[9px] font-black opacity-40 uppercase tracking-widest ml-3 text-text-body">
+                                            {displayType}
+                                        </span>
+                                    </div>
+                                </td>
+
+                                {/* Status Column */}
+                                <td className="py-5 px-6 bg-card last:rounded-r-2xl text-right  transition-colors">
+                                    <div className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-xl  text-[10px] font-black uppercase tracking-widest ${
+                                        payment.paymentStatus === 'paid' || payment.paymentStatus === 'succeeded'
+                                        ? 'bg-primary/10 text-primary border-primary/20'
+                                        : 'bg-secondary/10 text-secondary border-secondary/20'
+                                    }`}>
+                                        <FiCheckCircle size={12} />
+                                        {payment.paymentStatus || 'unknown'}
+                                    </div>
+                                </td>
+                            </tr>
+                        );
+                    })}
                 </tbody>
             </table>
         </div>

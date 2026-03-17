@@ -63,10 +63,7 @@ const SideNavbar = () => {
                 )}
             </div>
 
-            {/* Bottom Section */}
-            <div className="pt-6 border-t border-slate-200 dark:border-slate-800">
-                <NavLinkItem to="/" icon={FaHome}>Back to Website</NavLinkItem>
-            </div>
+           
         </nav>
     );
 };

@@ -31,7 +31,7 @@ const DashboardNavbar = ({ theme, toggleTheme }) => {
   };
 
   return (
-    <header className="h-20 bg-card border-b border-slate-200 dark:border-slate-800 flex items-center justify-between px-6 sticky top-0 z-40 transition-colors duration-300">
+    <header className="h-20 bg-card  flex items-center justify-between px-6 sticky top-0 z-40 transition-colors duration-300">
       
       {/* --- Left Side --- */}
       <div className="flex items-center">
@@ -45,10 +45,10 @@ const DashboardNavbar = ({ theme, toggleTheme }) => {
 
         {/* Desktop View Welcome Message (Hidden on Mobile) */}
         <div className="hidden lg:block">
-          <h4 className="text-text-heading font-bold text-lg leading-tight">
+          <h4 className="text-text-heading text-primary font-bold text-lg leading-tight">
             Hello, {user?.displayName?.split(' ')[0] || "User"}!
           </h4>
-          <p className="text-[10px] uppercase tracking-widest text-text-body opacity-60 font-black">
+          <p className="text-[10px] uppercase tracking-widest text-secondary text-text-body opacity-60 font-black">
             Welcome back to workspace
           </p>
         </div>
@@ -70,12 +70,12 @@ const DashboardNavbar = ({ theme, toggleTheme }) => {
                {user?.role || 'Member'}
              </p>
           </div>
-          
+          <Link to="/dashboard/profile">
           <img
             src={user?.photoURL || "https://i.ibb.co/PB957Xh/user.png"}
             alt="Profile"
             className="w-9 h-9 sm:w-10 sm:h-10 rounded-full object-cover border-2 border-primary/20 shadow-sm"
-          />
+          /></Link>
           
           <button
             onClick={handleLogout}

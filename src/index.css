@@ -103,7 +103,7 @@
   /* --- Secondary / Ghost Button (Optional but useful) --- */
   .btn-outline-custom {
     @apply px-7 py-3 rounded-xl font-bold border-2 transition-all duration-300
-           border-primary text-primary hover:bg-primary hover:text-white active:scale-95;
+           border-primary text-primary text-center hover:bg-primary hover:text-white active:scale-95;
   }
 
   /* --- Cards --- */

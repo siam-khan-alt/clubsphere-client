@@ -1,21 +1,19 @@
-import React from "react";
-import LoadingSpinner from "../../../components/shared/LoadingSpinner";
+import React, { useState } from "react";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import Swal from "sweetalert2";
-import {
-  FiUsers,
-  FiUserCheck,
-  FiShield,
-  FiTrash2,
-  FiMail,
-} from "react-icons/fi";
+import { FiActivity, FiClock } from "react-icons/fi";
+import DashboardHeader from "../../../components/shared/ui/DashboardHeader";
+import AdminUserTable from "../../../components/dashboard/admin/AdminUserTable";
+import ManageUsersSkeleton from "../../../components/shared/skeletons/admin/ManageUsersSkeleton";
 
 const ManageUsers = () => {
   const axiosSecure = useAxiosSecure();
   const queryClient = useQueryClient();
+  const [activeTab, setActiveTab] = useState('all');
 
-  const { data: users = [], isLoading } = useQuery({
+  // Fetching Users
+  const { data: users = [], isLoading, isFetching } = useQuery({
     queryKey: ["adminUsers"],
     queryFn: async () => {
       const res = await axiosSecure.get("/users");
@@ -23,6 +21,13 @@ const ManageUsers = () => {
     },
   });
 
+  // Filter Logic
+  const filteredUsers = users.filter(user => {
+    if (activeTab === 'all') return true;
+    return user.role === activeTab;
+  });
+
+  // Role Update Mutation
   const { mutateAsync: updateRoleMutate } = useMutation({
     mutationFn: async ({ email, role }) => {
       const res = await axiosSecure.patch(`/users/role/${email}`, { role });
@@ -30,16 +35,18 @@ const ManageUsers = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries(["adminUsers"]);
-      Swal.fire({
-        icon: "success",
-        title: "Success!",
-        text: "User role updated successfully.",
-        timer: 1500,
-        showConfirmButton: false,
+      Swal.fire({ 
+        icon: "success", 
+        title: "Updated!", 
+        background: 'var(--color-card)', 
+        color: 'var(--color-text-heading)', 
+        showConfirmButton: false, 
+        timer: 1500 
       });
     },
   });
 
+  // Delete User Mutation
   const { mutateAsync: deleteUserMutate } = useMutation({
     mutationFn: async (email) => {
       const res = await axiosSecure.delete(`/users/${email}`);
@@ -47,172 +54,101 @@ const ManageUsers = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries(["adminUsers"]);
-      Swal.fire({
-        icon: "success",
-        title: "Deleted!",
-        text: "User has been successfully removed.",
-        timer: 1500,
-        showConfirmButton: false,
+      Swal.fire({ 
+        icon: "success", 
+        title: "Removed!", 
+        background: 'var(--color-card)', 
+        color: 'var(--color-text-heading)', 
+        showConfirmButton: false, 
+        timer: 1500 
       });
     },
   });
 
-  if (isLoading) return <LoadingSpinner />;
-
-  const handleChangeRole = async (user, newRole) => {
+  const handleChangeRole = (user, newRole) => {
     Swal.fire({
-      title: `Update Role?`,
-      text: `Make ${user.name} a ${newRole}?`,
-      icon: "warning",
+      title: 'Modify Permissions?',
+      text: `Grant ${newRole.toUpperCase()} access to ${user.name}?`,
+      icon: 'question',
       showCancelButton: true,
-      confirmButtonColor: "#7C3AED",
-      cancelButtonColor: "#ef4444",
-      confirmButtonText: `Yes, update!`,
+      confirmButtonColor: 'var(--color-primary)',
+      cancelButtonColor: '#ef4444',
+      background: 'var(--color-card)',
+      color: 'var(--color-text-heading)',
     }).then(async (result) => {
-      if (result.isConfirmed) {
-        await updateRoleMutate({ email: user.email, role: newRole });
-      }
+      if (result.isConfirmed) await updateRoleMutate({ email: user.email, role: newRole });
     });
   };
 
-  const handleDeleteUser = async (user) => {
+  const handleDeleteUser = (user) => {
     Swal.fire({
-      title: `Delete User?`,
-      text: "This action cannot be undone!",
-      icon: "error",
+      title: 'Remove User?',
+      text: "This action will permanently revoke all access!",
+      icon: 'warning',
       showCancelButton: true,
-      confirmButtonColor: "#ef4444",
-      cancelButtonColor: "#6b7280",
-      confirmButtonText: "Yes, delete it!",
+      confirmButtonColor: '#ef4444',
+      background: 'var(--color-card)',
+      color: 'var(--color-text-heading)',
     }).then(async (result) => {
-      if (result.isConfirmed) {
-        await deleteUserMutate(user.email);
-      }
+      if (result.isConfirmed) await deleteUserMutate(user.email);
     });
   };
+
+  if (isLoading) return <ManageUsersSkeleton />;
 
   return (
-    <div className=" container mx-auto p-4 space-y-6">
-      <h2 className="sm:text-2xl text-xl font-black flex items-center gap-3 text-base-content">
-        <FiUsers className="text-primary" /> Manage All Users
-      </h2>
+    <div className="space-y-6 md:space-y-10 pb-10">
+      <DashboardHeader 
+        title="User Management"
+        description="Oversee system access levels. Manage roles for administrators, managers, and general members."
+        badgeText="Core Authority"
+      />
 
-      <div className="w-full max-w-[80vw] md:max-w-full overflow-hidden bg-base-100 rounded-2xl border border-base-content/5 shadow-sm">
-        <div className="overflow-x-auto w-full">
-          <table className="table w-full">
-            <thead className="bg-base-200/50">
-              <tr className="border-none text-base-content/70">
-                <th className="font-black uppercase text-[11px] tracking-wider">
-                  User Info
-                </th>
-                <th className="hidden lg:table-cell font-black uppercase text-[11px] tracking-wider">
-                  Email
-                </th>
-                <th className="font-black uppercase text-[11px] tracking-wider">
-                  Role
-                </th>
-                <th className="text-right font-black uppercase text-[11px] tracking-wider">
-                  Actions
-                </th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-base-content/5">
-              {users.map((user) => (
-                <tr
-                  key={user._id}
-                  className="hover:bg-base-200/30 transition-colors border-base-content/5"
-                >
-                  <td>
-                    <div className="flex items-center gap-3">
-                      <div className="avatar placeholder">
-                        <div className="bg-primary/10 text-center text-primary rounded-xl w-10">
-                          <span className="text-3xl  font-black uppercase">
-                            {user.name?.slice(0, 1)}
-                          </span>
-                        </div>
-                      </div>
-                      <div className="font-bold text-base-content">
-                        {user.name || "N/A"}
-                      </div>
-                    </div>
-                  </td>
-                  <td className="hidden lg:table-cell text-sm text-base-content/60">
-                    <div className="flex items-center gap-2">
-                      <FiMail className="opacity-40" /> {user.email}
-                    </div>
-                  </td>
-                  <td>
-                    <span
-                      className={`px-3 py-1 text-[10px] font-black uppercase tracking-widest rounded-full border ${
-                        user.role === "admin"
-                          ? "bg-purple-100 text-purple-600 border-purple-200"
-                          : user.role === "clubManager"
-                          ? "bg-blue-100 text-blue-600 border-blue-200"
-                          : "bg-base-200 text-base-content/50 border-base-300"
-                      }`}
-                    >
-                      {user.role}
-                    </span>
-                  </td>
-                  <td className="text-right space-x-1">
-                    <div className="dropdown dropdown-left dropdown-end">
-                      <div
-                        tabIndex={0}
-                        role="button"
-                        className="btn btn-ghost btn-xs text-primary hover:bg-primary/5 rounded-lg"
-                      >
-                        <FiShield size={18} />
-                      </div>
-                      <ul
-                        tabIndex={0}
-                        className="dropdown-content z-[1] menu p-2 shadow-xl bg-base-100 rounded-xl border border-base-content/5 w-48 font-bold text-sm"
-                      >
-                        {user.role !== "admin" && (
-                          <li>
-                            <button
-                              onClick={() => handleChangeRole(user, "admin")}
-                              className="flex items-center gap-2 py-3"
-                            >
-                              <FiShield className="text-purple-600" /> Make
-                              Admin
-                            </button>
-                          </li>
-                        )}
-                        {user.role !== "clubManager" &&
-                          user.role !== "admin" && (
-                            <li>
-                              <button
-                                onClick={() =>
-                                  handleChangeRole(user, "clubManager")
-                                }
-                                className="flex items-center gap-2 py-3"
-                              >
-                                <FiUserCheck className="text-blue-600" /> Make
-                                Manager
-                              </button>
-                            </li>
-                          )}
-                        <div className="divider my-0 opacity-10"></div>
-                        <li>
-                          <button
-                            onClick={() => handleDeleteUser(user)}
-                            className="text-error flex items-center gap-2 py-3"
-                          >
-                            <FiTrash2 /> Delete User
-                          </button>
-                        </li>
-                      </ul>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+      {/* Tab & Info Bar */}
+      <div className="flex flex-col lg:flex-row items-center justify-between gap-6 border-b border-primary/50 pb-6">
+        <div className="flex flex-wrap justify-center gap-2 bg-card border-standard p-1.5 rounded-2xl w-full lg:w-auto">
+          {['all', 'admin', 'clubManager', 'member'].map((tab) => (
+            <button
+              key={tab}
+              onClick={() => setActiveTab(tab)}
+              className={`flex-1 lg:flex-none px-5 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all duration-300 ${
+                activeTab === tab ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'text-text-body opacity-50 hover:opacity-100 hover:bg-background'
+              }`}
+            >
+              {tab === 'clubManager' ? 'Managers' : tab === 'member' ? 'Members' : tab}
+            </button>
+          ))}
+        </div>
+        <div className="flex items-center justify-center gap-3 px-6 py-3 bg-card border-standard rounded-2xl w-full lg:w-auto shadow-sm">
+          <FiActivity className="text-secondary animate-pulse" />
+          <span className="text-[10px] font-black uppercase tracking-widest text-text-heading">
+            {activeTab} Population: {filteredUsers.length} Units
+          </span>
         </div>
       </div>
 
-      <div className="p-4 bg-base-200/50 rounded-xl inline-block text-xs font-black uppercase tracking-widest text-base-content/50">
-        Total users found: {users.length}
+      {/* Table Area */}
+      <div className="relative">
+        {isFetching ? (
+          <div className="w-full space-y-4 p-6 bg-card border-standard rounded-2xl">
+              {[1, 2, 3, 4].map(i => (
+                  <div key={i} className="h-16 w-full bg-slate-100 dark:bg-slate-800/40 rounded-xl animate-pulse"></div>
+              ))}
+          </div>
+        ) : filteredUsers.length > 0 ? (
+          <div className="w-full max-w-[85vw] border-standard md:max-w-full rounded-2xl px-2">
+             <AdminUserTable 
+                users={filteredUsers} 
+                handleChangeRole={handleChangeRole} 
+                handleDeleteUser={handleDeleteUser} 
+             />
+          </div>
+        ) : (
+          <div className="bg-card border-standard rounded-2xl py-32 text-center flex flex-col items-center shadow-sm">
+            <FiClock className="text-primary opacity-20 mb-6" size={50} />
+            <p className="text-text-heading font-black uppercase tracking-[0.4em] text-xs opacity-40">No records in this sector</p>
+          </div>
+        )}
       </div>
     </div>
   );
