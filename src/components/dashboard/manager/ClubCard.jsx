@@ -6,64 +6,97 @@ const getStatusClasses = (status) => {
         case 'approved': return 'bg-success/10 text-success border-success/20';
         case 'pending': return 'bg-warning/10 text-warning border-warning/20';
         case 'rejected': return 'bg-error/10 text-error border-error/20';
-        default: return 'bg-base-200 text-base-content/50 border-base-300';
+        default: return 'bg-background text-text-body/40 border-standard';
     }
 };
 
 const ClubCard = ({ club, onDelete, onEdit, isDeleting, onViewMembers }) => {
     return (
-        <div className="bg-base-100 rounded-2xl overflow-hidden border border-base-content/5 shadow-sm hover:shadow-xl hover:shadow-primary/5 transition-all group flex flex-col h-full">
-            <div className="relative h-44 overflow-hidden">
+        <div className="bg-card rounded-2xl overflow-hidden border-standard shadow-sm hover:shadow-xl hover:shadow-primary/5 transition-all duration-500 group flex flex-col h-full animate-in fade-in zoom-in-95">
+            
+            {/* Banner Section */}
+            <div className="relative h-48 overflow-hidden">
                 {club.bannerImage ? (
                     <img 
                         src={club.bannerImage} 
                         alt={club.clubName} 
-                        className="w-full h-full object-cover transition duration-500 group-hover:scale-110"
+                        className="w-full h-full object-cover transition duration-700 group-hover:scale-110"
                     />
                 ) : (
-                    <div className="w-full h-full flex items-center justify-center bg-base-200 text-base-content/20 font-black uppercase text-[10px]">No Banner</div>
+                    <div className="w-full h-full flex items-center justify-center bg-background text-text-body/20 font-black uppercase text-[10px] tracking-widest">
+                        No Banner Provided
+                    </div>
                 )}
-                <div className="absolute top-3 right-3">
-                    <span className={`px-3 py-1 text-[10px] font-black rounded-lg uppercase tracking-widest border backdrop-blur-md shadow-sm ${getStatusClasses(club.status)}`}>
+                
+                {/* Status Badge */}
+                <div className="absolute top-4 right-4">
+                    <span className={`px-3 py-1.5 text-[10px] font-black rounded-xl uppercase tracking-tighter border backdrop-blur-md shadow-lg ${getStatusClasses(club.status)}`}>
                         {club.status}
                     </span>
                 </div>
+
+                {/* Overlay on hover */}
+                <div className="absolute inset-0 bg-gradient-to-t from-card/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
             </div>
             
-            <div className="p-5 flex-grow space-y-4">
-                <h3 className="text-lg font-black text-base-content leading-tight group-hover:text-primary transition-colors truncate">
-                    {club.clubName}
-                </h3>
+            {/* Content Section */}
+            <div className="p-6 flex-grow space-y-5">
+                <div className="space-y-1">
+                    <p className="text-[10px] font-black text-primary uppercase tracking-[0.2em]">
+                        {club.category || "General"}
+                    </p>
+                    <h3 className="text-xl font-black text-text-heading leading-tight group-hover:text-primary transition-colors line-clamp-1">
+                        {club.clubName}
+                    </h3>
+                </div>
                 
-                <div className="space-y-2">
-                    <div className="flex items-center gap-2 text-xs font-bold text-base-content/60">
-                        <div className="p-1.5 rounded-md bg-blue-500/10 text-blue-600"><FiUsers size={14}/></div>
+                {/* Stats Grid */}
+                <div className="grid grid-cols-1 gap-3">
+                    <div className="flex items-center gap-3 text-sm font-bold text-text-body/70">
+                        <div className="w-8 h-8 rounded-xl bg-background border-standard flex items-center justify-center text-primary">
+                            <FiUsers size={14}/>
+                        </div>
                         <span>{club.membersCount || 0} Members</span>
                     </div>
-                    <div className="flex items-center gap-2 text-xs font-bold text-base-content/60">
-                        <div className="p-1.5 rounded-md bg-purple-500/10 text-purple-600"><FiMapPin size={14}/></div>
+
+                    <div className="flex items-center gap-3 text-sm font-bold text-text-body/70">
+                        <div className="w-8 h-8 rounded-xl bg-background border-standard flex items-center justify-center text-secondary">
+                            <FiMapPin size={14}/>
+                        </div>
                         <span className="truncate">{club.location}</span>
                     </div>
-                    <div className="flex items-center gap-2 text-xs font-bold text-base-content/60">
-                        <div className="p-1.5 rounded-md bg-success/10 text-success"><FiDollarSign size={14}/></div>
+
+                    <div className="flex items-center gap-3 text-sm font-bold text-text-body/70">
+                        <div className="w-8 h-8 rounded-xl bg-background border-standard flex items-center justify-center text-success">
+                            <FiDollarSign size={14}/>
+                        </div>
                         <span>Fee: {club.membershipFee === 0 ? 'Free' : `$${club.membershipFee?.toFixed(2)}`}</span>
                     </div>
                 </div>
             </div>
 
-            <div className="p-2 grid grid-cols-3 gap-1 bg-base-200/30">
-                <button onClick={() => onViewMembers(club._id)} className="btn btn-ghost btn-xs rounded-lg text-primary hover:bg-primary/10 font-black uppercase text-[9px] h-10 tracking-tighter flex flex-col items-center justify-center gap-1">
-                    <FiList size={14}/> Members
+            {/* Action Buttons */}
+            <div className="p-3 grid grid-cols-3 gap-2 bg-background/50 border-t border-standard">
+                <button 
+                    onClick={() => onViewMembers(club._id)} 
+                    className="flex flex-col items-center justify-center gap-1.5 py-3 rounded-2xl text-text-heading hover:bg-primary/10 hover:text-primary transition-all duration-300 font-black uppercase text-[9px] tracking-widest"
+                >
+                    <FiList size={16}/> Members
                 </button>
-                <button onClick={() => onEdit(club)} className="btn btn-ghost btn-xs rounded-lg text-indigo-600 hover:bg-indigo-50 font-black uppercase text-[9px] h-10 tracking-tighter flex flex-col items-center justify-center gap-1">
-                    <FiEdit3 size={14}/> Edit
+
+                <button 
+                    onClick={() => onEdit(club)} 
+                    className="flex flex-col items-center justify-center gap-1.5 py-3 rounded-2xl text-text-heading hover:bg-secondary/10 hover:text-secondary transition-all duration-300 font-black uppercase text-[9px] tracking-widest"
+                >
+                    <FiEdit3 size={16}/> Edit
                 </button>
+
                 <button 
                     onClick={() => onDelete(club._id, club.clubName)} 
                     disabled={isDeleting}
-                    className="btn btn-ghost btn-xs rounded-lg text-error hover:bg-error/10 font-black uppercase text-[9px] h-10 tracking-tighter flex flex-col items-center justify-center gap-1"
+                    className="flex flex-col items-center justify-center gap-1.5 py-3 rounded-2xl text-error hover:bg-error/10 transition-all duration-300 font-black uppercase text-[9px] tracking-widest disabled:opacity-30"
                 >
-                    <FiTrash2 size={14}/> {isDeleting ? '...' : 'Delete'}
+                    <FiTrash2 size={16}/> {isDeleting ? '...' : 'Delete'}
                 </button>
             </div>
         </div>

@@ -1,81 +1,84 @@
-import React from "react";
-import { FiMail, FiCalendar, FiClock, FiSlash } from "react-icons/fi";
+import React from 'react';
+import { FiMail, FiCalendar, FiSlash, FiUser } from "react-icons/fi";
 import { format } from "date-fns";
 
 const getStatusBadge = (status) => {
-  switch (status?.toLowerCase()) {
-    case "active":
-      return (
-        <span className="px-3 py-1 text-[10px] font-black rounded-lg uppercase tracking-widest bg-success/10 text-success border border-success/20">
-          Active
-        </span>
-      );
-    case "pendingpayment":
-      return (
-        <span className="px-3 py-1 text-[10px] font-black rounded-lg uppercase tracking-widest bg-warning/10 text-warning border border-warning/20">
-          Pending
-        </span>
-      );
-    case "expired":
-      return (
-        <span className="px-3 py-1 text-[10px] font-black rounded-lg uppercase tracking-widest bg-error/10 text-error border border-error/20">
-          Expired
-        </span>
-      );
-    default:
-      return (
-        <span className="px-3 py-1 text-[10px] font-black rounded-lg uppercase tracking-widest bg-base-200 text-base-content/50">
-          Unknown
-        </span>
-      );
-  }
+  const isActive = status?.toLowerCase() === "active";
+  const isPending = status?.toLowerCase() === "pendingpayment";
+
+  return (isActive || isPending) ? (
+    <span className="px-3 py-1.5 text-[10px] font-black rounded-xl uppercase tracking-widest bg-primary/10 text-primary border border-primary/20">
+      {isActive ? "Active" : "Pending"}
+    </span>
+  ) : (
+    <span className="px-3 py-1.5 text-[10px] font-black rounded-xl uppercase tracking-widest bg-secondary/10 text-secondary border border-secondary/20">
+      Expired
+    </span>
+  );
 };
 
 const MemberTable = ({ members, onExpireMember }) => {
   return (
-    <div className="overflow-x-auto">
-      <table className="table w-full border-collapse">
+    <div className="w-full overflow-x-auto custom-scrollbar">
+      <table className="table w-full border-separate border-spacing-y-3 px-2">
         <thead>
-          <tr className="bg-base-200/50 border-b border-base-content/5">
-            <th className="text-[10px] font-black uppercase tracking-widest text-base-content/50 py-5 pl-8">Member Info</th>
-            <th className="text-[10px] font-black uppercase tracking-widest text-base-content/50 py-5">Joined Date</th>
-            <th className="text-[10px] font-black uppercase tracking-widest text-base-content/50 py-5">Status</th>
-            <th className="text-[10px] font-black uppercase tracking-widest text-base-content/50 py-5 pr-8 text-right">Action</th>
+          <tr className="text-text-body/40 border-none">
+            <th className="bg-transparent font-black uppercase text-[11px] tracking-widest pl-8">Member Information</th>
+            <th className="bg-transparent font-black uppercase text-[11px] tracking-widest text-center">Membership Details</th>
+            <th className="bg-transparent font-black uppercase text-[11px] tracking-widest text-center">Status</th>
+            <th className="bg-transparent font-black uppercase text-[11px] tracking-widest text-right pr-8">Actions</th>
           </tr>
         </thead>
-        <tbody className="divide-y divide-base-content/5">
+        <tbody>
           {members.map((member) => (
-            <tr key={member._id} className="hover:bg-base-200/30 transition-colors group">
-              <td className="py-4 pl-8">
-                <div className="flex items-center gap-3">
-                  <div className="p-2.5 rounded-xl bg-primary/10 text-primary group-hover:bg-primary group-hover:text-white transition-all">
-                    <FiMail size={16} />
+            <tr key={member._id} className="bg-card border-standard shadow-sm hover:shadow-md transition-all duration-300 group">
+              {/* Member Info */}
+              <td className="rounded-l-2xl border-y border-l border-primary/10 pl-8 py-5">
+                <div className="flex items-center gap-4">
+                  <div className="h-10 w-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-all duration-300">
+                    <FiUser size={18} />
                   </div>
-                  <span className="text-sm font-bold text-base-content tracking-tight">
-                    {member.userEmail}
+                  <div>
+                    <div className="font-black text-sm text-text-heading tracking-tight">
+                      {member.userEmail.split('@')[0]}
+                    </div>
+                    <div className="flex items-center gap-1.5 text-[11px] font-bold text-text-body/40 mt-0.5">
+                      <FiMail size={12} className="text-primary/60" /> {member.userEmail}
+                    </div>
+                  </div>
+                </div>
+              </td>
+
+              {/* Joined Date */}
+              <td className="border-y border-primary/10 text-center">
+                <div className="inline-flex flex-col items-center">
+                  <span className="font-bold text-xs text-text-body flex items-center gap-2">
+                    <FiCalendar className="text-secondary/60" /> 
+                    {format(new Date(member.joinedAt), "MMM dd, yyyy")}
+                  </span>
+                  <span className="text-[10px] font-black text-text-body/20 uppercase tracking-tighter mt-1">
+                    Registration Date
                   </span>
                 </div>
               </td>
-              <td className="py-4">
-                <div className="flex items-center gap-2 text-xs font-bold text-base-content/60">
-                  <FiCalendar className="text-primary/50" />
-                  {format(new Date(member.joinedAt), "MMM dd, yyyy")}
-                </div>
-              </td>
-              <td className="py-4">
+
+              {/* Status Badge */}
+              <td className="border-y border-primary/10 text-center">
                 {getStatusBadge(member.status)}
               </td>
-              <td className="py-4 pr-8 text-right">
+
+              {/* Actions */}
+              <td className="rounded-r-2xl border-y border-r border-primary/10 pr-8 text-right">
                 <button
                   onClick={() => onExpireMember(member._id)}
-                  className={`btn btn-xs rounded-lg font-black uppercase text-[10px] tracking-widest h-9 px-4 transition-all
-                    ${member.status === "expired" 
-                      ? "btn-disabled bg-base-200 text-base-content/20" 
-                      : "btn-ghost text-error hover:bg-error/10 border border-error/10"
-                    }`}
                   disabled={member.status === "expired"}
+                  className={`h-9 px-4 rounded-xl font-black uppercase text-[10px] tracking-widest transition-all active:scale-95 flex items-center gap-2 ml-auto
+                    ${member.status === "expired"
+                      ? "bg-text-body/5 text-text-body/20 cursor-not-allowed border border-transparent"
+                      : "bg-secondary/5 text-secondary border border-secondary/20 hover:bg-secondary hover:text-white shadow-sm"
+                    }`}
                 >
-                  <FiSlash className="mr-1" />
+                  <FiSlash size={14} />
                   {member.status === "expired" ? "Expired" : "Set Expired"}
                 </button>
               </td>

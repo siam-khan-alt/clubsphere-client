@@ -3,155 +3,73 @@ import { useForm } from "react-hook-form";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import Swal from "sweetalert2";
-import { FiPlus, FiX, FiCalendar, FiMapPin, FiFileText, FiUploadCloud } from "react-icons/fi";
+import { FiX, FiUploadCloud } from "react-icons/fi";
 import uploadImageToImgBB from "../../../utils/imgbb";
 import { TbFidgetSpinner } from "react-icons/tb";
 
-const CreateEventModal = ({ clubId, onClose }) => {
+const CreateEventModal = ({ isOpen, onClose }) => {
     const [isImageUploading, setIsImageUploading] = useState(false);
     const axiosSecure = useAxiosSecure();
     const queryClient = useQueryClient();
-
     const { register, handleSubmit, watch, formState: { errors } } = useForm();
     const selectedFile = watch("eventImage");
 
-    const createEventMutation = useMutation({
-        mutationFn: async (eventData) => axiosSecure.post('/events', eventData),
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ["events", clubId] });
-            onClose();
-            Swal.fire({
-                icon: "success",
-                title: "Event Created!",
-                showConfirmButton: false,
-                timer: 2000,
-                customClass: { popup: "rounded-2xl" },
-            });
-        },
-        onError: (error) => {
-            Swal.fire({
-                icon: "error",
-                title: "Error!",
-                text: error.response?.data?.message || "Failed to create.",
-                customClass: { popup: "rounded-2xl" },
-            });
-        },
-    });
+    if (!isOpen) return null;
 
     const onSubmit = async (data) => {
-        const imageFile = data.eventImage[0];
         setIsImageUploading(true);
         try {
-            const imageUrl = await uploadImageToImgBB(imageFile);
-            setIsImageUploading(false);
-            createEventMutation.mutate({
-                ...data,
-                clubId,
-                eventImage: imageUrl,
-                date: new Date(data.date).toISOString(),
-            });
+            const imageUrl = await uploadImageToImgBB(data.eventImage[0]);
+            await axiosSecure.post('/events', { ...data, eventImage: imageUrl });
+            queryClient.invalidateQueries({ queryKey: ["managerEvents"] });
+            onClose();
+            Swal.fire({ icon: "success", title: "Event Created", timer: 1500, showConfirmButton: false });
         } catch (error) {
-            Swal.fire("Upload Failed!", "Image upload failed.", "error");
-            setIsImageUploading(false);
-        }
+            Swal.fire("Error", "Check your inputs", "error");
+        } finally { setIsImageUploading(false); }
     };
 
-    const overallLoading = createEventMutation.isPending || isImageUploading;
-
     return (
-        <div className="fixed inset-0 bg-base-content/40 backdrop-blur-md z-[100] flex items-center justify-center p-4">
-            <div className="bg-base-100 dark:bg-slate-900 rounded-[32px] shadow-2xl w-full max-w-lg overflow-hidden border border-base-content/5 animate-in fade-in zoom-in duration-200">
-                <div className="p-6 border-b border-base-content/5 flex justify-between items-center">
-                    <h3 className="text-xl font-black text-base-content tracking-tight uppercase ">Host New <span className="text-primary not-italic">Event</span></h3>
-                    <button onClick={onClose} className="btn btn-ghost btn-circle btn-sm hover:rotate-90 transition-transform">
-                        <FiX size={20} />
-                    </button>
+        <div className="fixed inset-0 bg-background/60 backdrop-blur-md z-[100] flex items-center justify-center p-4">
+            <div className="bg-card border-standard rounded-[2.5rem] shadow-2xl w-full max-w-lg overflow-hidden animate-in fade-in zoom-in duration-300">
+                <div className="p-6 border-b border-standard/50 flex justify-between items-center">
+                    <h3 className="text-lg font-black text-text-body uppercase tracking-tight">Host <span className="text-primary">New Event</span></h3>
+                    <button onClick={onClose} className="p-2 hover:bg-primary/10 rounded-full"><FiX /></button>
                 </div>
 
-                <form onSubmit={handleSubmit(onSubmit)} className="p-8 space-y-5 max-h-[75vh] overflow-y-auto custom-scrollbar">
-                    <div className="form-control">
-                        <label className="label py-1">
-                            <span className="text-[10px] font-black uppercase tracking-widest text-base-content/50">Event Title</span>
-                        </label>
-                        <div className="relative">
-                            <span className="absolute inset-y-0 left-3 flex items-center text-base-content/30"><FiFileText /></span>
-                            <input
-                                type="text"
-                                placeholder="e.g. Annual Tech Summit"
-                                className={`input input-bordered w-full pl-10 rounded-xl bg-base-200/50 dark:bg-slate-800 font-bold focus:ring-2 focus:ring-primary/20 ${errors.title ? 'border-error' : 'border-base-content/10'}`}
-                                {...register("title", { required: "Title is required" })}
-                            />
-                        </div>
-                    </div>
-
-                    <div className="form-control">
-                        <label className="label py-1">
-                            <span className="text-[10px] font-black uppercase tracking-widest text-base-content/50">Description</span>
-                        </label>
-                        <textarea
-                            {...register("description", { required: "Description is required" })}
-                            rows="3"
-                            placeholder="What happens at the event?"
-                            className={`textarea textarea-bordered w-full rounded-xl bg-base-200/50 dark:bg-slate-800 font-bold focus:ring-2 focus:ring-primary/20 ${errors.description ? 'border-error' : 'border-base-content/10'}`}
-                        ></textarea>
+                <form onSubmit={handleSubmit(onSubmit)} className="p-8 space-y-4 max-h-[70vh] overflow-y-auto">
+                    <div className="space-y-1">
+                        <label className="text-[10px] font-black uppercase tracking-widest text-text-body/40 ml-1">Event Title</label>
+                        <input type="text" className="input-field-custom w-full" {...register("title", { required: true })} placeholder="Event name..." />
                     </div>
 
                     <div className="grid grid-cols-2 gap-4">
-                        <div className="form-control">
-                            <label className="label py-1">
-                                <span className="text-[10px] font-black uppercase tracking-widest text-base-content/50">Date</span>
-                            </label>
-                            <div className="relative">
-                                <span className="absolute inset-y-0 left-3 flex items-center text-base-content/30 z-10"><FiCalendar /></span>
-                                <input
-                                    type="date"
-                                    className="input input-bordered w-full pl-10 rounded-xl bg-base-200/50 dark:bg-slate-800 font-bold border-base-content/10"
-                                    {...register("date", { required: true })}
-                                />
-                            </div>
+                        <div className="space-y-1">
+                            <label className="text-[10px] font-black uppercase tracking-widest text-text-body/40 ml-1">Date</label>
+                            <input type="date" className="input-field-custom w-full" {...register("date", { required: true })} />
                         </div>
-                        <div className="form-control">
-                            <label className="label py-1">
-                                <span className="text-[10px] font-black uppercase tracking-widest text-base-content/50">Location</span>
-                            </label>
-                            <div className="relative">
-                                <span className="absolute inset-y-0 left-3 flex items-center text-base-content/30"><FiMapPin /></span>
-                                <input
-                                    type="text"
-                                    placeholder="Hall 102"
-                                    className="input input-bordered w-full pl-10 rounded-xl bg-base-200/50 dark:bg-slate-800 font-bold border-base-content/10"
-                                    {...register("location", { required: true })}
-                                />
-                            </div>
+                        <div className="space-y-1">
+                            <label className="text-[10px] font-black uppercase tracking-widest text-text-body/40 ml-1">Location</label>
+                            <input type="text" className="input-field-custom w-full" {...register("location", { required: true })} />
                         </div>
                     </div>
 
-                    <div className="form-control">
-                        <label className="label py-1">
-                            <span className="text-[10px] font-black uppercase tracking-widest text-base-content/50">Event Banner</span>
-                        </label>
-                        <div className="relative group">
-                            <input
-                                type="file"
-                                {...register("eventImage", { required: "Banner is required" })}
-                                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
-                                accept="image/*"
-                            />
-                            <div className={`p-6 rounded-xl border-2 border-dashed transition-all flex flex-col items-center justify-center gap-2 ${errors.eventImage ? 'border-error bg-error/5' : 'border-base-content/10 bg-base-200/30 group-hover:border-primary/40 group-hover:bg-primary/5'}`}>
-                                <FiUploadCloud className={`text-2xl ${errors.eventImage ? 'text-error' : 'text-primary animate-bounce'}`} />
-                                <span className="text-[10px] font-black uppercase tracking-tighter text-base-content/60 text-center">
-                                    {selectedFile?.[0] ? selectedFile[0].name : "Click to upload banner"}
-                                </span>
-                            </div>
-                        </div>
+                    <div className="space-y-1">
+                        <label className="text-[10px] font-black uppercase tracking-widest text-text-body/40 ml-1">Description</label>
+                        <textarea className="input-field-custom w-full min-h-[80px]" {...register("description", { required: true })} />
                     </div>
 
-                    <div className="pt-6 flex gap-3 sticky bottom-0 bg-base-100 dark:bg-slate-900 transition-colors">
-                        <button type="button" onClick={onClose} className="btn btn-ghost flex-1 rounded-xl font-black uppercase text-xs tracking-widest border border-base-content/10">Cancel</button>
-                        <button type="submit" disabled={overallLoading} className="btn btn-primary flex-[2] rounded-xl font-black uppercase text-xs tracking-widest shadow-lg shadow-primary/20">
-                            {overallLoading ? <TbFidgetSpinner className="animate-spin text-lg" /> : "Create Event"}
-                        </button>
+                    <div className="relative group rounded-2xl border-2 border-dashed border-standard/50 p-6 flex flex-col items-center gap-2 hover:bg-primary/5 transition-all">
+                        <input type="file" {...register("eventImage", { required: true })} className="absolute inset-0 opacity-0 cursor-pointer" />
+                        <FiUploadCloud className="text-primary text-xl" />
+                        <span className="text-[10px] font-bold text-text-body/40 uppercase tracking-widest">
+                            {selectedFile?.[0] ? selectedFile[0].name : "Upload Banner"}
+                        </span>
                     </div>
+
+                    <button type="submit" disabled={isImageUploading} className="btn-primary-gradient w-full py-4 rounded-2xl font-black uppercase tracking-[0.2em] text-xs mt-4">
+                        {isImageUploading ? <TbFidgetSpinner className="animate-spin mx-auto text-xl" /> : "Publish Event"}
+                    </button>
                 </form>
             </div>
         </div>

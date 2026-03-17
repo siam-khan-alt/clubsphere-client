@@ -3,9 +3,10 @@ import { useParams } from 'react-router-dom';
 import useAxiosSecure from '../../../hooks/useAxiosSecure';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import Swal from 'sweetalert2';
-import LoadingSpinner from '../../../components/shared/LoadingSpinner';
-import { FiUsers, FiUserCheck, FiTrendingUp } from 'react-icons/fi';
+import { FiUsers } from 'react-icons/fi';
 import MemberTable from '../../../components/dashboard/manager/MemberTable';
+import DashboardHeader from '../../../components/shared/ui/DashboardHeader';
+import ClubMembersSkeleton from '../../../components/shared/skeletons/manager/ClubMembersSkeleton';
 
 const ClubMembers = () => {
     const { clubId } = useParams();
@@ -16,11 +17,11 @@ const ClubMembers = () => {
         queryKey: ['clubMembers', clubId],
         queryFn: async () => {
             const res = await axiosSecure.get(`/manager/clubs/${clubId}/members`);
-            return res.data; 
+            return res.data;
         },
         enabled: !!clubId,
     });
-    
+
     const expireMutation = useMutation({
         mutationFn: async (memberId) => {
             return axiosSecure.patch(`/manager/memberships/${memberId}`, { status: 'expired' });
@@ -31,7 +32,10 @@ const ClubMembers = () => {
                 icon: 'success',
                 title: 'Membership Expired',
                 showConfirmButton: false,
-                timer: 1500
+                timer: 1500,
+                customClass: {
+                    popup: "rounded-2xl border-standard bg-card",
+                }
             });
         },
         onError: (error) => {
@@ -45,9 +49,11 @@ const ClubMembers = () => {
             text: "This will restrict the member's access!",
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonColor: '#ef4444',
-            cancelButtonColor: '#6b7280',
-            confirmButtonText: 'Yes, expire'
+            confirmButtonText: 'Yes, expire',
+            customClass: {
+                popup: "rounded-2xl border-standard bg-card",
+                confirmButton: "btn-primary-gradient",
+            }
         }).then((result) => {
             if (result.isConfirmed) {
                 expireMutation.mutate(memberId);
@@ -57,53 +63,73 @@ const ClubMembers = () => {
 
     const { clubName, members = [] } = memberData;
 
-    if (isLoading) return <LoadingSpinner />;
+   if (isLoading) {
+        const dynamicRows = members.length > 0 ? members.length : 5;
+        return <ClubMembersSkeleton rowCount={dynamicRows} />;
+    }
 
     if (isError) {
         return (
-            <div className="p-4 bg-error/10 text-error rounded-2xl font-black uppercase text-xs tracking-widest">
-                Failed to load member data.
+            <div className="m-4 p-6 bg-red-500/10 border border-red-500/20 text-red-500 rounded-2xl font-black uppercase text-xs tracking-widest text-center">
+                Failed to load member data. Please try again.
             </div>
         );
     }
 
     return (
-        <div className="p-4 space-y-8">
-            <h2 className="text-2xl font-black flex items-center gap-3 text-base-content tracking-tight">
-                <FiUserCheck className="text-primary" /> Members Management
-            </h2>
+        <div className="pb-10 animate-in fade-in duration-700">
+            {/* Custom Dashboard Header */}
+            <DashboardHeader 
+                title="Members Management"
+                description="Monitor and manage all active memberships for your club."
+                badgeText="Manager"
+            />
 
-            <div className="bg-base-100 p-8 rounded-2xl border border-base-content/5 shadow-sm relative overflow-hidden group">
-                <div className="absolute right-0 top-0 p-8 opacity-5 group-hover:scale-110 transition-transform">
-                    <FiUsers size={120} />
-                </div>
-                <div className="relative z-10">
-                    <p className="text-xs font-black uppercase tracking-[0.2em] text-base-content/50">Club Name</p>
-                    <h1 className="text-2xl md:text-4xl font-black text-base-content mt-2 tracking-tighter">
-                        {clubName || 'N/A'}
-                    </h1>
-                    <div className="mt-6 flex items-center gap-2">
-                        <div className="px-3 py-1 bg-primary/10 text-primary rounded-lg text-xs font-black uppercase tracking-widest">
-                            {members.length} Total Members
+            <div className="container mx-auto mt-8 space-y-6">
+                {/* Club Identity Card */}
+                <div className="bg-card border-standard p-8 rounded-2xl relative overflow-hidden group shadow-sm transition-all hover:shadow-md">
+                    <div className="absolute right-[-20px] top-[-20px] opacity-[0.03] dark:opacity-[0.05] group-hover:scale-110 transition-transform duration-700 text-text-heading">
+                        <FiUsers size={200} />
+                    </div>
+                    
+                    <div className="relative z-10">
+                        <p className="text-[10px] font-black uppercase tracking-[0.2em] text-primary">
+                            Active Club
+                        </p>
+                        <h1 className="text-3xl md:text-4xl font-black text-text-heading mt-2 tracking-tighter">
+                            {clubName || 'Club Directory'}
+                        </h1>
+                        <div className="mt-6 flex flex-wrap items-center gap-3">
+                            <div className="px-4 py-1.5 bg-primary/10 text-primary border border-primary/20 rounded-xl text-[10px] font-black uppercase tracking-widest">
+                                {members.length} Total Members
+                            </div>
+                            <span className="h-1.5 w-1.5 rounded-full bg-slate-300 dark:bg-slate-700"></span>
+                            <p className="text-xs font-bold text-text-body/60 italic">
+                                Authorized Personnel Only
+                            </p>
                         </div>
-                        <p className="text-xs font-bold text-base-content/40 ">Managed by you</p>
                     </div>
                 </div>
+
+                {/* Main Content Area */}
+                {members.length === 0 ? (
+                    <div className="text-center py-20 bg-card border-standard border-dashed rounded-3xl">
+                        <div className="w-20 h-20 mx-auto bg-slate-100 dark:bg-slate-800/50 rounded-full flex items-center justify-center mb-4">
+                            <FiUsers className="w-10 h-10 text-text-body/20" />
+                        </div>
+                        <p className="text-sm font-black uppercase tracking-widest text-text-body/40">
+                            No members found in this club
+                        </p>
+                    </div>
+                ) : (
+                    <div className=" w-full max-w-[80vw] md:max-w-full overflow-hidden rounded-2xl bg-card border-standard shadow-sm">
+                            <MemberTable 
+                                members={members} 
+                                onExpireMember={handleExpireMember} 
+                            />
+                    </div>
+                )}
             </div>
-            
-            {members.length === 0 ? (
-                <div className="text-center py-20 bg-base-100 rounded-2xl border border-dashed border-base-content/20 shadow-sm">
-                    <FiUsers className="w-16 h-16 mx-auto text-base-content/10 mb-4" />
-                    <p className="text-sm font-black uppercase tracking-widest text-base-content/40">No members have joined yet.</p>
-                </div>
-            ) : (
-                <div className="w-full max-w-[80vw] md:max-w-full overflow-hidden bg-base-100 rounded-2xl border border-base-content/5 shadow-sm">
-                    <MemberTable 
-                        members={members} 
-                        onExpireMember={handleExpireMember} 
-                    />
-                </div>
-            )}
         </div>
     );
 };

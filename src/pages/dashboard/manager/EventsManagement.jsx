@@ -6,8 +6,10 @@ import LoadingSpinner from "../../../components/shared/LoadingSpinner";
 import EventListTable from "../../../components/dashboard/manager/EventListTable";
 import CreateEventModal from "../../../components/dashboard/manager/CreateEventModal";
 import EditEventModal from "../../../components/dashboard/manager/EditEventModal";
-import { FiPlus, FiCalendar, FiActivity } from "react-icons/fi";
+import { FiPlus, FiCalendar } from "react-icons/fi";
 import ViewRegistrationModal from "../../../components/dashboard/manager/ViewRegistrationModal";
+import DashboardHeader from "../../../components/shared/ui/DashboardHeader";
+import EventsManagementSkeleton from "../../../components/shared/skeletons/manager/EventsManagementSkeleton";
 
 const EventsManagement = () => {
   const axiosSecure = useAxiosSecure();
@@ -28,11 +30,7 @@ const EventsManagement = () => {
     },
   });
 
-  const {
-    data: registrationData,
-    isLoading: isRegLoading,
-    isFetching: isRegFetching,
-  } = useQuery({
+  const { data: registrationData, isLoading: isRegLoading } = useQuery({
     queryKey: ["eventRegistrations", viewingEventId],
     queryFn: async () => {
       const res = await axiosSecure.get(
@@ -43,20 +41,20 @@ const EventsManagement = () => {
     enabled: !!viewingEventId && isViewRegModalOpen,
   });
 
-  const handleViewRegistrations = (eventId, eventTitle) => {
-    setViewingEventId(eventId);
-    setViewingEventTitle(eventTitle);
-    setIsViewRegModalOpen(true);
-  };
-
-  const handleCloseViewRegModal = () => {
-    setIsViewRegModalOpen(false);
-    setViewingEventId(null);
-  };
-
-  const handleEditEvent = (event) => {
-    setEventToEdit(event);
-    setIsEditModalOpen(true);
+  const handleDeleteEvent = (eventId, eventTitle) => {
+    Swal.fire({
+      title: `Delete Event?`,
+      text: `Remove "${eventTitle}" permanently?`,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, Delete",
+      customClass: {
+        popup: "rounded-2xl border-standard bg-card",
+        confirmButton: "btn-primary-gradient",
+      },
+    }).then((result) => {
+      if (result.isConfirmed) deleteEventMutation.mutate(eventId);
+    });
   };
 
   const deleteEventMutation = useMutation({
@@ -65,68 +63,63 @@ const EventsManagement = () => {
     onSuccess: () => {
       Swal.fire({
         icon: "success",
-        title: "Event Axed!",
-        showConfirmButton: false,
+        title: "Deleted!",
         timer: 1500,
-        customClass: { popup: "rounded-2xl" },
+        showConfirmButton: false,
       });
       queryClient.invalidateQueries({ queryKey: ["managerEvents"] });
     },
   });
 
-  const handleDeleteEvent = (eventId, eventTitle) => {
-    Swal.fire({
-      title: `Delete Event?`,
-      text: `Remove "${eventTitle}" permanently?`,
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#ef4444",
-      cancelButtonColor: "#3b82f6",
-      confirmButtonText: "Yes, Delete!",
-      customClass: { popup: "rounded-2xl" },
-    }).then((result) => {
-      if (result.isConfirmed) deleteEventMutation.mutate(eventId);
-    });
-  };
-
-  if (isLoading) return <LoadingSpinner />;
+  if (isLoading) {
+  const dynamicRows = events.length > 0 ? events.length : 6;
+  return <EventsManagementSkeleton rowCount={dynamicRows} />;
+}
 
   return (
-    <div className="p-4 container mx-auto space-y-8 animate-in fade-in duration-500">
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
-        <div>
-          <h2 className="md:text-3xl sm:text-2xl text-xl font-black flex flex-col md:flex-row  items-center gap-3 text-base-content uppercase  tracking-tighter">
-            <FiCalendar className="text-primary" /> Event{" "}
-            <span className="text-primary not-italic">Management</span>
-          </h2>
-          <p className="text-[10px] font-black uppercase tracking-[0.3em] text-base-content/30  mt-1 ml-1">
-            Control center for all club activities
-          </p>
-        </div>
-        <button
-          onClick={() => setIsCreateModalOpen(true)}
-          className="btn btn-primary rounded-2xl font-black uppercase text-xs tracking-widest shadow-xl shadow-primary/20 gap-2"
-        >
-          <FiPlus size={18} /> Host New Event
-        </button>
-      </div>
+    <div className="pb-10 animate-in fade-in duration-700">
+      <DashboardHeader
+        title="Event Management"
+        description="Control center for all your club activities and attendees."
+        badgeText="Manager"
+      />
 
-      <div className="grid grid-cols-1 gap-6">
-        <div className="flex items-center justify-between px-2">
-          <div className="flex items-center gap-4">
-            <div className="px-4 py-2 bg-base-200 rounded-2xl text-[10px] font-black uppercase tracking-widest text-base-content/60 border border-base-content/5">
-              Active Events: {events.length}
+      <div className="container mx-auto  mt-8 space-y-6">
+        <div className="flex justify-between items-center bg-card border-standard p-4 rounded-2xl">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
+              <FiCalendar className="text-primary" size={20} />
+            </div>
+            <div>
+              <p className="text-[10px] font-black uppercase tracking-widest text-text-body/40 leading-none">
+                Status
+              </p>
+              <h4 className="text-sm font-bold text-text-body">
+                {events.length} Active Events
+              </h4>
             </div>
           </div>
-        </div>
-
-        <div className="w-full max-w-[80vw] md:max-w-full overflow-hidden bg-base-100 mx-auto rounded-2xl border border-base-content/5 shadow-sm">
+          <button
+            onClick={() => setIsCreateModalOpen(true)}
+            className="btn-primary-gradient px-6 py-3 rounded-xl font-bold uppercase text-[10px] tracking-widest flex items-center gap-2"
+          >
+            <FiPlus /> Host Event
+          </button>
+        </div>{" "}
+        <div className="w-full max-w-[80vw] md:max-w-full overflow-hidden bg-card border-standard rounded-2xl mx-auto shadow-sm">
           <div className="overflow-x-auto w-full custom-scrollbar">
             <div className="inline-block min-w-full align-middle">
               <EventListTable
                 events={events}
-                onViewRegistrations={handleViewRegistrations}
-                onEditEvent={handleEditEvent}
+                onViewRegistrations={(id, title) => {
+                  setViewingEventId(id);
+                  setViewingEventTitle(title);
+                  setIsViewRegModalOpen(true);
+                }}
+                onEditEvent={(ev) => {
+                  setEventToEdit(ev);
+                  setIsEditModalOpen(true);
+                }}
                 onDeleteEvent={handleDeleteEvent}
               />
             </div>
@@ -134,13 +127,12 @@ const EventsManagement = () => {
         </div>
       </div>
 
-      {isCreateModalOpen && (
-        <CreateEventModal
-          isOpen={isCreateModalOpen}
-          onClose={() => setIsCreateModalOpen(false)}
-        />
-      )}
-      {isEditModalOpen && eventToEdit && (
+      {/* Modals */}
+      <CreateEventModal
+        isOpen={isCreateModalOpen}
+        onClose={() => setIsCreateModalOpen(false)}
+      />
+      {eventToEdit && (
         <EditEventModal
           event={eventToEdit}
           onClose={() => {
@@ -149,22 +141,13 @@ const EventsManagement = () => {
           }}
         />
       )}
-      {isViewRegModalOpen && (
-        <ViewRegistrationModal
-          isOpen={isViewRegModalOpen}
-          onClose={handleCloseViewRegModal}
-          registrations={registrationData?.registrations || []}
-          eventTitle={viewingEventTitle}
-          isLoading={isRegLoading || isRegFetching}
-        />
-      )}
-
-      <div className="flex items-center gap-2 pt-10">
-        <div className="h-1 w-12 bg-primary rounded-2xl"></div>
-        <p className="text-[10px] font-black uppercase tracking-[0.3em] text-base-content/30 ">
-          ClubSphere Event Logic v2.4
-        </p>
-      </div>
+      <ViewRegistrationModal
+        isOpen={isViewRegModalOpen}
+        onClose={() => setIsViewRegModalOpen(false)}
+        registrations={registrationData?.registrations || []}
+        eventTitle={viewingEventTitle}
+        isLoading={isRegLoading}
+      />
     </div>
   );
 };

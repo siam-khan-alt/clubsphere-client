@@ -1,76 +1,99 @@
 import React from 'react';
-import { FiEdit, FiTrash2, FiUsers, FiCalendar, FiMapPin } from 'react-icons/fi'; 
+import { FiEdit, FiTrash2, FiUsers, FiCalendar, FiMapPin, FiClock } from 'react-icons/fi'; 
 import { format } from 'date-fns';
 
 const EventListTable = ({ events, onViewRegistrations, onEditEvent, onDeleteEvent }) => { 
     return (
-        <div className="bg-base-100 rounded-2xl border border-base-content/5 shadow-2xl overflow-hidden">
-            <table className="table w-full border-separate border-spacing-y-2 px-4">
+        <div className="w-full overflow-x-auto custom-scrollbar">
+            <table className="table w-full border-separate border-spacing-y-3">
                 <thead>
-                    <tr className="border-none text-base-content/40 ">
-                        <th className="font-black uppercase text-[10px] tracking-[0.2em] py-6">Event Details</th>
-                        <th className="font-black uppercase text-[10px] tracking-[0.2em]">Club</th>
-                        <th className="font-black uppercase text-[10px] tracking-[0.2em]">Schedule</th>
-                        <th className="font-black uppercase text-[10px] tracking-[0.2em]">Fee</th>
-                        <th className="font-black uppercase text-[10px] tracking-[0.2em]">Registrations</th>
-                        <th className="text-right font-black uppercase text-[10px] tracking-[0.2em]">Control</th>
+                    <tr className="text-text-body/40 border-none">
+                        <th className="bg-transparent font-black uppercase text-[11px] tracking-widest pl-6">Event Details</th>
+                        <th className="bg-transparent font-black uppercase text-[11px] tracking-widest text-center">Schedule</th>
+                        <th className="bg-transparent font-black uppercase text-[11px] tracking-widest text-center">Type & Fee</th>
+                        <th className="bg-transparent font-black uppercase text-[11px] tracking-widest text-center">Registration</th>
+                        <th className="bg-transparent font-black uppercase text-[11px] tracking-widest text-right pr-6">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     {events.map((event) => (
-                        <tr key={event._id} className="hover:bg-base-200/30 transition-colors border-base-content/5">
-                            <td>
-                                <div className="font-bold text-base-content">{event.title}</div>
-                                <div className="flex items-center gap-1 text-[10px] text-base-content/50 uppercase font-black">
-                                    <FiMapPin className="text-primary" /> {event.location}
-                                </div>
-                            </td>
-                            <td className="text-sm font-bold text-base-content/70">
-                                {event.clubName}
-                            </td>
-                            <td className="text-sm">
-                                <div className="font-bold text-base-content/80">
-                                    {format(new Date(event.eventDate), 'MMM d, yyyy')}
-                                </div>
-                                <div className="text-[10px] font-black opacity-40 uppercase tracking-tighter">
-                                    {event.eventTime}
-                                </div>
-                            </td>
-                            <td>
-                                {event.isPaid ? (
-                                    <span className="font-bold text-base-content">${event.eventFee.toFixed(2)}</span>
-                                ) : (
-                                    <span className="text-green-500 font-black uppercase text-[10px]">Free</span>
-                                )}
-                            </td>
-                            <td>
-                                <div className="flex items-center gap-2">
-                                    <div className="radial-progress text-primary h-8 w-8 text-[8px] font-black" 
-                                         style={{ "--value": (event.registrationCount / (event.maxAttendees || 100)) * 100, "--size": "2rem" }}>
-                                        {event.registrationCount}
+                        <tr key={event._id} className="bg-card border-standard shadow-sm hover:shadow-md transition-all duration-300">
+                            {/* Event Details */}
+                            <td className="rounded-l-2xl border-y border-l border-primary/10 pl-6 py-5">
+                                <div className="flex items-center gap-4">
+                                    <div className="h-12 w-12 rounded-2xl bg-primary/10 flex items-center justify-center text-primary font-black text-xl">
+                                        {event.title.charAt(0)}
                                     </div>
-                                    <span className="text-[10px] font-black text-base-content/30 uppercase">
-                                        / {event.maxAttendees || '∞'}
+                                    <div>
+                                        <div className="font-black text-base text-text-heading">{event.title}</div>
+                                        <div className="flex items-center gap-1.5 text-[11px] font-bold text-text-body/50 uppercase mt-1">
+                                            <FiMapPin className="text-primary" /> {event.location}
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+
+                            {/* Schedule */}
+                            <td className="border-y border-primary/10 text-center">
+                                <div className="inline-flex flex-col items-center">
+                                    <span className="font-bold text-sm text-text-body flex items-center gap-2">
+                                        <FiCalendar className="text-primary/60" /> {format(new Date(event.eventDate || event.date), 'MMM d, yyyy')}
+                                    </span>
+                                    <span className="text-[10px] font-black text-text-body/30 uppercase tracking-tighter mt-1">
+                                        {event.eventTime || "TBA"}
                                     </span>
                                 </div>
                             </td>
-                            <td className="text-right">
-                                <div className="flex justify-end gap-1">
+
+                            {/* Fee */}
+                            <td className="border-y border-primary/10 text-center">
+                                {event.isPaid ? (
+                                    <span className="bg-primary/5 text-primary border border-primary/20 px-3 py-1.5 rounded-xl text-xs font-black">
+                                        ${event.eventFee?.toFixed(2)}
+                                    </span>
+                                ) : (
+                                    <span className="bg-secondary/5 text-secondary border border-secondary/20 px-3 py-1.5 rounded-xl text-[10px] font-black uppercase">
+                                        Free Entry
+                                    </span>
+                                )}
+                            </td>
+
+                            {/* Registration Stats */}
+                            <td className="border-y border-primary/10">
+                                <div className="flex flex-col items-center gap-2">
+                                    <div className="w-24 bg-slate-200 dark:bg-slate-800 h-1.5 rounded-full overflow-hidden">
+                                        <div 
+                                            className="bg-primary h-full transition-all duration-700" 
+                                            style={{ width: `${Math.min((event.registrationCount / (event.maxAttendees || 100)) * 100, 100)}%` }}
+                                        />
+                                    </div>
+                                    <span className="text-[10px] font-black uppercase text-text-body/40">
+                                        <span className="text-text-heading">{event.registrationCount}</span> / {event.maxAttendees || '∞'}
+                                    </span>
+                                </div>
+                            </td>
+
+                            {/* Control Buttons (Always Visible) */}
+                            <td className="rounded-r-2xl border-y border-r border-primary/10 pr-6 text-right">
+                                <div className="flex justify-end gap-2">
                                     <button 
                                         onClick={() => onViewRegistrations(event._id, event.title)}
-                                        className="btn btn-ghost btn-xs text-green-600 hover:bg-green-50 rounded-2xl"
+                                        className="h-9 w-9 flex items-center justify-center rounded-xl bg-card border border-primary/20 text-text-body hover:bg-primary hover:text-white transition-all active:scale-90"
+                                        title="View Participants"
                                     >
                                         <FiUsers size={16} />
                                     </button>
                                     <button 
                                         onClick={() => onEditEvent(event)} 
-                                        className="btn btn-ghost btn-xs text-blue-600 hover:bg-blue-50 rounded-2xl"
+                                        className="h-9 w-9 flex items-center justify-center rounded-xl bg-card border border-primary/20 text-text-body hover:bg-primary hover:text-white transition-all active:scale-90"
+                                        title="Edit Event"
                                     >
                                         <FiEdit size={16} />
                                     </button>
                                     <button 
                                         onClick={() => onDeleteEvent(event._id, event.title)} 
-                                        className="btn btn-ghost btn-xs text-red-600 hover:bg-red-50 rounded-2xl"
+                                        className="h-9 w-9 flex items-center justify-center rounded-xl bg-card border border-red-500/20 text-red-500 hover:bg-red-500 hover:text-white transition-all active:scale-90"
+                                        title="Delete Event"
                                     >
                                         <FiTrash2 size={16} />
                                     </button>

@@ -5,8 +5,9 @@ import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { TbFidgetSpinner } from "react-icons/tb";
-import { FiPlusCircle, FiImage, FiMapPin, FiTag, FiClock, FiDollarSign, FiFileText, FiUploadCloud } from "react-icons/fi";
+import { FiPlusCircle, FiMapPin, FiTag, FiClock, FiDollarSign, FiFileText, FiUploadCloud } from "react-icons/fi";
 import uploadImageToImgBB from "../../../utils/imgbb";
+import DashboardHeader from "../../../components/shared/ui/DashboardHeader";
 
 const CATEGORY_OPTIONS = [
     { value: "", label: "Select a Category" },
@@ -39,21 +40,14 @@ const CreateClub = () => {
         onSuccess: () => {
             Swal.fire({
                 icon: "success",
-                title: "Club Submitted!",
-                text: "Your club request is awaiting Admin approval.",
+                title: "Submitted!",
+                text: "Awaiting admin approval.",
                 timer: 2000,
-                customClass: { popup: 'rounded-2xl' }
+                showConfirmButton: false,
+                customClass: { popup: 'rounded-2xl border-standard bg-card' }
             });
             navigate("/dashboard/clubManager/myClubs");
-        },
-        onError: (error) => {
-            Swal.fire({
-                icon: "error",
-                title: "Error!",
-                text: error.response?.data?.message || "Failed to submit club request.",
-                customClass: { popup: 'rounded-2xl' }
-            });
-        },
+        }
     });
 
     const overallLoading = isImageUploading || isPending;
@@ -61,175 +55,129 @@ const CreateClub = () => {
     const onSubmit = async (data) => {
         const { bannerImage, membershipFee, ...restClubData } = data;
         let imageUrl = "";
-        const imageFile = bannerImage[0];
-
-        if (imageFile) {
+        if (bannerImage[0]) {
             setIsImageUploading(true);
-            try {
-                imageUrl = await uploadImageToImgBB(imageFile);
-            } catch (error) {
-                Swal.fire({ icon: "error", title: "Upload Failed!", text: error.message, customClass: { popup: 'rounded-2xl' } });
-                setIsImageUploading(false);
-                return;
-            }
+            try { imageUrl = await uploadImageToImgBB(bannerImage[0]); } 
+            catch (error) { setIsImageUploading(false); return; }
             setIsImageUploading(false);
         }
 
-        const finalClubData = {
+        createClub({
             ...restClubData,
             bannerImage: imageUrl,
             membershipFee: Number(membershipFee) || 0,
-        };
-        createClub(finalClubData);
+        });
     };
 
     return (
-        <div className="min-h-screen container mx-auto py-10 px-4 animate-in fade-in duration-500">
-            <div className="max-w-3xl mx-auto">
-                <div className="mb-10 text-center md:text-left">
-                    <h2 className="md:text-3xl sm:text-2xl text-xl font-black flex flex-col md:flex-row items-center justify-center md:justify-start gap-3 text-base-content uppercase  tracking-tighter">
-                        <FiPlusCircle className="text-primary" /> Create <span className="text-primary not-italic">New Club</span>
-                    </h2>
-                    <p className="text-[10px] font-black uppercase tracking-[0.3em] text-base-content/30  mt-1 ml-1">
-                        Register your community club on ClubSphere
-                    </p>
-                </div>
+        <div className="pb-10 animate-in fade-in duration-700">
+            <DashboardHeader 
+                title="Create New Club"
+                description="Register your community and start managing events."
+                badgeText="Manager"
+            />
 
-                <div className="bg-base-100 dark:bg-slate-900 rounded-2xl border border-base-content/5 shadow-2xl overflow-hidden transition-colors duration-300">
-                    <form onSubmit={handleSubmit(onSubmit)} className="p-8 space-y-6">
+            <div className="container mx-auto mt-6">
+                <div className="bg-card border-standard rounded-2xl shadow-sm overflow-hidden">
+                    <form onSubmit={handleSubmit(onSubmit)} className="p-6 md:p-10 space-y-6">
+                        
+                        {/* Club Name & Category */}
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            
-                            <div className="md:col-span-2">
-                                <label className="label py-1">
-                                    <span className="text-xs font-black uppercase tracking-widest text-base-content/50">Club Name</span>
-                                </label>
+                            <div className="space-y-2">
+                                <label className="text-[10px] font-black uppercase tracking-widest text-text-body/50 ml-1">Club Name</label>
                                 <div className="relative">
-                                    <span className="absolute inset-y-0 left-3 flex items-center text-base-content/30"><FiFileText /></span>
+                                    <FiFileText className="absolute left-4 top-1/2 -translate-y-1/2 text-primary/40" />
                                     <input
                                         type="text"
-                                        placeholder="Creative Minds IT Club"
-                                        className={`input input-bordered w-full pl-10 rounded-xl bg-base-200/50 dark:bg-slate-800 font-bold focus:ring-2 focus:ring-primary/20 ${errors.name ? 'border-error' : 'border-base-content/10'}`}
-                                        {...register("name", { required: "Name is required", maxLength: 50 })}
+                                        placeholder="Enter club name"
+                                        className={`input-field-custom w-full pl-11 !py-3 ${errors.name ? 'border-red-500' : ''}`}
+                                        {...register("name", { required: "Name is required" })}
                                     />
                                 </div>
-                                {errors.name && <p className="text-error text-[10px] font-bold mt-1 uppercase">{errors.name.message}</p>}
                             </div>
 
-                            <div className="md:col-span-2">
-                                <label className="label py-1">
-                                    <span className="text-xs font-black uppercase tracking-widest text-base-content/50">Description</span>
-                                </label>
-                                <textarea
-                                    {...register("description", { required: "Description is required" })}
-                                    rows="4"
-                                    placeholder="Tell us what this club is about..."
-                                    className={`textarea textarea-bordered w-full rounded-xl bg-base-200/50 dark:bg-slate-800 font-bold focus:ring-2 focus:ring-primary/20 transition-all ${errors.description ? 'border-error' : 'border-base-content/10'}`}
-                                ></textarea>
-                                {errors.description && <p className="text-error text-[10px] font-bold mt-1 uppercase">{errors.description.message}</p>}
-                            </div>
-
-                            <div>
-                                <label className="label py-1">
-                                    <span className="text-xs font-black uppercase tracking-widest text-base-content/50">Category</span>
-                                </label>
+                            <div className="space-y-2">
+                                <label className="text-[10px] font-black uppercase tracking-widest text-text-body/50 ml-1">Category</label>
                                 <div className="relative">
-                                    <span className="absolute inset-y-0 left-3 flex items-center text-base-content/30 z-10"><FiTag /></span>
+                                    <FiTag className="absolute left-4 top-1/2 -translate-y-1/2 text-primary/40 pointer-events-none" />
                                     <select
-                                        {...register("category", { required: "Category is required" })}
-                                        className={`select select-bordered w-full pl-10 rounded-xl bg-base-200/50 dark:bg-slate-800 font-bold focus:ring-2 focus:ring-primary/20 ${errors.category ? 'border-error' : 'border-base-content/10'}`}
+                                        className="input-field-custom w-full pl-11 appearance-none !py-3"
+                                        {...register("category", { required: true })}
                                     >
-                                        {CATEGORY_OPTIONS.map((option) => (
-                                            <option key={option.value} value={option.value} disabled={option.value === ""}>{option.label}</option>
+                                        {CATEGORY_OPTIONS.map((opt) => (
+                                            <option key={opt.value} value={opt.value}>{opt.label}</option>
                                         ))}
                                     </select>
                                 </div>
                             </div>
+                        </div>
 
-                            <div>
-                                <label className="label py-1">
-                                    <span className="text-xs font-black uppercase tracking-widest text-base-content/50">Location</span>
-                                </label>
+                        {/* Description */}
+                        <div className="space-y-2">
+                            <label className="text-[10px] font-black uppercase tracking-widest text-text-body/50 ml-1">Club Description</label>
+                            <textarea
+                                placeholder="Describe your club..."
+                                className="input-field-custom w-full min-h-[100px]"
+                                {...register("description", { required: true })}
+                            ></textarea>
+                        </div>
+
+                        {/* Logistics */}
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <div className="space-y-2">
+                                <label className="text-[10px] font-black uppercase tracking-widest text-text-body/50 ml-1">Location</label>
                                 <div className="relative">
-                                    <span className="absolute inset-y-0 left-3 flex items-center text-base-content/30"><FiMapPin /></span>
-                                    <input
-                                        type="text"
-                                        placeholder="City or Area"
-                                        className={`input input-bordered w-full pl-10 rounded-xl bg-base-200/50 dark:bg-slate-800 font-bold focus:ring-2 focus:ring-primary/20 ${errors.location ? 'border-error' : 'border-base-content/10'}`}
-                                        {...register("location", { required: "Location is required" })}
-                                    />
+                                    <FiMapPin className="absolute left-4 top-1/2 -translate-y-1/2 text-secondary/40" />
+                                    <input type="text" placeholder="Location" className="input-field-custom w-full pl-10 !py-3" {...register("location", { required: true })} />
                                 </div>
                             </div>
-
-                            <div>
-                                <label className="label py-1">
-                                    <span className="text-xs font-black uppercase tracking-widest text-base-content/50">Membership Fee (BDT)</span>
-                                </label>
+                            <div className="space-y-2">
+                                <label className="text-[10px] font-black uppercase tracking-widest text-text-body/50 ml-1">Schedule</label>
                                 <div className="relative">
-                                    <span className="absolute inset-y-0 left-3 flex items-center text-base-content/30"><FiDollarSign /></span>
-                                    <input
-                                        type="number"
-                                        className={`input input-bordered w-full pl-10 rounded-xl bg-base-200/50 dark:bg-slate-800 font-bold focus:ring-2 focus:ring-primary/20 ${errors.membershipFee ? 'border-error' : 'border-base-content/10'}`}
-                                        {...register("membershipFee", { required: true, min: 0 })}
-                                    />
+                                    <FiClock className="absolute left-4 top-1/2 -translate-y-1/2 text-secondary/40" />
+                                    <input type="text" placeholder="e.g. Fri 4PM" className="input-field-custom w-full pl-10 !py-3" {...register("meetingSchedule")} />
                                 </div>
                             </div>
-
-                            <div>
-                                <label className="label py-1">
-                                    <span className="text-xs font-black uppercase tracking-widest text-base-content/50">Meeting Schedule</span>
-                                </label>
+                            <div className="space-y-2">
+                                <label className="text-[10px] font-black uppercase tracking-widest text-text-body/50 ml-1">Fee (BDT)</label>
                                 <div className="relative">
-                                    <span className="absolute inset-y-0 left-3 flex items-center text-base-content/30"><FiClock /></span>
-                                    <input
-                                        type="text"
-                                        placeholder="e.g. Every Friday 4PM"
-                                        className="input input-bordered w-full pl-10 rounded-xl bg-base-200/50 dark:bg-slate-800 font-bold border-base-content/10 focus:ring-2 focus:ring-primary/20"
-                                        {...register("meetingSchedule")}
-                                    />
+                                    <FiDollarSign className="absolute left-4 top-1/2 -translate-y-1/2 text-secondary/40" />
+                                    <input type="number" className="input-field-custom w-full pl-10 !py-3" {...register("membershipFee")} />
                                 </div>
-                            </div>
-
-                            <div className="md:col-span-2">
-                                <label className="label py-1">
-                                    <span className="text-xs font-black uppercase tracking-widest text-base-content/50">Club Banner Image</span>
-                                </label>
-                                <div className="relative group">
-                                    <input
-                                        type="file"
-                                        accept="image/*"
-                                        {...register("bannerImage", { required: "Banner image is required" })}
-                                        className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
-                                    />
-                                    <div className={`p-6 rounded-xl border-2 border-dashed transition-all flex flex-col items-center justify-center gap-2 ${errors.bannerImage ? 'border-error bg-error/5' : 'border-base-content/10 bg-base-200/30 group-hover:border-primary/40 group-hover:bg-primary/5'}`}>
-                                        <FiUploadCloud className={`text-2xl ${errors.bannerImage ? 'text-error' : 'text-primary animate-bounce'}`} />
-                                        <span className="text-[11px] font-black uppercase tracking-tighter text-base-content/60 text-center">
-                                            {selectedFile?.[0] ? selectedFile[0].name : "Click or Drag to upload club banner"}
-                                        </span>
-                                    </div>
-                                </div>
-                                {errors.bannerImage && <p className="text-error text-[10px] font-bold mt-1 uppercase text-center">{errors.bannerImage.message}</p>}
                             </div>
                         </div>
 
+                        {/* Banner Upload */}
+                        <div className="space-y-2">
+                            <label className="text-[10px] font-black uppercase tracking-widest text-text-body/50 ml-1">Banner Image</label>
+                            <div className="relative group overflow-hidden rounded-2xl border-2 border-dashed border-standard/30 hover:border-primary/50 transition-all">
+                                <input
+                                    type="file"
+                                    accept="image/*"
+                                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                                    {...register("bannerImage", { required: "Required" })}
+                                />
+                                <div className="p-8 flex flex-col items-center justify-center gap-2 bg-background/30 group-hover:bg-primary/5 transition-colors">
+                                    <FiUploadCloud className="text-primary/40 group-hover:text-primary transition-colors" size={24} />
+                                    <span className="text-xs font-bold text-text-body/60 italic">
+                                        {selectedFile?.[0] ? selectedFile[0].name : "Click to upload banner"}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Submit Button */}
                         <div className="pt-4">
                             <button
                                 type="submit"
                                 disabled={overallLoading}
-                                className="btn btn-primary w-full rounded-xl font-black uppercase tracking-[0.2em] shadow-xl shadow-primary/20 h-14"
+                                className="btn-primary-gradient w-full h-14 rounded-xl flex items-center justify-center gap-2 tracking-widest uppercase text-sm"
                             >
-                                {overallLoading ? (
-                                    <TbFidgetSpinner className="animate-spin text-2xl" />
-                                ) : (
-                                    "Submit Club for Approval"
-                                )}
+                                {overallLoading ? <TbFidgetSpinner className="animate-spin text-2xl" /> : "Request Approval"}
                             </button>
                         </div>
                     </form>
                 </div>
-                
-                <p className="text-center mt-8 text-[10px] font-black uppercase tracking-[0.4em] text-base-content/20 ">
-                    Secured Club Registration System
-                </p>
             </div>
         </div>
     );
