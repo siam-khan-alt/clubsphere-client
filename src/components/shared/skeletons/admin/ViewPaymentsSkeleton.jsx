@@ -1,11 +1,11 @@
 import React from 'react';
-import DashboardHeaderSkeleton from '../dashboadCommon/DashboardHeaderSkeleton';
+import DashboardHeaderNonBTNSkeleton from '../dashboadCommon/DashboardHeaderNonBTNSkeleton';
 
 const ViewPaymentsSkeleton = () => {
     return (
         <div className="space-y-6 md:space-y-10 pb-10 animate-pulse">
             {/* 1. Header Skeleton */}
-            <DashboardHeaderSkeleton />
+            <DashboardHeaderNonBTNSkeleton />
 
             {/* 2. Revenue Card Skeleton */}
             <div className="bg-card border-standard rounded-3xl p-8 h-40 w-full relative overflow-hidden">

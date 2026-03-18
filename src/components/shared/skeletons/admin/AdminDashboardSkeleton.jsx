@@ -1,10 +1,10 @@
 import React from 'react';
-import DashboardHeaderSkeleton from '../dashboadCommon/DashboardHeaderSkeleton';
+import DashboardHeaderNonBTNSkeleton from '../dashboadCommon/DashboardHeaderNonBTNSkeleton';
 
 const AdminDashboardSkeleton = () => {
     return (
         <div className="pb-10 animate-pulse">
-            <DashboardHeaderSkeleton />
+            <DashboardHeaderNonBTNSkeleton />
 
             <div className="container mx-auto mt-8 space-y-8">
                 

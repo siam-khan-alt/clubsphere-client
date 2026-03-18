@@ -1,10 +1,10 @@
 import React from 'react';
-import DashboardHeaderSkeleton from '../dashboadCommon/DashboardHeaderSkeleton';
+import DashboardHeaderNonBTNSkeleton from '../dashboadCommon/DashboardHeaderNonBTNSkeleton';
 
 const EventsManagementSkeleton = ({ rowCount = 6 }) => {
     return (
         <div className="pb-10 animate-pulse">
-            <DashboardHeaderSkeleton />
+            <DashboardHeaderNonBTNSkeleton />
 
             <div className="max-w-7xl mx-auto px-4 mt-8 space-y-6">
                 {/* Status Bar Skeleton */}

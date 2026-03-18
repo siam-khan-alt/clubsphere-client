@@ -1,11 +1,11 @@
 import React from 'react';
-import DashboardHeaderSkeleton from '../dashboadCommon/DashboardHeaderSkeleton';
+import DashboardHeaderNonBTNSkeleton from '../dashboadCommon/DashboardHeaderNonBTNSkeleton';
 
 const ManageUsersSkeleton = () => {
     return (
         <div className="space-y-6 md:space-y-10 pb-10 animate-pulse">
             {/* 1. Header Skeleton */}
-            <DashboardHeaderSkeleton />
+            <DashboardHeaderNonBTNSkeleton />
 
             {/* 2. Tabs & Stat Bar Skeleton */}
             <div className="flex flex-col lg:flex-row items-center justify-between gap-6 border-b border-standard/10 pb-6">

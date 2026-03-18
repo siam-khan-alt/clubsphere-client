@@ -3,8 +3,8 @@ import { useQuery } from '@tanstack/react-query';
 import useAxiosSecure from '../../../hooks/useAxiosSecure';
 import PaymentHistoryTable from '../../../components/member/PaymentHistoryTable';
 import DashboardHeader from '../../../components/shared/ui/DashboardHeader';
-import DashboardHeaderSkeleton from '../../../components/shared/skeletons/dashboadCommon/DashboardHeaderSkeleton';
 import { TableSkeleton } from '../../../components/shared/skeletons/user/payment/TableSkeletons';
+import DashboardHeaderNonBTNSkeleton from '../../../components/shared/skeletons/dashboadCommon/DashboardHeaderNonBTNSkeleton';
 
 const PaymentHistory = () => {
     const axiosSecure = useAxiosSecure();
@@ -19,7 +19,7 @@ const PaymentHistory = () => {
 
     if (isLoading) return (
         <div className="space-y-8">
-            <DashboardHeaderSkeleton />
+            <DashboardHeaderNonBTNSkeleton />
             <div className="w-full max-w-[80vw] md:max-w-full overflow-hidden bg-card mx-auto rounded-2xl border-standard shadow-sm p-2">
                 <TableSkeleton rows={payments.length > 0 ? payments.length : 8} />
             </div>
