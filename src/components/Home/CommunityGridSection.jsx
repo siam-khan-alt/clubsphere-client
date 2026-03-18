@@ -76,7 +76,7 @@ const CommunityGridSection = () => {
 
           <div className="lg:col-span-5 relative h-[350px] lg:h-auto rounded-2xl overflow-hidden transition-all duration-700 shadow-2xl">
              <img 
-               src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&q=80&w=800" 
+               src="https://i.ibb.co.com/jZ9hmSM6/photo-1522202176988-66273c2fd55f-auto-format-fit-crop-q-80-w-800.jpg" 
                alt="Collaboration"
                className="w-full h-full object-cover"
              />
@@ -85,7 +85,7 @@ const CommunityGridSection = () => {
           {/* Bottom Row: Image (5 columns) & Points (7 columns) */}
           <div className="lg:col-span-5 relative h-[350px] lg:h-auto rounded-2xl overflow-hidden  transition-all duration-700 shadow-2xl order-last lg:order-none">
              <img 
-               src="https://images.unsplash.com/photo-1515187029135-18ee286d815b?auto=format&fit=crop&q=80&w=800" 
+               src="https://i.ibb.co.com/SXRNB0pr/photo-1515187029135-18ee286d815b-auto-format-fit-crop-q-80-w-800.jpg" 
                alt="Growth"
                className="w-full h-full object-cover"
              />

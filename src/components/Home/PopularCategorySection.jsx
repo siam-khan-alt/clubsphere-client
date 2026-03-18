@@ -7,14 +7,14 @@ import {
 import { Link } from 'react-router-dom';
 
 const CLUB_CATEGORIES = [
-  { name: "Technology", icon: <FaLaptopCode />, img: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=400&h=400&fit=crop" },
-  { name: "Photography", icon: <FaCamera />, img: "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?q=80&w=400&h=400&fit=crop" },
+  { name: "Technology", icon: <FaLaptopCode />, img: "https://i.ibb.co.com/DPvYMbQP/photo-1519389950473-47ba0277781c-q-80-w-400-h-400-fit-crop.jpg" },
+  { name: "Photography", icon: <FaCamera />, img: "https://i.ibb.co.com/GQ2r9ysc/photo-1516035069371-29a1b244cc32-q-80-w-400-h-400-fit-crop.jpg" },
   { name: "Sports", icon: <FaFootballBall />, img: "https://i.ibb.co.com/nsh7nC1s/image.png" },
-  { name: "Book Club", icon: <FaBookOpen />, img: "https://images.unsplash.com/photo-1495446815901-a7297e633e8d?q=80&w=400&h=400&fit=crop" },
-  { name: "Art & Design", icon: <FaPalette />, img: "https://images.unsplash.com/photo-1513364776144-60967b0f800f?q=80&w=400&h=400&fit=crop" },
+  { name: "Book Club", icon: <FaBookOpen />, img: "https://i.ibb.co.com/0RHxbK87/photo-1495446815901-a7297e633e8d-q-80-w-400-h-400-fit-crop.jpg" },
+  { name: "Art & Design", icon: <FaPalette />, img: "https://i.ibb.co.com/s9JWYsNk/photo-1513364776144-60967b0f800f-q-80-w-400-h-400-fit-crop.jpg" },
   { name: "Hiking & Travel", icon: <FaHiking />, img: "https://i.ibb.co.com/G4qbTn1B/image.png" },
-  { name: "Music & Film", icon: <FaMusic />, img: "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?q=80&w=400&h=400&fit=crop" },
-  { name: "Food & Cooking", icon: <FaUtensils />, img: "https://images.unsplash.com/photo-1556910103-1c02745aae4d?q=80&w=400&h=400&fit=crop" },
+  { name: "Music & Film", icon: <FaMusic />, img: "https://i.ibb.co.com/VW9m6KVM/photo-1511671782779-c97d3d27a1d4-q-80-w-400-h-400-fit-crop.jpg" },
+  { name: "Food & Cooking", icon: <FaUtensils />, img: "https://i.ibb.co.com/bjVhD9M4/photo-1556910103-1c02745aae4d-q-80-w-400-h-400-fit-crop.jpg" },
 ];
 
 const PopularCategorySection = () => {

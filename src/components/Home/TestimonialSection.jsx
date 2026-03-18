@@ -67,7 +67,7 @@ const TestimonialSection = () => {
                 </div>
 
                 {/* Right Side: Vertical Swiper */}
-                <div className="h-[480px] relative px-2"> 
+                <div className="h-[420px] relative px-2"> 
                     {/* Top and Bottom Fade Effect for "Infinite Stand" look */}
                     <div className="absolute top-0 left-0 right-0 h-20 bg-gradient-to-b from-background to-transparent z-10 pointer-events-none" />
                     <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-background to-transparent z-10 pointer-events-none" />
@@ -76,10 +76,10 @@ const TestimonialSection = () => {
                         direction={'vertical'}
                         modules={[Autoplay, Pagination]}
                         spaceBetween={20}
-                        slidesPerView={2.2} // Show parts of the next slide for better flow
+                        slidesPerView={1.7} 
                         loop={true}
                         autoplay={{
-                            delay: 3000,
+                            delay: 2000,
                             disableOnInteraction: false,
                             pauseOnMouseEnter: true
                         }}
