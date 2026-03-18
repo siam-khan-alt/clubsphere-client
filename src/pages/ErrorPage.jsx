@@ -1,59 +1,75 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { FiHome, FiAlertCircle } from 'react-icons/fi';
+import { FiHome, FiArrowLeft, FiActivity } from 'react-icons/fi';
 import { motion } from 'framer-motion';
 
-const ErrorPage = ({ status = '404', title = 'Page Not Found', message = 'The page you are looking for might have been moved, deleted, or never existed.' }) => {
+const ErrorPage = ({ status = '404', title = 'Connection Lost', message = 'The coordinate you are looking for does not exist in the Sphere. It might have been collapsed or moved to another dimension.' }) => {
     return (
-        <div className="min-h-screen bg-base-100 flex items-center justify-center p-6 relative overflow-hidden">
-            <div className="absolute inset-0 opacity-5 pointer-events-none">
-                <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-primary rounded-full blur-[120px]"></div>
-                <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-secondary rounded-full blur-[120px]"></div>
+        <div className="min-h-screen bg-background flex items-center justify-center p-6 relative overflow-hidden transition-colors duration-500">
+            
+            {/* Animated Cyber Background */}
+            <div className="absolute inset-0 pointer-events-none">
+                <div className="absolute top-[-20%] left-[-10%] w-[60%] h-[60%] bg-primary/10 rounded-full blur-[150px] animate-pulse"></div>
+                <div className="absolute bottom-[-20%] right-[-10%] w-[60%] h-[60%] bg-secondary/10 rounded-full blur-[150px] animate-[pulse_4s_infinite]"></div>
+                <div className="absolute inset-0 plaid-bg opacity-20"></div>
             </div>
 
-            <div className="max-w-2xl w-full text-center relative z-10">
+            <div className="max-w-4xl w-full text-center relative z-10">
                 <motion.div
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 0.5 }}
+                    initial={{ opacity: 0, y: 30 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6 }}
                 >
-                    <h1 className="text-[12rem] sm:text-[16rem] font-black  leading-none tracking-tighter opacity-10 select-none">
+                    {/* Large Background Status Code */}
+                    <h1 className="text-[15rem] md:text-[22rem] font-black leading-none tracking-tighter opacity-10 select-none bg-gradient-to-b from-primary to-secondary bg-clip-text text-transparent">
                         {status}
                     </h1>
                     
-                    <div className="mt-[-8rem] sm:mt-[-10rem]">
+                    <div className="mt-[-8rem] md:mt-[-12rem] relative">
+                        {/* Alert Badge */}
                         <motion.div 
-                            initial={{ y: 20, opacity: 0 }}
-                            animate={{ y: 0, opacity: 1 }}
-                            transition={{ delay: 0.2 }}
-                            className="inline-flex items-center gap-2 px-4 py-1 rounded-full bg-error/10 border border-error/20 text-error mb-6"
+                            initial={{ scale: 0.8, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            transition={{ delay: 0.3 }}
+                            className="inline-flex items-center gap-2 px-5 py-2 rounded-2xl bg-card border border-standard/10 shadow-2xl mb-8"
                         >
-                            <FiAlertCircle className="animate-pulse" />
-                            <span className="text-[10px] font-black uppercase tracking-[0.2em]">System Alert</span>
+                            <FiActivity className="text-secondary animate-pulse" />
+                            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-text-body">System Anomaly Detected</span>
                         </motion.div>
                         
-                        <h2 className="text-4xl sm:text-6xl font-black uppercase  tracking-tighter mb-4 text-base-content">
+                        {/* Title with Gradient */}
+                        <h2 className="text-5xl md:text-7xl font-black uppercase tracking-tighter mb-6 bg-gradient-to-r from-primary via-secondary to-primary bg-clip-text text-transparent">
                             {title}
                         </h2>
                         
-                        <p className="text-base-content/60 max-w-md mx-auto mb-10 font-medium leading-relaxed">
+                        <p className="text-text-body/70 max-w-lg mx-auto mb-12 font-medium leading-relaxed text-lg">
                             {message}
                         </p>
 
-                        <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+                        {/* Navigation Buttons */}
+                        <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
                             <Link
                                 to="/"
-                                className="group relative px-8 py-4 bg-primary text-primary-content font-black uppercase tracking-widest text-xs rounded-2xl overflow-hidden transition-all hover:pr-12"
+                                className="btn-primary-gradient group flex items-center gap-3 w-full sm:w-auto justify-center"
                             >
-                                <span className="relative z-10 flex items-center gap-2">
-                                    <FiHome size={18} /> Back to Hub
-                                </span>
-                                <span className="absolute right-4 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-all">→</span>
+                                <FiHome size={20} className="group-hover:rotate-12 transition-transform" /> 
+                                Back to Hub
                             </Link>
+                            
+                            <button 
+                                onClick={() => window.history.back()}
+                                className="px-8 py-3.5 rounded-xl border-2 border-standard/20 font-bold text-text-heading hover:bg-card transition-all flex items-center gap-2 w-full sm:w-auto justify-center"
+                            >
+                                <FiArrowLeft /> Go Back
+                            </button>
                         </div>
                     </div>
                 </motion.div>
             </div>
+
+            {/* Floating Tech Elements */}
+            <div className="absolute hidden lg:block top-20 right-[15%] animate-bounce text-primary/20"><FiActivity size={40}/></div>
+            <div className="absolute hidden lg:block bottom-20 left-[15%] animate-pulse text-secondary/20"><FiActivity size={60}/></div>
         </div>
     );
 };

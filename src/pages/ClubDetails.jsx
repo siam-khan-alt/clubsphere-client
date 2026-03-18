@@ -6,10 +6,10 @@ import useAxiosSecure from "../hooks/useAxiosSecure";
 import React, { useContext, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
 import toast from "react-hot-toast";
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { 
-  FiMapPin, FiTag, FiLayers, FiUsers, 
-  FiMail, FiClock, FiArrowRight, FiShield, FiStar
+  FiMapPin, FiLayers, FiUsers, 
+  FiMail, FiClock, FiArrowRight, FiShield, FiStar, FiZap
 } from "react-icons/fi";
 
 const ClubDetails = () => {
@@ -59,105 +59,141 @@ const ClubDetails = () => {
   };
 
   if (isLoading) return <LoadingSpinner />;
-  if (isError || !club) return <div className="min-h-screen flex items-center justify-center">Error loading club details.</div>;
+  if (isError || !club) return <div className="min-h-screen bg-background flex items-center justify-center text-primary font-bold">Error loading club details.</div>;
 
   return (
-    <div className="min-h-screen bg-base-100 transition-colors duration-300">
-      <div className="relative h-[50vh] lg:h-[65vh] w-full overflow-hidden">
-        <motion.img 
-          initial={{ scale: 1.1 }}
-          animate={{ scale: 1 }}
-          transition={{ duration: 1.5 }}
-          className="w-full h-full object-cover"
-          src={club.bannerImage}
-          alt={club.clubName}
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-base-100 via-base-100/40 to-transparent" />
-        
-        <div className="absolute inset-0 flex flex-col justify-end container mx-auto px-6 pb-12">
+    <div className="min-h-screen bg-background relative overflow-hidden selection:bg-primary selection:text-white">
+      
+      {/* Dynamic Background Elements */}
+      <div className="absolute top-0 left-0 w-full h-full pointer-events-none">
+        <div className="absolute top-[-10%] right-[-5%] w-[50%] h-[50%] bg-primary/10 blur-[120px] rounded-full animate-pulse" />
+        <div className="absolute bottom-[-10%] left-[-5%] w-[40%] h-[40%] bg-secondary/10 blur-[120px] rounded-full" />
+        <div className="absolute inset-0 plaid-bg opacity-30" />
+      </div>
+
+      {/* Hero Section with Parallax Effect */}
+      <div className="relative pt-24 pb-12 container mx-auto px-6">
+        <div className=" grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+          
           <motion.div 
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="space-y-4"
+            initial={{ opacity: 0, x: -50 }}
+            animate={{ opacity: 1, x: 0 }}
+            className="lg:col-span-7 space-y-8 relative z-10"
           >
-            <span className="px-6 py-2 bg-primary/20 backdrop-blur-md text-primary border border-primary/30 rounded-full text-sm font-bold tracking-widest uppercase">
-              {club.category}
-            </span>
-            <h1 className="text-5xl md:text-7xl font-black text-base-content tracking-tighter">
-              {club.clubName}
-            </h1>
-            <div className="flex flex-wrap gap-6 text-base-content/70 font-medium">
-              <span className="flex items-center gap-2"><FiMapPin className="text-primary"/> {club.location}</span>
-              <span className="flex items-center gap-2"><FiUsers className="text-primary"/> {club.members?.length || 0} Members</span>
-              <span className="flex items-center gap-2"><FiShield className="text-primary"/> Verified Club</span>
+            <div className="flex items-center gap-3">
+              <span className="px-5 py-1.5 bg-gradient-to-r from-primary to-secondary text-white rounded-full text-[10px] font-black uppercase tracking-[0.3em] shadow-lg shadow-primary/20">
+                {club.category}
+              </span>
+              <span className="flex items-center gap-1.5 text-xs font-bold text-secondary">
+                <FiShield /> Verified Organization
+              </span>
             </div>
+
+            <h1 className="text-5xl md:text-6xl text-primary md:font-extrabold text-text-heading leading-[0.9] tracking-tighter">
+              {club.clubName.split(' ').map((word, i) => (
+                <span key={i} className={i % 2 !== 0 ? "text-primary  block md:inline" : "block md:inline"}>
+                  {word}{' '}
+                </span>
+              ))}
+            </h1>
+
+            <div className="flex flex-wrap gap-8 py-4 border-y border-primary">
+              <div className="space-y-1">
+                <p className="text-[10px] font-black uppercase tracking-widest text-text-body/40">Location</p>
+                <p className="text-text-heading font-bold flex items-center gap-2"><FiMapPin className="text-primary"/> {club.location}</p>
+              </div>
+              <div className="space-y-1">
+                <p className="text-[10px] font-black uppercase tracking-widest text-text-body/40">Community</p>
+                <p className="text-text-heading font-bold flex items-center gap-2"><FiUsers className="text-secondary"/> {club.members?.length || 0} Members</p>
+              </div>
+              <div className="space-y-1">
+                <p className="text-[10px] font-black uppercase tracking-widest text-text-body/40">Fee Structure</p>
+                <p className="text-text-heading font-bold flex items-center gap-2 ">
+                  <FiZap className="text-primary"/> {club.membershipFee === 0 ? "Open Access" : `$${club.membershipFee}`}
+                </p>
+              </div>
+            </div>
+          </motion.div>
+
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="lg:col-span-5 relative group"
+          >
+            <div className="absolute inset-0 bg-gradient-to-br from-primary to-secondary rounded-2xl blur-xl opacity-20 group-hover:opacity-40 transition-opacity" />
+            <img 
+              src={club.bannerImage} 
+              alt={club.clubName}
+              className="relative w-full aspect-[4/5] object-cover rounded-2xl border-2 border-standard shadow-xl"
+            />
           </motion.div>
         </div>
       </div>
 
-      <div className="container mx-auto px-6 -mt-8 pb-20">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
+      {/* Content Section */}
+      <div className="container mx-auto px-6 py-20 relative z-10">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-16">
           
-          <div className="lg:col-span-2 space-y-12">
-            <section className="bg-base-200/40 p-10 rounded-2xl border border-base-content/5 backdrop-blur-sm">
-              <div className="flex items-center gap-3 mb-6">
-                <div className="w-10 h-10 bg-primary rounded-2xl flex items-center justify-center text-white shadow-lg shadow-primary/30">
-                  <FiLayers size={22} />
-                </div>
-                <h3 className="text-3xl font-bold mb-0">The Story</h3>
-              </div>
-              <p className="text-xl text-base-content/80 leading-relaxed font-light">
-                {club.description}
+          <div className="lg:col-span-8 space-y-16">
+            <section className="relative">
+              <div className="absolute -left-10 top-0 w-1 h-20 bg-gradient-to-b from-primary to-transparent" />
+              <h3 className="text-left text-4xl mb-8">The Philosophy</h3>
+              <p className="text-2xl text-text-body leading-relaxed font-medium opacity-80 ">
+                "{club.description}"
               </p>
             </section>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-               <div className="p-8 bg-gradient-to-br from-primary/10 to-transparent rounded-2xl border border-primary/10">
-                  <FiClock className="text-primary text-3xl mb-4" />
-                  <h4 className="text-xl font-bold mb-2">Meeting Time</h4>
-                  <p className="text-base-content/70">{club.meetingSchedule || "Every weekend (TBA)"}</p>
-               </div>
-               <div className="p-8 bg-gradient-to-br from-secondary/10 to-transparent rounded-2xl border border-secondary/10">
-                  <FiMail className="text-secondary text-3xl mb-4" />
-                  <h4 className="text-xl font-bold mb-2">Connect</h4>
-                  <p className="text-base-content/70 truncate">{club.managerEmail}</p>
-               </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div className="p-10 rounded-2xl bg-card border border-standard hover:border-primary/30 transition-all group">
+                <FiClock className="text-4xl text-primary mb-6 group-hover:rotate-12 transition-transform" />
+                <h4 className="text-xl text-primary font-bold text-text-heading mb-3 uppercase tracking-tight">Meeting Schedule</h4>
+                <p className="text-text-body font-medium">{club.meetingSchedule || "Every weekend (Coordinate with Manager)"}</p>
+              </div>
+              
+              <div className="p-10 rounded-2xl bg-card border border-standard hover:border-secondary/30 transition-all group">
+                <FiMail className="text-4xl text-secondary mb-6 group-hover:-rotate-12 transition-transform" />
+                <h4 className="text-xl text-primary font-bold text-text-heading mb-3 uppercase tracking-tight">Direct Channel</h4>
+                <p className="text-text-body font-medium truncate">{club.managerEmail}</p>
+              </div>
             </div>
           </div>
 
-          <div className="lg:col-span-1">
-            <div className="sticky top-28 space-y-6">
-              <div className="bg-base-100 p-8 rounded-2xl border-2 border-base-content/5 shadow-2xl shadow-primary/5 flex flex-col items-center text-center">
-                <div className="w-20 h-20 bg-base-200 rounded-full flex items-center justify-center mb-6 border border-base-content/5">
-                  <FiTag className="text-primary text-3xl" />
-                </div>
-                <h4 className="text-base-content/50 uppercase tracking-widest text-xs font-black">Membership Access</h4>
-                <div className="text-5xl font-black my-4 text-base-content">
-                  {club.membershipFee === 0 ? "FREE" : `$${club.membershipFee}`}
-                </div>
-                <p className="text-sm text-base-content/60 mb-8">Get full access to all events, workshops, and our private community circle.</p>
-                
-                <button
-                  onClick={handleJoinClub}
-                  disabled={isJoining}
-                  className="w-full btn-primary-gradient py-5 text-xl flex items-center justify-center gap-3 rounded-2xl"
-                >
-                  {isJoining ? "Processing..." : (
-                    <>
-                      Secure My Spot <FiArrowRight />
-                    </>
-                  )}
-                </button>
-                
-                <div className="mt-6 flex items-center gap-2 text-xs font-bold text-success/80 bg-success/5 px-4 py-2 rounded-full">
-                  <FiStar /> Instant Approval Available
-                </div>
-              </div>
+          <div className="lg:col-span-4">
+            <div className="sticky top-28">
+              <div className="p-2 bg-gradient-to-br from-primary/10 to-secondary/10 rounded-2xl  backdrop-blur-xl">
+                <div className="bg-card rounded-2xl p-10 text-center space-y-8">
+                  <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-background border border-standard text-primary">
+                    <FiStar size={30} className="animate-pulse" />
+                  </div>
+                  
+                  <div>
+                    <p className="text-[10px] font-black uppercase tracking-[0.4em] text-text-body/40 mb-2">Membership Status</p>
+                    <h2 className="text-4xl md:text-6xl font-black mb-0 ">
+                       {club.membershipFee === 0 ? "Free" : `$${club.membershipFee}`}
+                    </h2>
+                  </div>
 
-              <div className="bg-base-200/50 p-6 rounded-2xl border border-base-content/5 text-center">
-                <p className="text-sm font-medium text-base-content/40 ">
-                  Need help? Contact our support team for any membership inquiries.
-                </p>
+                  <p className="text-sm font-medium text-text-body/60 px-4">
+                    Unlock exclusive access to all digital resources, events, and networking hubs.
+                  </p>
+
+                  <button
+                    onClick={handleJoinClub}
+                    disabled={isJoining}
+                    className="btn-primary-gradient w-full py-6 text-xl rounded-2xl flex items-center justify-center gap-4 group shadow-2xl"
+                  >
+                    {isJoining ? "Syncing..." : (
+                      <>
+                        Join Now <FiArrowRight className="group-hover:translate-x-2 transition-transform" />
+                      </>
+                    )}
+                  </button>
+
+                  <div className="flex items-center justify-center gap-2 text-[10px] font-black uppercase tracking-widest text-emerald-500">
+                    <div className="w-2 h-2 rounded-full bg-emerald-500 animate-ping" />
+                    Slots Available Now
+                  </div>
+                </div>
               </div>
             </div>
           </div>
