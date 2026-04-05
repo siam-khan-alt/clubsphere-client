@@ -32,8 +32,8 @@ const Login = () => {
       setValue("email", "sifatkhan@gmail.com");
       setValue("password", "Siam12");
     } else if (role === "admin") {
-      setValue("email", "admin@clubsphere.com");
-      setValue("password", "Admin123");
+      setValue("email", "spsiam99@gmail.com");
+      setValue("password", "Sp999999");
     }
     toast.success(
       `${role.charAt(0).toUpperCase() + role.slice(1)} credentials applied!`

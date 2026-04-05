@@ -10,23 +10,77 @@
 
 ---
 
-## 📸 Platform Previews
+## 📸 Project Showcases (Dark & Light Experience)
 
-<p align="center">
-  <b>Admin Dashboard & Analytics</b><br>
-  <img src="https://i.ibb.co.com/Qjm7D6F5/club-spher-admin.png" width="90%" />
-</p>
+<h3> 1. Home Page & Hero Experience </h3>
 
-<br>
+<div align="center">
+  <table>
+    <tr>
+      <td align="center" width="50%">
+        <p><b>☀️ Light Mode</b></p>
+        <a href="https://i.ibb.co.com/ychmrgWJ/image.png">
+          <img src="https://i.ibb.co.com/ychmrgWJ/image.png" 
+               alt="Home Light" 
+               height="450" />
+        </a>
+      </td>
+      <td align="center" width="50%">
+        <p><b>🌙 Dark Mode</b></p>
+        <a href="https://i.ibb.co.com/NgyMDGVf/image.png">
+          <img src="https://i.ibb.co.com/NgyMDGVf/image.png" 
+               alt="Home Dark" 
+               height="450" />
+        </a>
+      </td>
+    </tr>
+  </table>
+  <p><i>(Tip: Click on the images to see the full long-page view)</i></p>
+</div>
+  <br />
 
-<p align="center">
-  <img src="https://i.ibb.co.com/3msW43VT/Club-sphere-Explore.png" alt="Club Exploration" width="48%" />
-  <img src="https://i.ibb.co.com/whQY4w7x/club-sphere-payment-succes.png" width="48%" />
-</p>
+  <h3>2. Member Dashboard </h3>
+  <table width="100%">
+    <tr>
+      <td width="50%">
+        <img src="https://i.ibb.co.com/35Kjs8kr/image.png" alt="Member Light" />
+      </td>
+      <td width="50%">
+        <img src="https://i.ibb.co.com/Y4TdPKyq/image.png" alt="Member Dark" />
+      </td>
+    </tr>
+  </table>
 
-<p align="center">
-  <i>(Left: Club Discovery Page | Right: Integrated Stripe Payment System)</i>
-</p>
+  <br />
+
+  <h3>3. Club Manager Dashboard </h3>
+  <table width="100%">
+    <tr>
+      <td width="50%">
+        <img src="https://i.ibb.co.com/Xfg19f12/image.png" alt="Club Manager Light" />
+      </td>
+      <td width="50%">
+        <img src="https://i.ibb.co.com/zh0cCNgc/image.png" alt="Club Manager Dark" />
+      </td>
+    </tr>
+  </table>
+
+  <br />
+
+  <h3>4. Admin Dashboard </h3>
+  <table width="100%">
+    <tr>
+      <td width="50%">
+        <img src="https://i.ibb.co.com/v4PNKdtX/image.png" alt="Admin Light" />
+      </td>
+      <td width="50%">
+        <img src="https://i.ibb.co.com/xRprQYf/image.png" alt="Admin Dark" />
+      </td>
+    </tr>
+  </table>
+  
+  <p><i>Premium glassmorphism and theme toggles are implemented across all dashboard layers.</i></p>
+</div>
 
 ---
 

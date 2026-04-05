@@ -17,6 +17,8 @@ const DashboardNavbar = ({ theme, toggleTheme }) => {
       confirmButtonColor: "var(--color-primary)",
       cancelButtonColor: "#EF4444",
       confirmButtonText: "Yes, logout!",
+      background: "var(--color-background)",
+      color: "var(--color-text-body)",
     }).then((result) => {
       if (result.isConfirmed) {
         logout();
@@ -25,6 +27,8 @@ const DashboardNavbar = ({ theme, toggleTheme }) => {
           icon: "success",
           timer: 1500,
           showConfirmButton: false,
+          background: "var(--color-background)",
+          color: "var(--color-text-body)",
         });
       }
     });

@@ -36,8 +36,8 @@ const LoadingSpinner = () => {
 
         {/* Brand Text Section */}
         <div className="mt-12 text-center relative">
-          <h2 className="text-5xl font-black tracking-tighter mb-0 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent italic">
-            Club<span className="not-italic">Sphere</span>
+          <h2 className="text-5xl font-black tracking-tighter mb-0 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent ">
+            Club Sphere
           </h2>
           
           {/* Progress Bar Container */}
