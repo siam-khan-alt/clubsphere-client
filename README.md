@@ -79,7 +79,6 @@
     </tr>
   </table>
   
-  <p><i>Premium glassmorphism and theme toggles are implemented across all dashboard layers.</i></p>
 </div>
 
 ---
