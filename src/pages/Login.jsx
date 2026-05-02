@@ -74,36 +74,22 @@ const Login = () => {
     setLoading(true);
     try {
       const result = await googleLogin();
-      const token = await result.user.getIdToken();
-
-      const response = await axiosSecure.get("/users/role", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const userInfo = {
+      name: result.user?.displayName,
+      email: result.user?.email,
+      photoURL: result.user?.photoURL,
+    };
+      const response = await axiosSecure.post("/users/google-login", userInfo);
 
       const userRole = response?.data?.role;
 
       if (userRole) {
-        toast.success("Login Successful!");
-        const userInfo = {
-          name: result.user?.displayName,
-          email: result.user?.email,
-          photoURL: result.user?.photoURL,
-        };
-        const response = await axiosSecure.post(
-          "/users/google-login",
-          userInfo
-        );
-        const userRole = response?.data?.role;
-
-        if (userRole) {
-          toast.success("Login Successful!");
-          const destination =
-            location.state?.from?.pathname || `/dashboard/${userRole}/home`;
-          navigate(destination, { replace: true });
-        }
-      }
+      toast.success("Login Successful!");
+      const destination = location.state?.from?.pathname || `/dashboard/${userRole}/home`;
+      navigate(destination, { replace: true });
+    } else {
+      setError("Failed to retrieve user role.");
+    }
     } catch {
       setError("Google login failed. Please try again.");
     } finally {
