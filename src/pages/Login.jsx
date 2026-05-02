@@ -86,12 +86,23 @@ const Login = () => {
 
       if (userRole) {
         toast.success("Login Successful!");
+        const userInfo = {
+          name: result.user?.displayName,
+          email: result.user?.email,
+          photoURL: result.user?.photoURL,
+        };
+        const response = await axiosSecure.post(
+          "/users/google-login",
+          userInfo
+        );
+        const userRole = response?.data?.role;
 
-        const dynamicPath = `/dashboard/${userRole}/home`;
-        const destination = location.state?.from?.pathname || dynamicPath;
-        navigate(destination, { replace: true });
-      } else {
-        setError("Role not assigned to this Google account.");
+        if (userRole) {
+          toast.success("Login Successful!");
+          const destination =
+            location.state?.from?.pathname || `/dashboard/${userRole}/home`;
+          navigate(destination, { replace: true });
+        }
       }
     } catch {
       setError("Google login failed. Please try again.");

@@ -65,18 +65,17 @@ const Register = () => {
   };
 
   const handleGoogleSignIn = async () => {
+    
     try {
       const result = await googleLogin();
+      const userInfo = {
+      name: result.user?.displayName,
+      email: result.user?.email,
+      photoURL: result.user?.photoURL,
+    };
+      const response = await axiosSecure.post("/users/google-login", userInfo);
 
-      const token = await result.user.getIdToken();
-
-      const response = await axiosSecure.get("/users/role", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      const userRole = response?.data?.role || "user";
+     const userRole = response?.data?.role || "member";
 
       toast.success("Signup Successful");
 
