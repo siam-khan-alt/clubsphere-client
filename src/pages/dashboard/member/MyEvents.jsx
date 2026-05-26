@@ -13,7 +13,7 @@ const MyEvents = () => {
     const { data: registrations = [], isLoading, error } = useQuery({
         queryKey: ['memberEvents'],
         queryFn: async () => {
-            const res = await axiosSecure.get('/member/events'); 
+            const res = await axiosSecure.get('/events/member/events');
             return res.data;
         }
     });

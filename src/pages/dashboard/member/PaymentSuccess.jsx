@@ -22,12 +22,12 @@ const PaymentSuccess = () => {
 
         const verifyPayment = async () => {
             try {
-                const response = await axiosSecure.get(`/payment/success?session_id=${sessionId}`);
+                const response = await axiosSecure.get(`/payments/success?session_id=${sessionId}`);
                 const data = response.data;
                 setPaymentType(data.type);
-                
-                const navigatePath = data.type === 'membership' && data.clubId 
-                    ? `/clubs/${data.clubId}` 
+
+                const navigatePath = data.type === 'membership' && data.clubId
+                    ? `/clubs/${data.clubId}`
                     : (data.type === 'event' && data.eventId ? `/events/${data.eventId}` : `/dashboard/member/home`);
 
                 setStatus('Payment Successful!');

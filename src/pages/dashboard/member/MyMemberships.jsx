@@ -23,7 +23,7 @@ const MyMemberships = () => {
     const { data: memberships = [], isLoading } = useQuery({
         queryKey: ['memberClubs'],
         queryFn: async () => {
-            const res = await axiosSecure.get('/member/clubs');
+            const res = await axiosSecure.get('/clubs/member/clubs');
             return res.data;
         }
     });
