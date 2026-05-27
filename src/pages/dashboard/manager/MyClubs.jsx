@@ -9,6 +9,8 @@ import UpdateClubModal from '../../../components/dashboard/manager/UpdateClubMod
 import DashboardHeader from '../../../components/shared/ui/DashboardHeader';
 import { useNavigate } from 'react-router-dom';
 import MyClubsSkeleton from '../../../components/shared/skeletons/manager/MyClubsSkeleton';
+import SubscriptionBanner from '../../../components/dashboard/manager/SubscriptionBanner';
+import useSubscription from '../../../hooks/useSubscription';
 
 const MyClubs = () => {
     const axiosSecure = useAxiosSecure();
@@ -39,6 +41,10 @@ const MyClubs = () => {
             return res.data;
         }
     });
+
+    // Get subscription for first club (or selected club)
+    const primaryClubId = myClubs[0]?._id;
+    const { subscription } = useSubscription(primaryClubId);
 
     // Delete Mutation
     const deleteClubMutation = useMutation({
@@ -126,6 +132,9 @@ const MyClubs = () => {
                 badgeText="Manager Workspace"
                 showSmile={true}
             />
+
+            {/* --- Subscription Banner --- */}
+            {primaryClubId && <SubscriptionBanner subscription={subscription} clubId={primaryClubId} />}
 
             {/* --- Filter & Search Bar --- */}
             <div className="flex flex-col md:flex-row items-center gap-4 sticky top-0 z-30 py-4 bg-background/80 backdrop-blur-md">

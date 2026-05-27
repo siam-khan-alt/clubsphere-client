@@ -2,7 +2,7 @@ import { use } from 'react';
 import { FaHistory, FaChartLine, FaUsers, FaPlus, FaCalendarCheck, FaHome } from 'react-icons/fa';
 import { AuthContext } from '../../context/AuthContext';
 import NavLinkItem from '../dashboard/NavLinkItem';
-import { FiGrid } from 'react-icons/fi';
+import { FiGrid, FiAward, FiCreditCard } from 'react-icons/fi';
 
 const SideNavbar = () => {
     const { user } = use(AuthContext); 
@@ -38,6 +38,7 @@ const SideNavbar = () => {
                                 <NavLinkItem to="/dashboard/clubManager/myClubs" icon={FaChartLine}>My Clubs</NavLinkItem>
                                 <NavLinkItem to="/dashboard/clubManager/createClub" icon={FaPlus}>Create New Club</NavLinkItem>
                                 <NavLinkItem to="/dashboard/clubManager/events" icon={FaCalendarCheck}>Manage Events</NavLinkItem>
+                                <NavLinkItem to="/dashboard/clubManager/myClubs" icon={FiCreditCard}>Pricing & Plans</NavLinkItem>
                             </>
                         )}
                         {isAdmin && (
@@ -57,8 +58,10 @@ const SideNavbar = () => {
                 {isMember && (
                     <>
                         <div className="pt-6 pb-2 px-3 text-[10px] font-black uppercase text-text-body opacity-40 tracking-tighter">Personal</div>
-                        <NavLinkItem to="/dashboard/member/payments" icon={FaHistory}>Payment History</NavLinkItem>
+                        <NavLinkItem to="/dashboard/member/clubs" icon={FaCalendarCheck}>My Memberships</NavLinkItem>
                         <NavLinkItem to="/dashboard/member/events" icon={FaCalendarCheck}>My Events</NavLinkItem>
+                        <NavLinkItem to="/dashboard/member/payments" icon={FaHistory}>Payment History</NavLinkItem>
+                        <NavLinkItem to="/dashboard/member/achievements" icon={FiAward}>Achievements</NavLinkItem>
                     </>
                 )}
             </div>

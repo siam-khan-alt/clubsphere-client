@@ -35,14 +35,14 @@ const DashboardLayout = () => {
                 `}
             >
                 <div className="flex items-center justify-between mb-10 px-2">
-                     <Link to="/" className="  flex items-center gap-2 group">
-                    <div className="w-10 h-10 bg-gradient-to-br from-primary to-secondary rounded-xl flex items-center justify-center shadow-lg shadow-primary/20">
-                      <span className="text-white font-black text-xl">C</span>
-                    </div>
-                    <span className="text-2xl font-black tracking-tighter text-primary">
-                      Club<span className="text-secondary">Sphere</span>
-                    </span>
-                  </Link>
+                     <Link to="/" className="flex items-center gap-1 group">
+                                 <div className="w-10 h-10 ">
+                                   <img src="/image.png" alt="" />
+                                 </div>
+                                 <span className="text-2xl font-black tracking-tighter text-primary">
+                                   Club<span className="text-secondary">Sphere</span>
+                                 </span>
+                               </Link>
                     <button className="lg:hidden text-text-body" onClick={() => setIsSidebarOpen(false)}>
                         <FaTimes size={20} />
                     </button>

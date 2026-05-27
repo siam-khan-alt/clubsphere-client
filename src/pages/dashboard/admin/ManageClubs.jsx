@@ -41,8 +41,44 @@ const ManageClubs = () => {
         }
     });
 
+    const deleteClubMutation = useMutation({
+        mutationFn: async (clubId) => {
+            const res = await axiosSecure.delete(`/admin/clubs/${clubId}`);
+            return res.data;
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries(['allClubsForAdmin']);
+            Swal.fire({
+                icon: 'success',
+                title: 'Club Deleted!',
+                background: 'var(--color-card)',
+                color: 'var(--color-text-heading)',
+                confirmButtonColor: 'var(--color-primary)',
+                timer: 1500,
+                showConfirmButton: false
+            });
+        }
+    });
+
     const handleApprove = (clubId) => updateClubStatusMutation.mutate({ clubId, newStatus: 'approved' });
     const handleReject = (clubId) => updateClubStatusMutation.mutate({ clubId, newStatus: 'rejected' });
+    const handleDelete = (clubId) => {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: 'This will permanently delete the club and all its data.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#ef4444',
+            cancelButtonColor: '#0284c7',
+            confirmButtonText: 'Yes, delete it!',
+            background: 'var(--color-card)',
+            color: 'var(--color-text-heading)'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                deleteClubMutation.mutate(clubId);
+            }
+        });
+    };
 
     if (isError) return (
         <div className="p-8 text-center min-h-[400px] flex flex-col items-center justify-center bg-card rounded-3xl border-standard">
@@ -100,8 +136,9 @@ const ManageClubs = () => {
                         <AdminClubTable 
                             clubs={filteredClubs} 
                             handleApprove={handleApprove} 
-                            handleReject={handleReject} 
-                            isMutating={updateClubStatusMutation.isPending}
+                            handleReject={handleReject}
+                            handleDelete={handleDelete}
+                            isMutating={updateClubStatusMutation.isPending || deleteClubMutation.isPending}
                         />
                     </div>
                 ) : (

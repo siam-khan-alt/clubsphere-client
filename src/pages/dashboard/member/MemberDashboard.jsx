@@ -10,6 +10,8 @@ import { DashboardOverviewSkeleton } from '../../../components/shared/skeletons/
 import { EventListSkeleton } from '../../../components/shared/skeletons/user/dashboard/ListSkeletons';
 import { SuggestedClubSkeleton } from '../../../components/shared/skeletons/user/dashboard/CardSkeletons';
 import DashboardHeader from '../../../components/shared/ui/DashboardHeader';
+import ReferralSection from '../../../components/dashboard/member/ReferralSection';
+import BadgeDisplay from '../../../components/dashboard/member/BadgeDisplay';
 
 const MemberDashboard = () => {
     const { user } = use(AuthContext);
@@ -137,6 +139,12 @@ const MemberDashboard = () => {
 
                 {/* Discover Clubs Sidebar */}
                 <div className="space-y-6">
+                    {/* Badge Display */}
+                    <BadgeDisplay />
+
+                    {/* Referral Section */}
+                    <ReferralSection />
+
                     <h4 className="text-xl font-bold text-text-heading flex items-center gap-2">
                         <FiZap className="text-yellow-500 animate-pulse" /> Discover Clubs
                     </h4>

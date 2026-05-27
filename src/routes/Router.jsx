@@ -28,6 +28,8 @@ import PaymentSuccess from "../pages/dashboard/member/PaymentSuccess";
 import Profile from "../pages/dashboard/Profile";
 import About from "../pages/About/About";
 import Contact from "../pages/Contact/Contact";
+import PricingPlans from "../pages/dashboard/manager/PricingPlans";
+import Achievements from "../pages/dashboard/member/Achievements";
 
 const router =createBrowserRouter([
     {
@@ -118,6 +120,10 @@ const router =createBrowserRouter([
         path: 'clubManager/events',
         element: <PrivateRoute requiredRole="clubManager"><EventsManagement /></PrivateRoute>
       },
+      {
+        path: 'clubManager/pricing/:clubId',
+        element: <PrivateRoute requiredRole="clubManager"><PricingPlans /></PrivateRoute>
+      },
       
         {path:'member/home', element:<PrivateRoute requiredRole="member"> <MemberDashboard/></PrivateRoute>},
          {
@@ -131,6 +137,10 @@ const router =createBrowserRouter([
       {
         path: 'member/payments',
         element: <PrivateRoute requiredRole="member"><PaymentHistory /></PrivateRoute>
+      },
+      {
+        path: 'member/achievements',
+        element: <PrivateRoute requiredRole="member"><Achievements /></PrivateRoute>
       }
     ]
   }

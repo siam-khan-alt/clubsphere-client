@@ -1,9 +1,9 @@
 import React from 'react';
-import { FiCheck, FiX, FiEye, FiUser, FiCalendar } from 'react-icons/fi';
+import { FiCheck, FiX, FiEye, FiUser, FiCalendar, FiTrash2 } from 'react-icons/fi';
 import { TbFidgetSpinner } from 'react-icons/tb';
 import { Link } from 'react-router-dom';
 
-const AdminClubTable = ({ clubs, handleApprove, handleReject, isMutating }) => {
+const AdminClubTable = ({ clubs, handleApprove, handleReject, handleDelete, isMutating }) => {
     return (
         <div className="w-full overflow-x-auto custom-scrollbar">
             <table className="table w-full border-separate border-spacing-y-4 px-2 ">
@@ -84,11 +84,21 @@ const AdminClubTable = ({ clubs, handleApprove, handleReject, isMutating }) => {
                                                 </button>
                                             </>
                                         ) : (
-                                            <Link to={`/clubs/${club._id}`}>
-                                                <button className="btn-primary-gradient !px-6 !py-2.5 !text-[10px] uppercase tracking-widest flex items-center gap-2 ml-auto">
-                                                    <FiEye size={14} /> View Node
+                                            <div className="flex justify-end gap-2">
+                                                <Link to={`/clubs/${club._id}`}>
+                                                    <button className="btn-primary-gradient !px-4 !py-2.5 !text-[10px] uppercase tracking-widest flex items-center gap-2">
+                                                        <FiEye size={14} /> View
+                                                    </button>
+                                                </Link>
+                                                <button 
+                                                    onClick={() => handleDelete(club._id)}
+                                                    disabled={isMutating}
+                                                    className="h-11 w-11 flex items-center justify-center bg-background border-standard text-error hover:bg-error hover:text-white rounded-xl transition-all disabled:opacity-50"
+                                                    title="Delete Club"
+                                                >
+                                                    {isMutating ? <TbFidgetSpinner className="animate-spin" /> : <FiTrash2 size={18} strokeWidth={3} />}
                                                 </button>
-                                            </Link>
+                                            </div>
                                         )}
                                     </div>
                                 </td>
