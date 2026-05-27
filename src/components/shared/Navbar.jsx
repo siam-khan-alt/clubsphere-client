@@ -11,6 +11,7 @@ import {
 import { Link, NavLink } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 import Swal from "sweetalert2";
+import NotificationDropdown from "./NotificationDropdown";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -73,9 +74,9 @@ const Navbar = () => {
       <div className="container mx-auto px-6">
         <div className="flex justify-between items-center">
           {/* Logo Section */}
-          <Link to="/" className="flex items-center gap-2 group">
-            <div className="w-10 h-10 bg-gradient-to-br from-primary to-secondary rounded-xl flex items-center justify-center shadow-lg shadow-primary/20">
-              <span className="text-white font-black text-xl">C</span>
+          <Link to="/" className="flex items-center gap-1 group">
+            <div className="w-10 h-10 ">
+              <img src="/image.png" alt="" />
             </div>
             <span className="text-2xl font-black tracking-tighter text-primary">
               Club<span className="text-secondary">Sphere</span>
@@ -98,6 +99,8 @@ const Navbar = () => {
                   <FiSun size={20} className="text-yellow-400" />
                 )}
               </button>
+
+              {user && <NotificationDropdown />}
 
               {user ? (
                 <div className="dropdown dropdown-end">

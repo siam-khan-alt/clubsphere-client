@@ -4,6 +4,7 @@ import { FaSun, FaMoon, FaSignOutAlt } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 import { FiMoon, FiSun } from "react-icons/fi";
+import NotificationDropdown from "./NotificationDropdown";
 
 const DashboardNavbar = ({ theme, toggleTheme }) => {
   const { user, logout } = use(AuthContext);
@@ -64,8 +65,11 @@ const DashboardNavbar = ({ theme, toggleTheme }) => {
         <button onClick={toggleTheme}
                         style={{ backgroundColor: "var(--color-accent-plaid)" }}
                         className="w-10 h-10 flex items-center justify-center rounded-xl text-slate-600 dark:text-slate-300 hover:text-primary transition-all active:scale-95">
-                       {theme === "light" ? <FiMoon size={22} /> : <FiSun size={22} className="text-yellow-400" />}
+                       {theme === "light" ? <FiMoon size={22} /> : <FiSun size={22} className="text-yellow-400" /> }
                      </button>
+
+        {/* Notification Bell */}
+        <NotificationDropdown />
 
         {/* User & Logout Section */}
         <div className="flex items-center gap-3 border-l border-primary/50 pl-3 sm:pl-4">

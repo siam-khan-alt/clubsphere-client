@@ -9,7 +9,7 @@ import LoadingSpinner from '../components/shared/LoadingSpinner';
 import { motion } from "framer-motion";
 import { 
   FiCalendar, FiMapPin, FiDollarSign, FiUsers, 
-  FiArrowRight, FiCheckCircle, FiInfo, FiLayers, FiZap, FiActivity
+  FiArrowRight, FiCheckCircle, FiInfo, FiLayers, FiZap, FiActivity, FiDownload
 } from "react-icons/fi";
 
 const EventDetails = () => {
@@ -76,6 +76,44 @@ const EventDetails = () => {
       paidRegistrationMutation.mutate(event);
     } else {
       freeRegistrationMutation.mutate();
+    }
+  };
+
+  const handleDownloadCalendar = async () => {
+    try {
+      const API_BASE = import.meta.env.VITE_API_BASE || "http://localhost:5000";
+      const response = await fetch(`${API_BASE}/events/${eventId}/calendar`);
+      
+      if (!response.ok) {
+        throw new Error("Failed to download calendar file");
+      }
+
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${event.title.replace(/\s+/g, '_')}.ics`;
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+      
+      Swal.fire({
+        icon: 'success',
+        title: 'Calendar Downloaded!',
+        text: 'The event has been added to your calendar file.',
+        confirmButtonColor: '#0284c7',
+        timer: 2000,
+        showConfirmButton: false
+      });
+    } catch (error) {
+      console.error("Failed to download calendar:", error);
+      Swal.fire({
+        icon: 'error',
+        title: 'Download Failed',
+        text: 'Could not download the calendar file. Please try again.',
+        confirmButtonColor: '#0284c7'
+      });
     }
   };
 
@@ -228,6 +266,14 @@ const EventDetails = () => {
                         )}
                       </button>
                     )}
+
+                    <button
+                      onClick={handleDownloadCalendar}
+                      className="w-full py-4 bg-card border border-standard hover:border-primary/30 rounded-2xl flex items-center justify-center gap-3 text-primary font-bold transition-all hover:bg-primary/5 active:scale-95"
+                    >
+                      <FiDownload size={20} />
+                      Add to Calendar
+                    </button>
                   </div>
 
                   <div className="flex items-center justify-center gap-2 text-[10px] font-black uppercase tracking-widest text-emerald-500">
