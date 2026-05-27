@@ -18,7 +18,7 @@ const MemberDashboard = () => {
     const { data: memberData, isLoading, error } = useQuery({
         queryKey: ['memberOverviewStats'],
         queryFn: async () => {
-            const res = await axiosSecure.get('/member/stats-and-upcoming-events');
+            const res = await axiosSecure.get('/users/member/stats-and-upcoming-events');
             return res.data;
         }
     });

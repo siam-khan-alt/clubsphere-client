@@ -20,7 +20,7 @@ const CreateEventModal = ({ isOpen, onClose }) => {
         setIsImageUploading(true);
         try {
             const imageUrl = await uploadImageToImgBB(data.eventImage[0]);
-            await axiosSecure.post('/events', { ...data, eventImage: imageUrl });
+            await axiosSecure.post('/manager/events', { ...data, eventImage: imageUrl });
             queryClient.invalidateQueries({ queryKey: ["managerEvents"] });
             onClose();
             Swal.fire({ icon: "success", title: "Event Created", timer: 1500, showConfirmButton: false });

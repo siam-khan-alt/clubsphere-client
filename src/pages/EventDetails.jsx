@@ -26,7 +26,7 @@ const EventDetails = () => {
     queryFn: async () => {
       const [eventResponse, registrationResponse] = await Promise.all([
         axiosSecure.get(`/events/${eventId}`),
-        axiosSecure.get(`/member/event-registration-status/${eventId}`, {
+        axiosSecure.get(`/events/member/event-registration-status/${eventId}`, {
           params: { userEmail: user?.email }
         }).catch(() => ({ data: { isRegistered: false } }))
       ]);
@@ -40,7 +40,7 @@ const EventDetails = () => {
 
   const freeRegistrationMutation = useMutation({
     mutationFn: async () => {
-      const response = await axiosSecure.post(`/events/register/${eventId}`, {});
+      const response = await axiosSecure.post(`/events/events/register/${eventId}`, {});
       return response.data;
     },
     onSuccess: (data) => {
@@ -54,7 +54,7 @@ const EventDetails = () => {
 
   const paidRegistrationMutation = useMutation({
     mutationFn: async (event) => {
-      const response = await axiosSecure.post(`/event-payment/create-checkout-session`, {
+      const response = await axiosSecure.post(`/events/event-payment/create-checkout-session`, {
         eventFee: event.eventFee,
         eventId: event._id,
         userEmail: user.email,

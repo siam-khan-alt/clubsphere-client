@@ -24,7 +24,7 @@ const EditEventModal = ({ event, onClose }) => {
     const selectedFile = watch("eventImage");
 
     const updateEventMutation = useMutation({
-        mutationFn: async (updatedData) => axiosSecure.patch(`/events/${event._id}`, updatedData),
+        mutationFn: async (updatedData) => axiosSecure.patch(`/manager/events/${event._id}`, updatedData),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["managerEvents"] }); // Matching your create query key
             onClose();

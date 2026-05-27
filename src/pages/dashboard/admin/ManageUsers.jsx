@@ -16,7 +16,7 @@ const ManageUsers = () => {
   const { data: users = [], isLoading, isFetching } = useQuery({
     queryKey: ["adminUsers"],
     queryFn: async () => {
-      const res = await axiosSecure.get("/users");
+      const res = await axiosSecure.get("/admin/users");
       return res.data;
     },
   });
@@ -30,7 +30,7 @@ const ManageUsers = () => {
   // Role Update Mutation
   const { mutateAsync: updateRoleMutate } = useMutation({
     mutationFn: async ({ email, role }) => {
-      const res = await axiosSecure.patch(`/users/role/${email}`, { role });
+      const res = await axiosSecure.patch(`/admin/users/role/${email}`, { role });
       return res.data;
     },
     onSuccess: () => {
@@ -49,7 +49,7 @@ const ManageUsers = () => {
   // Delete User Mutation
   const { mutateAsync: deleteUserMutate } = useMutation({
     mutationFn: async (email) => {
-      const res = await axiosSecure.delete(`/users/${email}`);
+      const res = await axiosSecure.delete(`/admin/users/${email}`);
       return res.data;
     },
     onSuccess: () => {

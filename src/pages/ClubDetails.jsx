@@ -35,11 +35,11 @@ const ClubDetails = () => {
       toast.error("Please login first!");
       return navigate("/login");
     }
-    
+
     setIsJoining(true);
     try {
       if (club.membershipFee > 0) {
-        const res = await axiosSecure.post("/payment/create-checkout-session", {
+        const res = await axiosSecure.post("/payments/membership-payment/create-checkout-session", {
           membershipFee: club.membershipFee,
           clubId: club._id,
           userEmail: user.email,
