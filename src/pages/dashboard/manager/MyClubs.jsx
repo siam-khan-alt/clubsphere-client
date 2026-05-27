@@ -44,7 +44,7 @@ const MyClubs = () => {
     const deleteClubMutation = useMutation({
         mutationFn: async (clubId) => {
             setDeletingClubId(clubId);
-            return axiosSecure.delete(`/clubs/${clubId}`);
+            return axiosSecure.delete(`/manager/clubs/${clubId}`);
         },
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['myClubsForManager'] });

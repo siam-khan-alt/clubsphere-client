@@ -31,7 +31,7 @@ const UpdateClubModal = ({ club, onClose }) => {
 
   const updateClubMutation = useMutation({
     mutationFn: async (updatedData) =>
-      axiosSecure.patch(`/clubs/${club._id}`, updatedData),
+      axiosSecure.patch(`/manager/clubs/${club._id}`, updatedData),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["myClubsForManager"] });
       onClose();

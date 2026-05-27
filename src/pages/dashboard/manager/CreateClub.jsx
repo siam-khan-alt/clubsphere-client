@@ -34,7 +34,7 @@ const CreateClub = () => {
 
     const { mutate: createClub, isPending } = useMutation({
         mutationFn: async (data) => {
-            const res = await axiosSecure.post("/clubs", data);
+            const res = await axiosSecure.post("/manager/clubs", data);
             return res.data;
         },
         onSuccess: () => {
