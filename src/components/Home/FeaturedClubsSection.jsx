@@ -17,7 +17,7 @@ const FeaturedClubsSection = () => {
   const { data: clubs = [], isLoading, isError } = useQuery({
     queryKey: ["featuredClubs"],
     queryFn: async () => {
-      const res = await axios.get(`${import.meta.env.VITE_API_URL}/featuredClubs`);
+      const res = await axios.get(`${import.meta.env.VITE_API_URL}/clubs/featuredClubs`);
       return res.data;
     },
     staleTime: 1000 * 60 * 5,
