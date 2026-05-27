@@ -11,7 +11,7 @@ const EliteManagersSection = () => {
   const { data: managers = [], isLoading } = useQuery({
     queryKey: ["popularClubsManagers"],
     queryFn: async () => {
-      const res = await axios.get(`${import.meta.env.VITE_API_URL}/popular-clubsManagers`);
+      const res = await axios.get(`${import.meta.env.VITE_API_URL}/clubs/popular-clubsManagers`);
       return res.data;
     },
   });
