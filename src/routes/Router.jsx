@@ -30,6 +30,7 @@ import About from "../pages/About/About";
 import Contact from "../pages/Contact/Contact";
 import PricingPlans from "../pages/dashboard/manager/PricingPlans";
 import Achievements from "../pages/dashboard/member/Achievements";
+import Messenger from "../pages/dashboard/shared/Messenger";
 
 const router =createBrowserRouter([
     {
@@ -141,6 +142,10 @@ const router =createBrowserRouter([
       {
         path: 'member/achievements',
         element: <PrivateRoute requiredRole="member"><Achievements /></PrivateRoute>
+      },
+      {
+        path: 'shared/messenger',
+        element: <PrivateRoute><Messenger /></PrivateRoute>
       }
     ]
   }

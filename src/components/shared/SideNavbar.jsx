@@ -2,7 +2,7 @@ import { use } from 'react';
 import { FaHistory, FaChartLine, FaUsers, FaPlus, FaCalendarCheck, FaHome } from 'react-icons/fa';
 import { AuthContext } from '../../context/AuthContext';
 import NavLinkItem from '../dashboard/NavLinkItem';
-import { FiGrid, FiAward, FiCreditCard } from 'react-icons/fi';
+import { FiGrid, FiAward, FiCreditCard, FiMessageSquare } from 'react-icons/fi';
 
 const SideNavbar = () => {
     const { user } = use(AuthContext); 
@@ -23,7 +23,11 @@ const SideNavbar = () => {
                 <NavLinkItem to={`/dashboard/${role}/home`} icon={FiGrid}>
                     Overview
                 </NavLinkItem>
-                
+
+                <NavLinkItem to="/dashboard/shared/messenger" icon={FiMessageSquare}>
+                    Messenger
+                </NavLinkItem>
+
                 {isMember && (
                     <NavLinkItem to="/dashboard/member/clubs" icon={FaCalendarCheck}>
                         My Memberships
