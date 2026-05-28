@@ -1,7 +1,6 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import { FiBell, FiX, FiCheck, FiClock, FiCalendar, FiUser, FiAlertCircle } from "react-icons/fi";
 import { getNotifications, markNotificationAsRead, markAllNotificationsAsRead, deleteNotification } from "../../utils/notificationService";
-import { use } from "react";
 import { AuthContext } from "../../context/AuthContext";
 import LoadingSpinner from "./LoadingSpinner";
 
@@ -11,7 +10,7 @@ const NotificationDropdown = () => {
   const [loading, setLoading] = useState(false);
   const [unreadCount, setUnreadCount] = useState(0);
   const dropdownRef = useRef(null);
-  const { user } = use(AuthContext);
+  const { user } = useContext(AuthContext);
 
   // Fetch notifications
   const fetchNotifications = async () => {
@@ -31,9 +30,31 @@ const NotificationDropdown = () => {
 
   // Initial fetch and periodic refresh
   useEffect(() => {
+    let mounted = true;
+
+    const fetchNotifications = async () => {
+      if (!user?.accessToken || !mounted) return;
+
+      setLoading(true);
+      try {
+        const data = await getNotifications(user.accessToken);
+        if (mounted) {
+          setNotifications(data);
+          setUnreadCount(data.filter((n) => !n.isRead).length);
+        }
+      } catch (error) {
+        if (mounted) console.error("Failed to fetch notifications:", error);
+      } finally {
+        if (mounted) setLoading(false);
+      }
+    };
+
     fetchNotifications();
     const interval = setInterval(fetchNotifications, 60000); // Refresh every minute
-    return () => clearInterval(interval);
+    return () => {
+      mounted = false;
+      clearInterval(interval);
+    };
   }, [user?.accessToken]);
 
   // Close dropdown when clicking outside

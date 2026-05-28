@@ -1,4 +1,4 @@
-import React, { use, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   FiGrid,
   FiLogOut,
@@ -15,7 +15,7 @@ import NotificationDropdown from "./NotificationDropdown";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const { user, logout } = use(AuthContext);
+  const { user, logout } = useContext(AuthContext);
   const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
 
   useEffect(() => {

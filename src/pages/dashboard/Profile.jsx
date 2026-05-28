@@ -1,10 +1,10 @@
-import React, { useState, use } from "react";
+import React, { useState, useContext } from "react";
 import { AuthContext } from "../../context/AuthContext";
 import { FiMail, FiUser, FiShield, FiCalendar, FiEdit2, FiHash } from "react-icons/fi";
 import UpdateProfileModal from "../../components/dashboard/UpdateProfileModal";
 
 const Profile = () => {
-  const { user, updateUser } = use(AuthContext);
+  const { user, updateUser } = useContext(AuthContext);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const roleConfig = {
