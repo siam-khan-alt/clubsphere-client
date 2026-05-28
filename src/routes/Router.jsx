@@ -32,6 +32,7 @@ import PricingPlans from "../pages/dashboard/manager/PricingPlans";
 import Achievements from "../pages/dashboard/member/Achievements";
 import Messenger from "../pages/dashboard/shared/Messenger";
 import ClubWars from "../pages/dashboard/ClubWars";
+import ClubGovernance from "../pages/dashboard/ClubGovernance";
 
 const router =createBrowserRouter([
     {
@@ -151,6 +152,10 @@ const router =createBrowserRouter([
       {
         path: 'shared/club-wars',
         element: <PrivateRoute><ClubWars /></PrivateRoute>
+      },
+      {
+        path: 'shared/club-governance/:id',
+        element: <PrivateRoute><ClubGovernance /></PrivateRoute>
       }
     ]
   }
