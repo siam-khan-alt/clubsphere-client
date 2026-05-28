@@ -50,6 +50,9 @@ const ClubWars = () => {
       setSocket(newSocket);
 
       return () => {
+        newSocket.off("leaderboardUpdate");
+        newSocket.off("connect");
+        newSocket.off("disconnect");
         newSocket.disconnect();
       };
     }

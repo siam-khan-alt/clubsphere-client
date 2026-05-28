@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
@@ -27,13 +27,29 @@ const ClubGovernance = () => {
   });
 
   const { data: governanceData, isLoading, isError, refetch } = useQuery({
-    queryKey: ["clubProposals", id],
+    queryKey: ["clubProposals", id, user?.email],
     queryFn: async () => {
       const res = await axiosSecure.get(`/clubs/${id}/proposals`);
       return res.data;
     },
     enabled: !!id,
   });
+
+  // Cleanup effect to flush state on unmount
+  useEffect(() => {
+    return () => {
+      setShowCreateModal(false);
+      setProposalForm({
+        title: "",
+        description: "",
+        type: "other",
+        options: ["Yes", "No"],
+        durationDays: 7,
+      });
+      setIsCreatingProposal(false);
+      setIsVoting(null);
+    };
+  }, []);
 
   const handleCreateProposal = async (e) => {
     e.preventDefault();
