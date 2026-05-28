@@ -2,7 +2,7 @@ import { use } from 'react';
 import { FaHistory, FaChartLine, FaUsers, FaPlus, FaCalendarCheck, FaHome } from 'react-icons/fa';
 import { AuthContext } from '../../context/AuthContext';
 import NavLinkItem from '../dashboard/NavLinkItem';
-import { FiGrid, FiAward, FiCreditCard, FiMessageSquare } from 'react-icons/fi';
+import { FiGrid, FiAward, FiCreditCard, FiMessageSquare, FiTrophy } from 'react-icons/fi';
 
 const SideNavbar = () => {
     const { user } = use(AuthContext); 
@@ -26,6 +26,10 @@ const SideNavbar = () => {
 
                 <NavLinkItem to="/dashboard/shared/messenger" icon={FiMessageSquare}>
                     Messenger
+                </NavLinkItem>
+
+                <NavLinkItem to="/dashboard/shared/club-wars" icon={FiTrophy}>
+                    Club Wars ⚔️
                 </NavLinkItem>
 
                 {isMember && (
