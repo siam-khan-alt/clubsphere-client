@@ -9,7 +9,8 @@ import toast from "react-hot-toast";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { 
   FiMapPin, FiLayers, FiUsers, 
-  FiMail, FiClock, FiArrowRight, FiShield, FiStar, FiZap, FiLogOut
+  FiMail, FiClock, FiArrowRight, FiShield, FiStar, FiZap, FiLogOut, 
+  FiMessageSquare, FiThumbsUp, FiHeart, FiSmile, FiEye, FiEdit2, FiTrash2
 } from "react-icons/fi";
 import Swal from "sweetalert2";
 
@@ -21,11 +22,25 @@ const ClubDetails = () => {
   const axiosSecure = useAxiosSecure();
   const [isJoining, setIsJoining] = useState(false);
   const [isLeaving, setIsLeaving] = useState(false);
+  const [commentText, setCommentText] = useState("");
+  const [isPostingComment, setIsPostingComment] = useState(false);
+  const [editingCommentId, setEditingCommentId] = useState(null);
+  const [editCommentText, setEditCommentText] = useState("");
+  const [isUpdatingComment, setIsUpdatingComment] = useState(false);
 
   const { data: club, isLoading, isError } = useQuery({
     queryKey: ["club", id],
     queryFn: async () => {
       const res = await axios.get(`${import.meta.env.VITE_API_URL}/clubs/${id}`);
+      return res.data;
+    },
+    enabled: !!id,
+  });
+
+  const { data: comments, isLoading: commentsLoading } = useQuery({
+    queryKey: ["clubComments", id],
+    queryFn: async () => {
+      const res = await axios.get(`${import.meta.env.VITE_API_URL}/clubs/${id}/comments`);
       return res.data;
     },
     enabled: !!id,
@@ -95,10 +110,134 @@ const ClubDetails = () => {
     }
   };
 
+  const handlePostComment = async () => {
+    if (loading || isPostingComment || !commentText.trim()) return;
+    if (!user) {
+      toast.error("Please login first!");
+      return navigate("/login");
+    }
+
+    setIsPostingComment(true);
+    try {
+      await axiosSecure.post(`/clubs/${club._id}/comments`, { text: commentText });
+      toast.success("Comment posted successfully!");
+      setCommentText("");
+      queryClient.invalidateQueries(["clubComments", id]);
+    } catch (err) {
+      toast.error(err.response?.data?.message || "Failed to post comment");
+    } finally {
+      setIsPostingComment(false);
+    }
+  };
+
+  const handleToggleReaction = async (commentId, type) => {
+    if (loading || !user) {
+      toast.error("Please login first!");
+      return navigate("/login");
+    }
+
+    try {
+      await axiosSecure.post(`/clubs/${club._id}/comments/${commentId}/react`, { type });
+      queryClient.invalidateQueries(["clubComments", id]);
+    } catch (err) {
+      toast.error(err.response?.data?.message || "Failed to update reaction");
+    }
+  };
+
+  const formatTimestamp = (timestamp) => {
+    const now = new Date();
+    const commentTime = new Date(timestamp);
+    const diffMs = now - commentTime;
+    const diffMins = Math.floor(diffMs / 60000);
+    const diffHours = Math.floor(diffMs / 3600000);
+    const diffDays = Math.floor(diffMs / 86400000);
+
+    if (diffMins < 1) return "Just now";
+    if (diffMins < 60) return `${diffMins}m ago`;
+    if (diffHours < 24) return `${diffHours}h ago`;
+    if (diffDays < 7) return `${diffDays}d ago`;
+    return commentTime.toLocaleDateString();
+  };
+
+  const getReactionCounts = (reactions) => {
+    const counts = { like: 0, love: 0, haha: 0, wow: 0 };
+    reactions.forEach((r) => {
+      if (counts[r.type] !== undefined) counts[r.type]++;
+    });
+    return counts;
+  };
+
+  const getUserReaction = (reactions) => {
+    if (!user) return null;
+    return reactions.find((r) => r.userEmail === user.email)?.type || null;
+  };
+
+  const handleEditComment = async () => {
+    if (loading || isUpdatingComment || !editCommentText.trim()) return;
+    if (!user) {
+      toast.error("Please login first!");
+      return navigate("/login");
+    }
+
+    setIsUpdatingComment(true);
+    try {
+      await axiosSecure.patch(`/clubs/${club._id}/comments/${editingCommentId}`, {
+        text: editCommentText,
+      });
+      toast.success("Comment updated successfully!");
+      setEditingCommentId(null);
+      setEditCommentText("");
+      queryClient.invalidateQueries(["clubComments", id]);
+    } catch (err) {
+      toast.error(err.response?.data?.message || "Failed to update comment");
+    } finally {
+      setIsUpdatingComment(false);
+    }
+  };
+
+  const handleDeleteComment = async (commentId) => {
+    if (loading || !user) {
+      toast.error("Please login first!");
+      return navigate("/login");
+    }
+
+    const result = await Swal.fire({
+      title: "Are you sure?",
+      text: "This action cannot be undone.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#ef4444",
+      cancelButtonColor: "#3b82f6",
+      confirmButtonText: "Yes, delete it",
+      background: "var(--color-card)",
+      color: "var(--color-text-body)",
+    });
+
+    if (result.isConfirmed) {
+      try {
+        await axiosSecure.delete(`/clubs/${club._id}/comments/${commentId}`);
+        toast.success("Comment deleted successfully!");
+        queryClient.invalidateQueries(["clubComments", id]);
+      } catch (err) {
+        toast.error(err.response?.data?.message || "Failed to delete comment");
+      }
+    }
+  };
+
+  const startEditingComment = (comment) => {
+    setEditingCommentId(comment._id);
+    setEditCommentText(comment.text);
+  };
+
+  const cancelEditingComment = () => {
+    setEditingCommentId(null);
+    setEditCommentText("");
+  };
+
   if (isLoading) return <LoadingSpinner />;
   if (isError || !club) return <div className="min-h-screen bg-background flex items-center justify-center text-primary font-bold">Error loading club details.</div>;
 
-  const isMember = user && club.members?.includes(user.email);
+  const isMember = user && (club.members?.includes(user.email) || club.managerEmail === user.email);
 
   return (
     <div className="min-h-screen bg-background relative overflow-hidden selection:bg-primary selection:text-white">
@@ -251,6 +390,219 @@ const ClubDetails = () => {
             </div>
           </div>
 
+        </div>
+      </div>
+
+      {/* Club Discussion & Reviews Section */}
+      <div className="container mx-auto px-6 py-20 relative z-10">
+        <div className="max-w-4xl mx-auto">
+          <section className="relative">
+            <div className="absolute -left-10 top-0 w-1 h-20 bg-gradient-to-b from-primary to-transparent" />
+            <h3 className="text-left text-4xl mb-8 flex items-center gap-3">
+              <FiMessageSquare className="text-primary" />
+              Club Discussion & Reviews
+            </h3>
+
+            {/* Comment Input Box */}
+            {isMember ? (
+              <div className="mb-12 p-6 rounded-2xl bg-card border border-standard backdrop-blur-xl">
+                <textarea
+                  value={commentText}
+                  onChange={(e) => setCommentText(e.target.value)}
+                  placeholder="Share your thoughts about this club..."
+                  className="w-full bg-background border border-standard rounded-xl p-4 text-text-body placeholder-text-body/40 resize-none focus:outline-none focus:border-primary transition-colors"
+                  rows={3}
+                  maxLength={1000}
+                />
+                <div className="flex justify-between items-center mt-4">
+                  <span className="text-xs text-text-body/40">
+                    {commentText.length}/1000
+                  </span>
+                  <button
+                    onClick={handlePostComment}
+                    disabled={isPostingComment || !commentText.trim()}
+                    className="btn-primary-gradient px-6 py-3 rounded-xl font-bold flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {isPostingComment ? "Posting..." : "Post Comment"}
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <div className="mb-12 p-6 rounded-2xl bg-card border border-standard backdrop-blur-xl text-center">
+                <p className="text-text-body/60 font-medium">
+                  Only club members can participate in discussions. Join now to comment!
+                </p>
+              </div>
+            )}
+
+            {/* Comments Feed */}
+            {commentsLoading ? (
+              <div className="text-center py-12">
+                <LoadingSpinner />
+              </div>
+            ) : comments && comments.length > 0 ? (
+              <div className="space-y-6">
+                {comments.map((comment) => {
+                  const reactionCounts = getReactionCounts(comment.reactions || []);
+                  const userReaction = getUserReaction(comment.reactions || []);
+
+                  return (
+                    <motion.div
+                      key={comment._id}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="p-6 rounded-2xl bg-card border border-standard backdrop-blur-xl"
+                    >
+                      <div className="flex items-start gap-4">
+                        {/* User Avatar */}
+                        <div className="flex-shrink-0">
+                          {comment.userAvatar ? (
+                            <img
+                              src={comment.userAvatar}
+                              alt={comment.userName}
+                              className="w-12 h-12 rounded-full object-cover border-2 border-primary"
+                            />
+                          ) : (
+                            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-white font-bold text-lg">
+                              {comment.userName.charAt(0).toUpperCase()}
+                            </div>
+                          )}
+                        </div>
+
+                        {/* Comment Content */}
+                        <div className="flex-1">
+                          <div className="flex items-center justify-between mb-2">
+                            <div className="flex items-center gap-3">
+                              <h4 className="font-bold text-text-heading">{comment.userName}</h4>
+                              <span className="text-xs text-text-body/40">
+                                {formatTimestamp(comment.createdAt)}
+                              </span>
+                            </div>
+                            {/* Conditional Actions Panel */}
+                            {user && (
+                              <div className="flex items-center gap-2">
+                                {comment.userEmail === user.email && (
+                                  <button
+                                    onClick={() => startEditingComment(comment)}
+                                    className="text-text-body/40 hover:text-primary transition-colors"
+                                    title="Edit comment"
+                                  >
+                                    <FiEdit2 size={16} />
+                                  </button>
+                                )}
+                                {(comment.userEmail === user.email || club.managerEmail === user.email) && (
+                                  <button
+                                    onClick={() => handleDeleteComment(comment._id)}
+                                    className="text-text-body/40 hover:text-red-500 transition-colors"
+                                    title="Delete comment"
+                                  >
+                                    <FiTrash2 size={16} />
+                                  </button>
+                                )}
+                              </div>
+                            )}
+                          </div>
+                          {editingCommentId === comment._id ? (
+                            <div className="space-y-3">
+                              <textarea
+                                value={editCommentText}
+                                onChange={(e) => setEditCommentText(e.target.value)}
+                                className="w-full bg-background border border-standard rounded-xl p-3 text-text-body placeholder-text-body/40 resize-none focus:outline-none focus:border-primary transition-colors"
+                                rows={3}
+                                maxLength={1000}
+                              />
+                              <div className="flex justify-between items-center">
+                                <span className="text-xs text-text-body/40">
+                                  {editCommentText.length}/1000
+                                </span>
+                                <div className="flex gap-2">
+                                  <button
+                                    onClick={cancelEditingComment}
+                                    className="px-4 py-2 rounded-lg bg-background border border-standard text-text-body hover:border-primary transition-colors"
+                                  >
+                                    Cancel
+                                  </button>
+                                  <button
+                                    onClick={handleEditComment}
+                                    disabled={isUpdatingComment || !editCommentText.trim()}
+                                    className="px-4 py-2 rounded-lg bg-primary text-white font-bold disabled:opacity-50 disabled:cursor-not-allowed hover:bg-primary/90 transition-colors"
+                                  >
+                                    {isUpdatingComment ? "Saving..." : "Save"}
+                                  </button>
+                                </div>
+                              </div>
+                            </div>
+                          ) : (
+                            <p className="text-text-body leading-relaxed">{comment.text}</p>
+                          )}
+
+                          {/* Reaction Bar */}
+                          <div className="flex items-center gap-2 mt-4">
+                            {user ? (
+                              <>
+                                <button
+                                  onClick={() => handleToggleReaction(comment._id, "like")}
+                                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold transition-all ${
+                                    userReaction === "like"
+                                      ? "bg-blue-500 text-white"
+                                      : "bg-background text-text-body/60 hover:text-primary"
+                                  }`}
+                                >
+                                  <FiThumbsUp size={14} />
+                                  {reactionCounts.like > 0 && reactionCounts.like}
+                                </button>
+                                <button
+                                  onClick={() => handleToggleReaction(comment._id, "love")}
+                                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold transition-all ${
+                                    userReaction === "love"
+                                      ? "bg-red-500 text-white"
+                                      : "bg-background text-text-body/60 hover:text-primary"
+                                  }`}
+                                >
+                                  <FiHeart size={14} />
+                                  {reactionCounts.love > 0 && reactionCounts.love}
+                                </button>
+                                <button
+                                  onClick={() => handleToggleReaction(comment._id, "haha")}
+                                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold transition-all ${
+                                    userReaction === "haha"
+                                      ? "bg-yellow-500 text-white"
+                                      : "bg-background text-text-body/60 hover:text-primary"
+                                  }`}
+                                >
+                                  <FiSmile size={14} />
+                                  {reactionCounts.haha > 0 && reactionCounts.haha}
+                                </button>
+                                <button
+                                  onClick={() => handleToggleReaction(comment._id, "wow")}
+                                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold transition-all ${
+                                    userReaction === "wow"
+                                      ? "bg-purple-500 text-white"
+                                      : "bg-background text-text-body/60 hover:text-primary"
+                                  }`}
+                                >
+                                  <FiEye size={14} />
+                                  {reactionCounts.wow > 0 && reactionCounts.wow}
+                                </button>
+                              </>
+                            ) : (
+                              <span className="text-xs text-text-body/40">
+                                {Object.values(reactionCounts).reduce((a, b) => a + b, 0)} reactions
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    </motion.div>
+                  );
+                })}
+              </div>
+            ) : (
+              <div className="text-center py-12">
+                <p className="text-text-body/40 font-medium">No comments yet. Be the first to share your thoughts!</p>
+              </div>
+            )}
+          </section>
         </div>
       </div>
     </div>
