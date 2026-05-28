@@ -51,6 +51,20 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const refreshRole = async () => {
+    if (user) {
+      try {
+        const idToken = await user.getIdToken();
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/users/role`, {
+          headers: { Authorization: `Bearer ${idToken}` }
+        });
+        setRole(response.data.role);
+      } catch (error) {
+        console.error("Error refreshing role:", error);
+      }
+    }
+  };
+
   const logout = async () => {
     try {
       await auth.signOut();
@@ -74,6 +88,7 @@ export const AuthProvider = ({ children }) => {
     token,
     logout,
     getFirebaseToken,
+    refreshRole,
     isAdmin,
     isManager,
     isMember,

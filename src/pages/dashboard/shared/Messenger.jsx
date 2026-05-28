@@ -43,22 +43,40 @@ const Messenger = () => {
       const newSocket = io(SOCKET_URL, {
         auth: {
           token: user.accessToken,
+          email: user.email,
         },
+        reconnection: true,
+        reconnectionAttempts: 5,
+        reconnectionDelay: 1000,
       });
 
       setSocket(newSocket);
 
-      newSocket.on("receive_message", (message) => {
+      const handleMessage = (message) => {
         if (activeRoom && message.roomId === activeRoom._id) {
           setMessages((prev) => [...prev, message]);
         }
+      };
+
+      newSocket.on("receive_message", handleMessage);
+
+      newSocket.on("connect", () => {
+        console.log("Socket reconnected");
+        if (activeRoom) {
+          newSocket.emit("join_room", activeRoom._id);
+        }
+      });
+
+      newSocket.on("disconnect", () => {
+        console.warn("Socket disconnected");
       });
 
       return () => {
+        newSocket.off("receive_message", handleMessage);
         newSocket.disconnect();
       };
     }
-  }, [user]);
+  }, [user, activeRoom]);
 
   // Join room when active room changes
   useEffect(() => {
