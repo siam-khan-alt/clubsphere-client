@@ -9,8 +9,9 @@ import toast from "react-hot-toast";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { 
   FiMapPin, FiLayers, FiUsers, 
-  FiMail, FiClock, FiArrowRight, FiShield, FiStar, FiZap
+  FiMail, FiClock, FiArrowRight, FiShield, FiStar, FiZap, FiLogOut
 } from "react-icons/fi";
+import Swal from "sweetalert2";
 
 const ClubDetails = () => {
   const { id } = useParams();
@@ -19,6 +20,7 @@ const ClubDetails = () => {
   const queryClient = useQueryClient();
   const axiosSecure = useAxiosSecure();
   const [isJoining, setIsJoining] = useState(false);
+  const [isLeaving, setIsLeaving] = useState(false);
 
   const { data: club, isLoading, isError } = useQuery({
     queryKey: ["club", id],
@@ -58,8 +60,45 @@ const ClubDetails = () => {
     }
   };
 
+  const handleLeaveClub = async () => {
+    if (loading || isLeaving) return;
+    if (!user) {
+      toast.error("Please login first!");
+      return navigate("/login");
+    }
+
+    const result = await Swal.fire({
+      title: "Are you sure?",
+      text: "You will lose access to all club resources and events.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#ef4444",
+      cancelButtonColor: "#3b82f6",
+      confirmButtonText: "Yes, leave club",
+      background: "var(--color-card)",
+      color: "var(--color-text-body)",
+    });
+
+    if (result.isConfirmed) {
+      setIsLeaving(true);
+      try {
+        await axiosSecure.post(`/clubs/leave/${club._id}`);
+        toast.success(`You have left ${club.clubName}`);
+        queryClient.invalidateQueries(["club", id]);
+        queryClient.invalidateQueries(["memberClubs"]);
+        navigate("/dashboard/member/clubs");
+      } catch (err) {
+        toast.error(err.response?.data?.message || "Failed to leave club");
+      } finally {
+        setIsLeaving(false);
+      }
+    }
+  };
+
   if (isLoading) return <LoadingSpinner />;
   if (isError || !club) return <div className="min-h-screen bg-background flex items-center justify-center text-primary font-bold">Error loading club details.</div>;
+
+  const isMember = user && club.members?.includes(user.email);
 
   return (
     <div className="min-h-screen bg-background relative overflow-hidden selection:bg-primary selection:text-white">
@@ -177,17 +216,31 @@ const ClubDetails = () => {
                     Unlock exclusive access to all digital resources, events, and networking hubs.
                   </p>
 
-                  <button
-                    onClick={handleJoinClub}
-                    disabled={isJoining}
-                    className="btn-primary-gradient w-full py-6 text-xl rounded-2xl flex items-center justify-center gap-4 group shadow-2xl"
-                  >
-                    {isJoining ? "Syncing..." : (
-                      <>
-                        Join Now <FiArrowRight className="group-hover:translate-x-2 transition-transform" />
-                      </>
-                    )}
-                  </button>
+                  {isMember ? (
+                    <button
+                      onClick={handleLeaveClub}
+                      disabled={isLeaving}
+                      className="w-full py-6 text-xl rounded-2xl flex items-center justify-center gap-4 group shadow-2xl bg-gradient-to-r from-red-500 to-red-600 text-white font-bold hover:from-red-600 hover:to-red-700 transition-all"
+                    >
+                      {isLeaving ? "Leaving..." : (
+                        <>
+                          Leave Club <FiLogOut className="group-hover:translate-x-2 transition-transform" />
+                        </>
+                      )}
+                    </button>
+                  ) : (
+                    <button
+                      onClick={handleJoinClub}
+                      disabled={isJoining}
+                      className="btn-primary-gradient w-full py-6 text-xl rounded-2xl flex items-center justify-center gap-4 group shadow-2xl"
+                    >
+                      {isJoining ? "Syncing..." : (
+                        <>
+                          Join Now <FiArrowRight className="group-hover:translate-x-2 transition-transform" />
+                        </>
+                      )}
+                    </button>
+                  )}
 
                   <div className="flex items-center justify-center gap-2 text-[10px] font-black uppercase tracking-widest text-emerald-500">
                     <div className="w-2 h-2 rounded-full bg-emerald-500 animate-ping" />
