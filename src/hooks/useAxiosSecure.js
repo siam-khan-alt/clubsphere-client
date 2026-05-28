@@ -1,4 +1,4 @@
-import { use, useEffect } from 'react';
+import { useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom'; 
 import axios from 'axios'; 
 import { AuthContext } from '../context/AuthContext';
@@ -9,7 +9,7 @@ const axiosInstance = axios.create({
 });
 
 const useAxiosSecure = () => {
-    const { user, logout, loading ,getFirebaseToken} = use(AuthContext); 
+    const { user, logout, loading, getFirebaseToken } = useContext(AuthContext); 
     const navigate = useNavigate();
 
     useEffect(() => {

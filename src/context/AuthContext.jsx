@@ -26,7 +26,7 @@ export const AuthProvider = ({ children }) => {
           setRole(response.data.role);
         } catch (error) {
           console.error("Error fetching user role:", error);
-          setRole("member"); // Default to member if role fetch fails
+          setRole(null); // Keep role null if fetch fails - let router guards handle access control
         }
       } else {
         setUser(null);

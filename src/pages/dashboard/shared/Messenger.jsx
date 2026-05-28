@@ -40,9 +40,19 @@ const Messenger = () => {
   // Initialize Socket.io connection
   useEffect(() => {
     if (user) {
+      const getToken = async () => {
+        try {
+          const idToken = await user.getIdToken();
+          return idToken;
+        } catch (error) {
+          console.error("Error getting Firebase token:", error);
+          return null;
+        }
+      };
+
       const newSocket = io(SOCKET_URL, {
         auth: {
-          token: user.accessToken,
+          token: user.stsTokenManager?.accessToken || getToken(),
           email: user.email,
         },
         reconnection: true,
