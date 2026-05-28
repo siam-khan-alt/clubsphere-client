@@ -3,7 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import LoadingSpinner from "../components/shared/LoadingSpinner";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import useAxiosSecure from "../hooks/useAxiosSecure";
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { AuthContext } from "../context/AuthContext";
 import toast from "react-hot-toast";
 import { motion, useScroll, useTransform } from "framer-motion";
@@ -45,6 +45,15 @@ const ClubDetails = () => {
     },
     enabled: !!id,
   });
+
+  // Cleanup effect for inline editing state
+  useEffect(() => {
+    return () => {
+      setEditingCommentId(null);
+      setEditCommentText("");
+      setIsUpdatingComment(false);
+    };
+  }, []);
 
   const handleJoinClub = async () => {
     if (loading || isJoining) return;
@@ -190,6 +199,8 @@ const ClubDetails = () => {
       queryClient.invalidateQueries(["clubComments", id]);
     } catch (err) {
       toast.error(err.response?.data?.message || "Failed to update comment");
+      setEditingCommentId(null);
+      setEditCommentText("");
     } finally {
       setIsUpdatingComment(false);
     }
